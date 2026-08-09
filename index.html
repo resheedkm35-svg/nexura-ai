@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexura AI - Next-Gen Creator Studio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        body {
+            color: #ffa500;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background-color: #03030c; /* വീഡിയോ ലോഡ് ആകുന്നതുവരെ ഡാർക്ക് ബാക്ക്ഗ്രൗണ്ട് */
+        }
+
+        /* Video Background Styling */
+        .bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            z-index: -2;
+            filter: brightness(0.4) contrast(1.1); /* വീഡിയോയുടെ തെളിച്ചം കുറച്ച് ടെക്സ്റ്റ് വ്യക്തമാക്കാൻ */
+        }
+
+        /* Overlay for extra dark effect and smooth blend */
+        .video-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(3, 3, 12, 0.6);
+            z-index: -1;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            border-bottom: 1px solid rgba(255, 165, 0, 0.3);
+            background: rgba(3, 3, 12, 0.85);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            color: #fff;
+            text-shadow: 0 0 10px #ffa500;
+        }
+
+        .logo span {
+            color: #ffa500;
+        }
+
+        .system-status {
+            font-size: 0.8rem;
+            color: #ffa500;
+            text-shadow: 0 0 5px #ffa500;
+            border: 1px solid rgba(255, 165, 0, 0.4);
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            text-shadow: 0 0 20px rgba(255, 165, 0, 0.6);
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: #b0c4de;
+            max-width: 700px;
+            margin: 0 auto 40px auto;
+            line-height: 1.6;
+        }
+
+        /* Features Grid (Modules) */
+        .features-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto 60px auto;
+            padding: 0 20px;
+        }
+
+        .feature-card {
+            background: rgba(10, 10, 25, 0.75);
+            border: 1px solid rgba(255, 165, 0, 0.3);
+            border-radius: 15px;
+            padding: 30px 20px;
+            text-align: center;
+            transition: 0.3s ease;
+            box-shadow: 0 0 15px rgba(255, 165, 0, 0.1);
+            backdrop-filter: blur(5px);
+        }
+
+        .feature-card:hover {
+            border-color: #ffa500;
+            box-shadow: 0 0 25px rgba(255, 165, 0, 0.4);
+            transform: translateY(-5px);
+        }
+
+        .feature-card h3 {
+            color: #fff;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            letter-spacing: 1px;
+        }
+
+        .feature-card p {
+            color: #8892b0;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .btn-module {
+            background: transparent;
+            color: #ffa500;
+            border: 1px solid #ffa500;
+            padding: 10px 25px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s ease;
+            border-radius: 5px;
+        }
+
+        .btn-module:hover {
+            background: #ffa500;
+            color: #03030c;
+            box-shadow: 0 0 15px #ffa500;
+        }
+
+        .btn-module.locked {
+            border-color: #555;
+            color: #556270;
+            cursor: not-allowed;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.8rem;
+            color: #778899;
+            border-top: 1px solid rgba(255, 165, 0, 0.2);
+            background: rgba(3, 3, 12, 0.9);
+        }
+    </style>
+</head>
+<body>
+
+    <video autoplay muted loop playsinline class="bg-video">
+        <source src="bg-video.mp4" type="video/mp4">
+    </video>
+    <div class="video-overlay"></div>
+
+    <header>
+        <div class="logo">NEXURA<span>.AI</span></div>
+        <div class="system-status">CORE_STATUS: ONLINE</div>
+    </header>
+
+    <main>
+        <div class="hero">
+            <h1 class="hero-title">Next-Gen Creator Ecosystem</h1>
+            <p class="hero-subtitle">Advanced neural modules engineered for modern content creators, vloggers, and digital architects. Choose your operational workspace below.</p>
+        </div>
+
+        <div class="features-container">
+            <div class="feature-card">
+                <h3>01. AI Voice Studio</h3>
+                <p>Advanced vocal enhancement, clarity restoration, and studio-grade studio filtering designed specifically for video creators and vloggers.</p>
+                <button class="btn-module" onclick="alert('Initializing Voice Studio Module...')">Launch Module</button>
+            </div>
+
+            <div class="feature-card">
+                <h3>02. AI Image Studio</h3>
+                <p>Full-body smart isolation, background manipulation, and high-precision visual processing tools for high-end digital design.</p>
+                <button class="btn-module" onclick="alert('Initializing Image Studio Module...')">Launch Module</button>
+            </div>
+
+            <div class="feature-card">
+                <h3>03. Neural Video Lab</h3>
+                <p>Multi-dimensional video transformation and automated cinematic framing. (Coming in Phase 2)</p>
+                <button class="btn-module locked">Locked [Phase 2]</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        &copy; 2050 Nexura Quantum Systems. All Rights Reserved.
+    </footer>
+
+</body>
+</html>
+
