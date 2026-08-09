@@ -6,8 +6,8 @@
     <title>Nexura.AI - Next-Gen Creator Ecosystem</title>
     <style>
         :root {
-            --bg-dark: #121212;
-            --charcoal: #2a2a2a;
+            --bg-dark: #0a0a0a;
+            --charcoal-light: #2c2c2c;
             --gold-bright: #ffb700;
             --gold-dim: #bfa071;
             --text-main: #e0e0e0;
@@ -19,13 +19,12 @@
             padding: 0;
             width: 100%;
             height: 100%;
-            font-family: 'Courier New', Courier, monospace; /* പ്രോജക്റ്റിന് യോജിച്ച ഫോണ്ട് */
+            font-family: 'Courier New', Courier, monospace;
             background-color: var(--bg-dark);
             color: var(--text-main);
             overflow-x: hidden;
         }
 
-        /* പശ്ചാത്തല ഡിസൈൻ (ഇമേജിലുള്ളതുപോലെ) */
         .background-overlay {
             position: fixed;
             top: 0;
@@ -33,7 +32,6 @@
             width: 100%;
             height: 100%;
             background-color: var(--bg-dark);
-            /* ഇമേജിലെ അതേ വെതർഡ് പാറ്റേൺ നിർമ്മിക്കാൻ CSS */
             background-image: 
                 radial-gradient(circle at 20% 30%, rgba(40, 40, 40, 0.8) 0%, transparent 60%),
                 radial-gradient(circle at 80% 70%, rgba(30, 30, 30, 0.8) 0%, transparent 60%),
@@ -47,7 +45,6 @@
             z-index: -1;
         }
 
-        /* പ്രധാന കണ്ടെന്റ് ഹോൾഡർ */
         .main-container {
             display: flex;
             flex-direction: column;
@@ -58,7 +55,6 @@
             z-index: 1;
         }
 
-        /* ഹെഡർ (ലോഗോ, സ്റ്റാറ്റസ്) */
         header {
             width: 100%;
             max-width: 1200px;
@@ -93,7 +89,6 @@
             box-shadow: var(--glow);
         }
 
-        /* 3D ലോഗോ സെക്ഷൻ */
         .logo-section {
             display: flex;
             flex-direction: column;
@@ -104,9 +99,9 @@
 
         .logo-3d-wrapper {
             position: relative;
-            width: 250px;
-            height: 250px;
-            perspective: 1000px; /* 3D ഇഫക്റ്റിന് */
+            width: 220px;
+            height: 220px;
+            perspective: 1000px;
         }
 
         .logo-3d {
@@ -114,10 +109,9 @@
             height: 100%;
             position: absolute;
             transform-style: preserve-3d;
-            animation: rotateLogo 15s linear infinite; /* പതുക്കെയുള്ള കറക്കം */
+            animation: rotateLogo 15s linear infinite;
         }
 
-        /* ലോഗോയുടെ ഭാഗങ്ങൾ (3D രൂപം നൽകാൻ) */
         .logo-part {
             position: absolute;
             top: 50%;
@@ -127,388 +121,8 @@
         }
 
         .logo-base {
-            width: 220px;
-            height: 220px;
-            border: 4px solid var(--charcoal);
-            border-radius: 50%;
-            background-color: rgba(18, 18, 18, 0.9);
-            transform: translate(-50%, -50%) translateZ(0px);
-        }
-
-        .logo-ring {
             width: 200px;
             height: 200px;
-            border: 2px solid var(--gold-dim);
-            border-radius: 50%;
-            transform: translate(-50%, -50%) translateZ(10px);
-        }
-
-        .logo-letters {
-            font-size: 6em;
-            font-weight: bold;
-            color: var(--gold-bright);
-            text-shadow: var(--glow);
-            transform: translate(-50%, -50%) translateZ(30px);
-        }
-
-        .logo-subtext {
-            margin-top: 10px;
-            font-size: 2.2em;
-            color: var(--gold-dim);
-            letter-spacing: 5px;
-            text-transform: uppercase;
-            font-weight: lighter;
-        }
-
-        /* ആനിമേഷൻ - ലോഗോ കറങ്ങാൻ */
-        @keyframes rotateLogo {
-            0% { transform: rotateY(0deg); }
-            100% { transform: rotateY(360deg); }
-        }
-
-        /* ടൈറ്റിൽ സെക്ഷൻ */
-        .title-section {
-            text-align: center;
-            margin-bottom: 60px;
-            max-width: 800px;
-        }
-
-        .main-title {
-            font-size: 2em;
-            color: var(--gold-bright);
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            margin-bottom: 15px;
-            text-shadow: var(--glow);
-        }
-
-        .sub-title {
-            font-size: 0.9em;
-            color: var(--gold-dim);
-            line-height: 1.6;
-        }
-
-        /* മൊഡ്യൂൾ ഗ്രിഡ് */
-        .module-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-            width: 100%;
-            max-width: 1200px;
-            margin-bottom: 50px;
-        }
-
-        /* മൊഡ്യൂൾ കാർഡ് */
-        .module-card {
-            background-color: rgba(42, 42, 42, 0.3);
-            border: 1px solid var(--charcoal);
-            border-radius: 8px;
-            padding: 30px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transition: transform 0.3s ease, border-color 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* ഹോവർ ചെയ്യുമ്പോൾ ഗ്ലോ നൽകാൻ */
-        .module-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--gold-bright);
-            box-shadow: 0 5px 20px rgba(255, 183, 0, 0.2);
-        }
-
-        /* ഹോവർ ചെയ്യുമ്പോഴുള്ള പശ്ചാത്തല ഗ്ലോ */
-        .module-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255, 183, 0, 0.1) 0%, transparent 70%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: -1;
-        }
-
-        .module-card:hover::before {
-            opacity: 1;
-        }
-
-        .module-header {
-            margin-bottom: 20px;
-        }
-
-        .module-number {
-            font-size: 0.9em;
-            color: var(--gold-bright);
-            font-weight: bold;
-        }
-
-        .module-title {
-            font-size: 1.1em;
-            color: var(--gold-dim);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 5px;
-        }
-
-        .module-description {
-            font-size: 0.85em;
-            line-height: 1.6;
-            color: #b0b0b0;
-            margin-bottom: 25px;
-        }
-
-        /* ലോഞ്ച് ബട്ടൺ */
-        .launch-button {
-            background: transparent;
-            border: 1px solid var(--gold-bright);
-            color: var(--gold-bright);
-            padding: 10px 20px;
-            text-transform: uppercase;
-            font-size: 0.8em;
-            letter-spacing: 1px;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s ease, color 0.3s ease;
-            width: 100%;
-        }
-
-        .launch-button:hover {
-            background-color: var(--gold-bright);
-            color: var(--bg-dark);
-        }
-
-        /* ലോക്ക്ഡ് മൊഡ്യൂൾ ബട്ടൺ */
-        .launch-button:disabled {
-            border-color: var(--charcoal);
-            color: var(--charcoal);
-            cursor: not-allowed;
-        }
-
-        /* മൊബൈൽ റെസ്പോൺസീവ് ആക്കാൻ */
-        @media (max-width: 900px) {
-            .module-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            .logo-letters {
-                font-size: 4em;
-            }
-            .logo-subtext {
-                font-size: 1.5em;
-            }
-            .logo-3d-wrapper {
-                width: 180px;
-                height: 180px;
-            }
-        }
-    </style>
-</head>
-<body>
-
-    <div class="background-overlay"></div>
-
-    <div class="main-container">
-        <header>
-            <div class="header-logo">NEXURA.AI</div>
-            <div class="status-container">
-                <div class="status-dot"></div>
-                CORE STATUS: ONLINE
-            }
-        </header>
-
-        <section class="logo-section">
-            <div class="logo-3d-wrapper">
-                <div class="logo-3d">
-                    <div class="logo-part logo-base"></div>
-                    <div class="logo-part logo-ring"></div>
-                    <div class="logo-part logo-letters">N</div>
-                </div>
-            </div>
-            <div class="logo-subtext">NEXURA.AI</div>
-        </section>
-
-        <section class="title-section">
-            <h1 class="main-title">NEXT-GEN CREATOR ECOSYSTEM</h1>
-            <p class="sub-title">Advanced neural modules engineered for modern content creators, vloggers, and digital architects. Choose your operational workspace below.</p>
-        </section>
-
-        <div class="module-grid">
-            <!-- മൊഡ്യൂൾ 1: AI Voice Studio -->
-            <div class="module-card">
-                <div class="module-header">
-                    <div class="module-number">01.</div>
-                    <div class="module-title">AI Voice Studio</div>
-                </div>
-                <p class="module-description">
-                    Advanced vocal enhancement, clarity restoration, and studio-grade studio filtering designed specifically for video creators and vloggers.
-                </p>
-                <!-- വോയിസ് സ്റ്റുഡിയോയിലേക്ക് പോകാനുള്ള ലിങ്ക് -->
-                <button class="launch-button" onclick="location.href='voice.html'">LAUNCH MODULE</button>
-            </div>
-
-            <!-- മൊഡ്യൂൾ 2: AI Image Studio -->
-            <div class="module-card">
-                <div class="module-header">
-                    <div class="module-number">02.</div>
-                    <div class="module-title">AI Image Studioതീർച്ചയായും! നിങ്ങൾ നൽകിയ ആ പ്രീമിയം 3D ഡിസൈനും തീമും അതേപടി നമുക്ക് കോഡിലേക്ക് മാറ്റാം. 
-
-താഴെ നൽകിയിരിക്കുന്ന കോഡ് നിങ്ങളുടെ പഴയ `index.html`-ന് പകരം ചേർത്താൽ മതി. ഞാൻ ഇതിൽ ആ വെതർഡ് ചാർക്കോൾ ബാക്ക്ഗ്രൗണ്ടും, കറങ്ങുന്ന ഗോൾഡൻ 3D ലോഗോയും, ഗ്ലാസ് മോർഫിക് മൊഡ്യൂളുകളും അതേപടി HTML-ലും CSS-ലും നിർമ്മിച്ചെടുത്തിട്ടുണ്ട്.
-
-### ചെയ്യേണ്ട വിധം:
-
-1.  **Termux** തുറക്കുക.
-2.  നിങ്ങളുടെ പ്രോജക്റ്റ് ഫോൾഡറിലേക്ക് പോവുക:
-    ```bash
-    cd ~/nexura-ai
-    ```
-3.  `index.html` ഫയൽ എഡിറ്റ് ചെയ്യാൻ തുറക്കുക (ഉദാഹരണത്തിന് `nano` ഉപയോഗിച്ച്):
-    ```bash
-    nano index.html
-    ```
-4.  പഴയ കോഡ് മുഴുവൻ മായ്ച്ചു കളയുക.
-5.  താഴെ നൽകിയിരിക്കുന്ന കോഡ് മുഴുവനായി കോപ്പി ചെയ്ത് അവിടെ പേസ്റ്റ് ചെയ്യുക.
-6.  സേവ് ചെയ്യാൻ `Ctrl+O` അമർത്തി `Enter` അടിക്കുക. ശേഷം `Ctrl+X` അമർത്തി പുറത്തുകടക്കുക.
-
-### പുതിയ HTML/CSS കോഡ്:
-
-```html
-<!DOCTYPE html>
-<html lang="ml">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexura.AI - Next-Gen Creator Ecosystem</title>
-    <style>
-        /* അടിസ്ഥാന വെരിയബിളുകൾ - തീം അനുസരിച്ച് */
-        :root {
-            --bg-dark: #0a0a0a; /* ഇമേജിലെ അതേ കറുത്ത പശ്ചാത്തലം */
-            --charcoal-light: #2c2c2c; /* മൊഡ്യൂൾ പശ്ചാത്തലം */
-            --gold-bright: #ffb700; /* തിളങ്ങുന്ന സ്വർണ്ണ നിറം */
-            --gold-dim: #bfa071; /* മങ്ങിയ സ്വർണ്ണ നിറം */
-            --text-main: #e0e0e0; /* പ്രധാന അക്ഷരങ്ങളുടെ നിറം */
-            --glow: 0 0 15px rgba(255, 183, 0, 0.6); /* സ്വർണ്ണ ഗ്ലോ */
-        }
-
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            font-family: 'Courier New', Courier, monospace; /* പ്രോജക്റ്റിന് യോജിച്ച ഫോണ്ട് */
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            overflow-x: hidden;
-        }
-
-        /* പശ്ചാത്തല ഡിസൈൻ - ഇമേജിലുള്ളതുപോലെ വെതർഡ് ടെക്സ്ചർ */
-        .background-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: var(--bg-dark);
-            background-image: 
-                radial-gradient(circle at 20% 30%, rgba(40, 40, 40, 0.8) 0%, transparent 60%),
-                radial-gradient(circle at 80% 70%, rgba(30, 30, 30, 0.8) 0%, transparent 60%),
-                linear-gradient(135deg, #1a1a1a 25%, transparent 25%) -50px 0,
-                linear-gradient(225deg, #1a1a1a 25%, transparent 25%) -50px 0,
-                linear-gradient(315deg, #1a1a1a 25%, transparent 25%),
-                linear-gradient(45deg, #1a1a1a 25%, transparent 25%);
-            background-size: 100% 100%, 100% 100%, 100px 100px, 100px 100px, 100px 100px, 100px 100px;
-            background-blend-mode: overlay;
-            opacity: 0.6;
-            z-index: -1;
-        }
-
-        /* പ്രധാന കണ്ടെന്റ് ഹോൾഡർ */
-        .main-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-            box-sizing: border-box;
-            z-index: 1;
-        }
-
-        /* ഹെഡർ (ലോഗോ, സ്റ്റാറ്റസ്) */
-        header {
-            width: 100%;
-            max-width: 1200px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 50px;
-        }
-
-        .header-logo {
-            font-size: 1.2em;
-            color: var(--gold-bright);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            font-weight: bold;
-        }
-
-        .status-container {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.8em;
-            color: var(--gold-dim);
-            text-transform: uppercase;
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            background-color: var(--gold-bright);
-            border-radius: 50%;
-            box-shadow: var(--glow);
-        }
-
-        /* 3D ലോഗോ സെക്ഷൻ */
-        .logo-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 40px;
-            position: relative;
-        }
-
-        /* കറങ്ങുന്ന 3D ലോഗോ ഇവിടെ നിർമ്മിക്കുന്നു */
-        .logo-3d-wrapper {
-            position: relative;
-            width: 250px;
-            height: 250px;
-            perspective: 1000px; /* 3D ഇഫക്റ്റിന് */
-        }
-
-        .logo-3d {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            transform-style: preserve-3d;
-            animation: rotateLogo 15s linear infinite; /* പതുക്കെയുള്ള കറക്കം */
-        }
-
-        /* ലോഗോയുടെ ഭാഗങ്ങൾ (3D രൂപം നൽകാൻ) */
-        .logo-part {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            backface-visibility: hidden;
-        }
-
-        .logo-base {
-            width: 220px;
-            height: 220px;
             border: 4px solid #1a1a1a;
             border-radius: 50%;
             background-color: rgba(18, 18, 18, 0.9);
@@ -516,38 +130,35 @@
         }
 
         .logo-ring {
-            width: 200px;
-            height: 200px;
+            width: 180px;
+            height: 180px;
             border: 2px solid var(--gold-dim);
             border-radius: 50%;
             transform: translate(-50%, -50%) translateZ(10px);
         }
 
         .logo-letters {
-            font-size: 6em;
+            font-size: 5em;
             font-weight: bold;
             color: var(--gold-bright);
             text-shadow: var(--glow);
             transform: translate(-50%, -50%) translateZ(30px);
         }
 
-        /* ലോഗോയ്ക്ക് താഴെയുള്ള വലിയ ടെക്സ്റ്റ് */
         .logo-subtext {
-            margin-top: 10px;
-            font-size: 2.2em;
+            margin-top: 15px;
+            font-size: 2em;
             color: var(--gold-dim);
             letter-spacing: 5px;
             text-transform: uppercase;
             font-weight: lighter;
         }
 
-        /* ആനിമേഷൻ - ലോഗോ കറങ്ങാൻ */
         @keyframes rotateLogo {
             0% { transform: rotateY(0deg); }
             100% { transform: rotateY(360deg); }
         }
 
-        /* ടൈറ്റിൽ സെക്ഷൻ */
         .title-section {
             text-align: center;
             margin-bottom: 60px;
@@ -555,7 +166,7 @@
         }
 
         .main-title {
-            font-size: 2em;
+            font-size: 1.8em;
             color: var(--gold-bright);
             text-transform: uppercase;
             letter-spacing: 3px;
@@ -569,7 +180,6 @@
             line-height: 1.6;
         }
 
-        /* മൊഡ്യൂൾ ഗ്രിഡ് - ഇമേജിലെ ഗ്ലോ ഇഫക്റ്റോടുകൂടി */
         .module-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -579,10 +189,9 @@
             margin-bottom: 50px;
         }
 
-        /* മൊഡ്യൂൾ കാർഡ് */
         .module-card {
-            background-color: rgba(42, 42, 42, 0.3); /* ചാർക്കോൾ നിറം - ട്രാൻസ്പെരന്റ് */
-            border: 1px solid #1a1a1a;
+            background-color: rgba(42, 42, 42, 0.3);
+            border: 1px solid #222;
             border-radius: 8px;
             padding: 30px;
             display: flex;
@@ -593,29 +202,10 @@
             overflow: hidden;
         }
 
-        /* ഹോവർ ചെയ്യുമ്പോൾ ഗ്ലോ നൽകാൻ */
         .module-card:hover {
             transform: translateY(-5px);
             border-color: var(--gold-bright);
             box-shadow: 0 5px 20px rgba(255, 183, 0, 0.2);
-        }
-
-        /* ഹോവർ ചെയ്യുമ്പോഴുള്ള പശ്ചാത്തല ഗ്ലോ */
-        .module-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255, 183, 0, 0.1) 0%, transparent 70%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: -1;
-        }
-
-        .module-card:hover::before {
-            opacity: 1;
         }
 
         .module-header {
@@ -643,7 +233,6 @@
             margin-bottom: 25px;
         }
 
-        /* ലോഞ്ച് ബട്ടൺ - ഇമേജിലെ അതേ ഗോൾഡൻ സ്റ്റൈലിൽ */
         .launch-button {
             background: transparent;
             border: 1px solid var(--gold-bright);
@@ -663,28 +252,16 @@
             color: var(--bg-dark);
         }
 
-        /* ലോക്ക്ഡ് മൊഡ്യൂൾ ബട്ടൺ */
         .launch-button:disabled {
             border-color: var(--charcoal-light);
             color: var(--charcoal-light);
             cursor: not-allowed;
         }
 
-        /* മൊബൈൽ റെസ്പോൺസീവ് ആക്കാൻ */
         @media (max-width: 900px) {
             .module-grid {
                 grid-template-columns: 1fr;
                 gap: 20px;
-            }
-            .logo-letters {
-                font-size: 4em;
-            }
-            .logo-subtext {
-                font-size: 1.5em;
-            }
-            .logo-3d-wrapper {
-                width: 180px;
-                height: 180px;
             }
         }
     </style>
@@ -699,7 +276,7 @@
             <div class="status-container">
                 <div class="status-dot"></div>
                 CORE STATUS: ONLINE
-            }
+            </div>
         </header>
 
         <section class="logo-section">
@@ -719,7 +296,6 @@
         </section>
 
         <div class="module-grid">
-            <!-- മൊഡ്യൂൾ 1: AI Voice Studio -->
             <div class="module-card">
                 <div class="module-header">
                     <div class="module-number">01.</div>
@@ -728,11 +304,9 @@
                 <p class="module-description">
                     Advanced vocal enhancement, clarity restoration, and studio-grade studio filtering designed specifically for video creators and vloggers.
                 </p>
-                <!-- വോയിസ് സ്റ്റുഡിയോയിലേക്ക് പോകാനുള്ള ലിങ്ക് -->
                 <button class="launch-button" onclick="location.href='voice.html'">LAUNCH MODULE</button>
             </div>
 
-            <!-- മൊഡ്യൂൾ 2: AI Image Studio -->
             <div class="module-card">
                 <div class="module-header">
                     <div class="module-number">02.</div>
@@ -744,7 +318,6 @@
                 <button class="launch-button">LAUNCH MODULE</button>
             </div>
 
-            <!-- മൊഡ്യൂൾ 3: Neural Video Lab (LOCKED) -->
             <div class="module-card">
                 <div class="module-header">
                     <div class="module-number">03.</div>
