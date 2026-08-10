@@ -1,47 +1,74 @@
 <!DOCTYPE html>
-<html lang="ml">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexura.AI - Next-Gen Creator Ecosystem</title>
-    <!-- CSS ഫയൽ ലിങ്ക് ചെയ്തിരിക്കുന്നു -->
+    <title>Nexura.AI - Ecosystem Dashboard</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Header -->
-    <header>
-        <div class="header-logo">NEXURA.AI</div>
-        <div class="status-container">
-            <div class="status-dot"></div>CORE STATUS: ONLINE
+    <!-- Top Navigation Header -->
+    <header class="main-header">
+        <div class="brand-badge">NEXURA.AI</div>
+        <div class="system-status">
+            <span class="pulse-dot"></span>
+            SYSTEM ONLINE
         </div>
     </header>
 
-    <!-- 1. ലോഗോയും ആനിമേഷനും -->
-    <div class="logo-container">
-        <img src="bg.jpg" alt="NXA Logo" class="animated-logo" id="logo">
-        <div class="brand-name">NEXURA.AI</div>
-    </div>
+    <!-- Main Container -->
+    <main class="dashboard-container">
+        
+        <!-- Center Hero / Logo Focal Point -->
+        <div class="hero-spacer">
+            <div class="hero-glow"></div>
+        </div>
 
-    <!-- 2. ഇമേജ് ബാക്ക്ഗ്രൗണ്ട് റിമൂവൽ സെക്ഷൻ -->
-    <div class="section">
-        <h2 class="section-title">ഇമേജ് ബാക്ക്ഗ്രൗണ്ട് റിമൂവൽ</h2>
-        <label for="image-upload" class="upload-btn">ഇമേജ് അപ്‌ലോഡ് ചെയ്യുക</label>
-        <input type="file" id="image-upload" accept="image/*">
-        <button id="remove-bg-btn" disabled>ബാക്ക്ഗ്രൗണ്ട് റിമൂവ് ചെയ്യുക</button>
-        <p id="status-message"></p>
-        <img src="" alt="Image Preview" class="image-preview" id="image-preview">
-        <img src="" alt="Processed Image" class="image-preview" id="processed-image">
-    </div>
+        <!-- 3 Core Module Cards Grid -->
+        <div class="card-grid">
+            
+            <!-- Card 1: AI Voice & Audio -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-num">01</span>
+                    <div class="status-indicator">READY</div>
+                </div>
+                <h3 class="card-title">AI Voice & Audio</h3>
+                <p class="card-desc">Voice generation, background music & audio processing studio.</p>
+                <div class="card-footer">
+                    <button class="launch-btn">EXPLORE MODULE</button>
+                </div>
+            </div>
 
-    <!-- 3. വോയിസ് (ടെക്സ്റ്റ്-ടു-സ്പീച്ച്) സെക്ഷൻ -->
-    <div class="section">
-        <h2 class="section-title">AI വോയിസ് ജനറേഷൻ</h2>
-        <textarea id="voice-text" placeholder="ഇവിടെ ടെക്സ്റ്റ് ടൈപ്പ് ചെയ്യുക..."></textarea>
-        <button id="speak-btn">സംസാരിക്കുക</button>
-    </div>
+            <!-- Card 2: AI Image & Background -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-num">02</span>
+                    <div class="status-indicator">READY</div>
+                </div>
+                <h3 class="card-title">Image Studio</h3>
+                <p class="card-desc">Automatic background removal, graphic editing & asset tools.</p>
+                <div class="card-footer">
+                    <button class="launch-btn">EXPLORE MODULE</button>
+                </div>
+            </div>
 
-    <!-- JavaScript ഫയൽ ലിങ്ക് ചെയ്തിരിക്കുന്നു -->
-    <script src="script.js"></script>
+            <!-- Card 3: Neural Video Lab -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-num">03</span>
+                    <div class="status-indicator lock">LOCKED</div>
+                </div>
+                <h3 class="card-title">Video Lab</h3>
+                <p class="card-desc">Cinematic video framing, AI generation & timeline rendering.</p>
+                <div class="card-footer">
+                    <button class="launch-btn disabled" disabled>COMING SOON</button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
 </body>
 </html>
