@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Hologram Logo Spinner & Video Exporter</title>
+    <title>3D Hologram Studio with Custom Timeline & Slow-Mo</title>
+    <!-- Three.js 3D Engine -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         * {
             box-sizing: border-box;
@@ -13,14 +15,14 @@
         }
 
         body {
-            background-color: #06080d;
+            background-color: #030508;
             color: #ffffff;
             padding: 20px;
             overflow-x: hidden;
         }
 
         .studio-container {
-            max-width: 1200px;
+            max-width: 1250px;
             margin: 0 auto;
         }
 
@@ -47,44 +49,42 @@
             font-size: 1.3rem;
             font-weight: 800;
             letter-spacing: 1px;
-            text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.6);
         }
 
         .editor-grid {
             display: grid;
             grid-template-columns: 1.3fr 1fr;
             gap: 20px;
-            background: rgba(13, 17, 23, 0.9);
+            background: rgba(10, 14, 22, 0.95);
             border: 1px solid rgba(0, 255, 204, 0.3);
             border-radius: 16px;
             padding: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
         }
 
-        /* 3D Holographic Canvas Stage */
+        /* 3D Stage Container */
         .stage-wrapper {
             width: 100%;
             height: 480px;
-            background: radial-gradient(circle, #001220 0%, #000000 100%);
+            background: #000000;
             border: 1.5px dashed rgba(0, 243, 255, 0.4);
             border-radius: 12px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             position: relative;
             overflow: hidden;
             cursor: pointer;
         }
 
-        canvas#holoCanvas {
+        #webglCanvas {
             width: 100%;
             height: 100%;
             display: block;
-            z-index: 2;
         }
 
         .upload-placeholder {
             position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
             z-index: 3;
             text-align: center;
             pointer-events: none;
@@ -110,7 +110,40 @@
             letter-spacing: 1px;
         }
 
-        /* Controls */
+        /* Video Recording Timeline Bar Area */
+        .timeline-container {
+            margin-top: 10px;
+            background: rgba(0, 15, 25, 0.8);
+            border: 1px solid rgba(0, 255, 204, 0.3);
+            border-radius: 8px;
+            padding: 10px 15px;
+        }
+
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: #00ffcc;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .timeline-bar-bg {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .timeline-progress {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #00ffcc, #ff0055);
+            transition: width 0.1s linear;
+        }
+
+        /* Tools Panel */
         .tools-panel {
             display: flex;
             flex-direction: column;
@@ -151,37 +184,55 @@
             cursor: pointer;
         }
 
+        .duration-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 5px;
+        }
+
+        .dur-btn {
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 204, 0.3);
+            color: #fff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .dur-btn.active {
+            background: #00ffcc;
+            color: #000;
+            border-color: #00ffcc;
+            box-shadow: 0 0 10px rgba(0, 255, 204, 0.4);
+        }
+
         .btn-stack {
             display: flex;
             flex-direction: column;
             gap: 10px;
-            margin-top: 10px;
+            margin-top: 5px;
         }
 
         .action-btn {
             width: 100%;
             padding: 13px;
-            background: #00ffcc;
+            background: #ff0055;
             border: none;
-            color: #000;
+            color: #fff;
             font-size: 0.85rem;
             font-weight: 800;
             letter-spacing: 1px;
             border-radius: 8px;
             cursor: pointer;
-            box-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
+            box-shadow: 0 0 15px rgba(255, 0, 85, 0.4);
             transition: all 0.3s ease;
         }
 
-        .action-btn:hover { box-shadow: 0 0 25px rgba(0, 255, 204, 0.7); }
-
-        .record-btn {
-            background: #ff0055;
-            color: #fff;
-            box-shadow: 0 0 15px rgba(255, 0, 85, 0.4);
-        }
-
-        .record-btn:hover { box-shadow: 0 0 25px rgba(255, 0, 85, 0.7); }
+        .action-btn:hover { box-shadow: 0 0 25px rgba(255, 0, 85, 0.7); }
 
         @media (max-width: 900px) {
             .editor-grid { grid-template-columns: 1fr; }
@@ -194,53 +245,74 @@
     <div class="studio-container">
         <div class="header-bar">
             <a href="index.html" class="back-btn">← DASHBOARD</a>
-            <h2 class="studio-title">🌀 3D HOLOGRAM LOGO SPINNER & VIDEO GENERATOR</h2>
+            <h2 class="studio-title">🌐 3D HOLOGRAM TIMELINE & SLOW-MOTION STUDIO</h2>
         </div>
 
         <div class="editor-grid">
             
-            <!-- 3D Hologram Render Stage -->
-            <div class="stage-wrapper" onclick="document.getElementById('logoInput').click()">
-                <canvas id="holoCanvas" width="600" height="480"></canvas>
+            <!-- Left Side: 3D Stage & Recording Timeline Bar -->
+            <div>
+                <div class="stage-wrapper" onclick="document.getElementById('logoInput').click()">
+                    <canvas id="webglCanvas"></canvas>
 
-                <div class="upload-placeholder" id="uploadPlaceholder">
-                    <p style="font-size: 0.9rem; font-weight: 700; color: #fff;">🔮 Upload Logo Image</p>
-                    <p style="font-size: 0.75rem; color: #00ffcc; margin-top: 4px;">PNG / JPG ഫയൽ തിരഞ്ഞടുക്കുക</p>
+                    <div class="upload-placeholder" id="uploadPlaceholder">
+                        <p style="font-size: 0.9rem; font-weight: 700; color: #fff;">🔮 Upload Logo Image</p>
+                        <p style="font-size: 0.75rem; color: #00ffcc; margin-top: 4px;">ലോഗോ അപ്‌ലോഡ് ചെയ്യാൻ ക്ലിക്ക് ചെയ്യുക</p>
+                    </div>
+
+                    <div class="holo-badges">
+                        <span class="badge" id="statusBadge">STATUS: WAITING FOR LOGO</span>
+                        <span class="badge" id="recBadge" style="display:none; color:#ff0055; border-color:#ff0055;">🔴 RECORDING...</span>
+                    </div>
+
+                    <input type="file" id="logoInput" accept="image/*" style="display: none;">
                 </div>
 
-                <div class="holo-badges">
-                    <span class="badge" id="statusBadge">STATUS: WAITING FOR LOGO</span>
-                    <span class="badge" id="recBadge" style="display:none; color:#ff0055; border-color:#ff0055;">🔴 RECORDING VIDEO...</span>
+                <!-- Video Timeline Progress Bar -->
+                <div class="timeline-container">
+                    <div class="timeline-header">
+                        <span>🎬 VIDEO TIMELINE PROGRESS</span>
+                        <span id="timeText">00:00 / 00:15</span>
+                    </div>
+                    <div class="timeline-bar-bg">
+                        <div class="timeline-progress" id="timeProgress"></div>
+                    </div>
                 </div>
-
-                <input type="file" id="logoInput" accept="image/*" style="display: none;">
             </div>
 
-            <!-- Controls Panel -->
+            <!-- Right Side: Slow-Mo & Timeline Controls -->
             <div class="tools-panel">
                 
                 <div class="panel-section">
-                    <div class="section-title">⚙️ 3D Rotation & Hologram Settings</div>
+                    <div class="section-title">⏱️ Duration Timeline & Slow Motion</div>
 
                     <div class="control-group">
-                        <div class="control-label"><span>Rotation Speed (കറക്കത്തിന്റെ വേഗത)</span><span id="v-speed">Speed: 2</span></div>
+                        <div class="control-label"><span>Video Duration (എത്ര സെക്കൻഡ് വേണം)</span></div>
+                        <div class="duration-options">
+                            <div class="dur-btn" onclick="selectDuration(10, this)">10 Sec</div>
+                            <div class="dur-btn active" onclick="selectDuration(15, this)">15 Sec</div>
+                            <div class="dur-btn" onclick="selectDuration(20, this)">20 Sec</div>
+                        </div>
+                    </div>
+
+                    <div class="control-group" style="margin-top: 15px;">
+                        <div class="control-label"><span>Rotation Speed (സ്ലോ-മോഷൻ സ്പീഡ്)</span><span id="v-spin">Slow (Smooth)</span></div>
                         <input type="range" class="slider" id="spinSpeed" min="1" max="10" value="2">
                     </div>
 
                     <div class="control-group">
-                        <div class="control-label"><span>Hologram Glow (നിയോൺ വെളിച്ചം)</span><span id="v-glow">20px</span></div>
-                        <input type="range" class="slider" id="holoGlow" min="5" max="50" value="20">
+                        <div class="control-label"><span>Float & Wave Motion (ഇളക്കം)</span><span id="v-float">Cinematic</span></div>
+                        <input type="range" class="slider" id="floatHeight" min="1" max="10" value="4">
                     </div>
 
                     <div class="control-group">
-                        <div class="control-label"><span>Scanline Transparency</span><span id="v-opac">80%</span></div>
-                        <input type="range" class="slider" id="holoOpac" min="30" max="100" value="80">
+                        <div class="control-label"><span>3D Thickness (കനം/ആഴം)</span><span id="v-thick">Medium</span></div>
+                        <input type="range" class="slider" id="objThickness" min="1" max="10" value="4">
                     </div>
                 </div>
 
-                <!-- Export Video Controls -->
                 <div class="btn-stack">
-                    <button class="action-btn record-btn" id="recordBtn" onclick="renderAndRecordVideo()">📹 RECORD & DOWNLOAD HOLOGRAM VIDEO</button>
+                    <button class="action-btn" id="recordBtn" onclick="recordHologramVideo()">📹 RECORD & DOWNLOAD (<span id="btnDurText">15</span> SECONDS)</button>
                 </div>
 
             </div>
@@ -249,123 +321,138 @@
     </div>
 
     <script>
+        const canvas = document.getElementById('webglCanvas');
         const logoInput = document.getElementById('logoInput');
-        const canvas = document.getElementById('holoCanvas');
-        const ctx = canvas.getContext('2d');
         const uploadPlaceholder = document.getElementById('uploadPlaceholder');
         const statusBadge = document.getElementById('statusBadge');
         const recBadge = document.getElementById('recBadge');
+        const timeProgress = document.getElementById('timeProgress');
+        const timeText = document.getElementById('timeText');
 
-        let loadedImage = null;
-        let rotationAngle = 0;
-        let isAnimating = false;
+        let scene, camera, renderer, logoMesh, particleSystem, gridFloor;
+        let clock = new THREE.Clock();
+        let selectedDuration = 15; // Default 15 Seconds
 
-        // Sliders
-        const spinSpeed = document.getElementById('spinSpeed');
-        const holoGlow = document.getElementById('holoGlow');
-        const holoOpac = document.getElementById('holoOpac');
+        function init3D() {
+            scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2(0x000000, 0.015);
 
+            camera = new THREE.PerspectiveCamera(45, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+            camera.position.set(0, 2, 10);
+            camera.lookAt(0, 0, 0);
+
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, preserveDrawingBuffer: true });
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+
+            const ambientLight = new THREE.AmbientLight(0x00ffcc, 1.2);
+            scene.add(ambientLight);
+
+            const pointLight = new THREE.PointLight(0x00ffff, 2, 50);
+            pointLight.position.set(0, 5, 5);
+            scene.add(pointLight);
+
+            createHoloGrid();
+            createHoloParticles();
+            animate();
+        }
+
+        function createHoloGrid() {
+            gridFloor = new THREE.GridHelper(30, 30, 0x00ffcc, 0x003344);
+            gridFloor.position.y = -3;
+            scene.add(gridFloor);
+        }
+
+        function createHoloParticles() {
+            const particleCount = 400;
+            const geometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+
+            for (let i = 0; i < particleCount * 3; i += 3) {
+                positions[i] = (Math.random() - 0.5) * 20;
+                positions[i + 1] = (Math.random() - 0.5) * 20;
+                positions[i + 2] = (Math.random() - 0.5) * 20;
+            }
+
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            const material = new THREE.PointsMaterial({ color: 0x00ffcc, size: 0.05, transparent: true, opacity: 0.6 });
+            particleSystem = new THREE.Points(geometry, material);
+            scene.add(particleSystem);
+        }
+
+        // Duration Button Selector
+        function selectDuration(sec, btn) {
+            selectedDuration = sec;
+            document.querySelectorAll('.dur-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('btnDurText').innerText = sec;
+            timeText.innerText = `00:00 / 00:${sec < 10 ? '0' + sec : sec}`;
+        }
+
+        // Image Load into 3D Box Extrusion
         logoInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (!file) return;
 
             const reader = new FileReader();
-            reader.onload = function(event) {
-                const img = new Image();
-                img.onload = function() {
-                    loadedImage = img;
+            reader.onload = function (event) {
+                const texture = new THREE.TextureLoader().load(event.target.result, () => {
+                    if (logoMesh) scene.remove(logoMesh);
+
+                    const thickness = parseFloat(document.getElementById('objThickness').value) * 0.1;
+
+                    const geometry = new THREE.BoxGeometry(3.5, 3.5, thickness);
+                    const materials = [
+                        new THREE.MeshPhongMaterial({ color: 0x00ffcc, transparent: true, opacity: 0.8, wireframe: true }),
+                        new THREE.MeshPhongMaterial({ color: 0x00ffcc, transparent: true, opacity: 0.8, wireframe: true }),
+                        new THREE.MeshPhongMaterial({ color: 0x00ffcc, transparent: true, opacity: 0.8, wireframe: true }),
+                        new THREE.MeshPhongMaterial({ color: 0x00ffcc, transparent: true, opacity: 0.8, wireframe: true }),
+                        new THREE.MeshPhongMaterial({ map: texture, transparent: true, opacity: 0.9 }),
+                        new THREE.MeshPhongMaterial({ map: texture, transparent: true, opacity: 0.9 })
+                    ];
+
+                    logoMesh = new THREE.Mesh(geometry, materials);
+                    scene.add(logoMesh);
+
                     uploadPlaceholder.style.display = 'none';
-                    statusBadge.innerText = 'STATUS: 3D HOLOGRAM ACTIVE';
-                    if (!isAnimating) {
-                        isAnimating = true;
-                        animateHologram();
-                    }
-                };
-                img.src = event.target.result;
+                    statusBadge.innerText = 'STATUS: TRUE 3D HOLOGRAM ACTIVE';
+                });
             };
             reader.readAsDataURL(file);
         });
 
-        // 3D Rotation Animation Loop
-        function animateHologram() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // Slow-Motion 3D Render Loop
+        function animate() {
+            requestAnimationFrame(animate);
 
-            // Draw Hologram Floor Grid
-            drawGridFloor();
+            const elapsedTime = clock.getElapsedTime();
+            const speed = parseFloat(document.getElementById('spinSpeed').value) * 0.0025; // Ultra-smooth slow rotation
+            const floatAmp = parseFloat(document.getElementById('floatHeight').value) * 0.08;
 
-            if (loadedImage) {
-                const speed = parseFloat(spinSpeed.value) * 0.02;
-                const glow = holoGlow.value;
-                const opacity = holoOpac.value / 100;
+            if (logoMesh) {
+                logoMesh.rotation.y += speed;
+                logoMesh.rotation.x = Math.sin(elapsedTime * 0.6) * 0.12;
+                logoMesh.rotation.z = Math.cos(elapsedTime * 0.4) * 0.06;
 
-                rotationAngle += speed;
-
-                ctx.save();
-                ctx.translate(canvas.width / 2, canvas.height / 2 - 20);
-
-                // Simulate 3D Y-Axis Scale Rotation
-                const scaleX = Math.cos(rotationAngle);
-                ctx.scale(scaleX, 1);
-
-                // Cyan Holographic Glow Effect
-                ctx.shadowColor = '#00ffcc';
-                ctx.shadowBlur = glow;
-                ctx.globalAlpha = opacity;
-
-                const imgWidth = 180;
-                const imgHeight = (loadedImage.height / loadedImage.width) * imgWidth;
-
-                ctx.drawImage(loadedImage, -imgWidth / 2, -imgHeight / 2, imgWidth, imgHeight);
-                ctx.restore();
-
-                // Hologram Laser Scanline Overlay
-                drawScanlines();
+                logoMesh.position.y = Math.sin(elapsedTime * 1.5) * floatAmp;
+                logoMesh.position.x = Math.cos(elapsedTime * 1.2) * (floatAmp * 0.4);
             }
 
-            requestAnimationFrame(animateHologram);
+            if (particleSystem) {
+                particleSystem.rotation.y = elapsedTime * 0.03;
+            }
+
+            renderer.render(scene, camera);
         }
 
-        // Draw 3D Grid Floor
-        function drawGridFloor() {
-            ctx.save();
-            ctx.strokeStyle = 'rgba(0, 255, 204, 0.15)';
-            ctx.lineWidth = 1;
-
-            const startY = canvas.height - 100;
-            for (let i = -canvas.width; i < canvas.width * 2; i += 30) {
-                ctx.beginPath();
-                ctx.moveTo(canvas.width / 2, startY - 80);
-                ctx.lineTo(i, canvas.height);
-                ctx.stroke();
-            }
-
-            for (let y = startY - 80; y < canvas.height; y += 15) {
-                ctx.beginPath();
-                ctx.moveTo(0, y);
-                ctx.lineTo(canvas.width, y);
-                ctx.stroke();
-            }
-            ctx.restore();
-        }
-
-        // Scanlines Overlay Effect
-        function drawScanlines() {
-            ctx.save();
-            ctx.fillStyle = 'rgba(0, 255, 204, 0.04)';
-            for (let i = 0; i < canvas.height; i += 4) {
-                ctx.fillRect(0, i, canvas.width, 2);
-            }
-            ctx.restore();
-        }
-
-        // Record 3D Animation and Export Video
-        function renderAndRecordVideo() {
-            if (!loadedImage) {
-                alert('ദയവായി റെക്കോർഡ് ചെയ്യുന്നതിന് മുമ്പ് ഒരു ലോഗോ അപ്‌ലോഡ് ചെയ്യുക!');
+        // Record Video with Live Timeline Progress
+        function recordHologramVideo() {
+            if (!logoMesh) {
+                alert('ദയവായി ആദ്യം ഒരു ലോഗോ അപ്‌ലോഡ് ചെയ്യുക!');
                 return;
             }
 
-            const stream = canvas.captureStream(60); // 60 FPS Video Stream
+            const stream = canvas.captureStream(60);
             const mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
             const chunks = [];
 
@@ -375,23 +462,36 @@
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = 'NewDezire_3D_Hologram_Logo.webm';
+                a.download = `3D_Hologram_${selectedDuration}s_Render.webm`;
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
 
                 recBadge.style.display = 'none';
-                alert('3D ഹോളോഗ്രാം വീഡിയോ വിജയകരമായി റെക്കോർഡ് ചെയ്തു ડൗൺലോഡ് ആയിട്ടുണ്ട്!');
+                timeProgress.style.width = '0%';
+                timeText.innerText = `00:00 / 00:${selectedDuration}`;
+                alert(`${selectedDuration} സെക്കൻഡ് ദൈർഘ്യമുള്ള HD 3D ഹോളോഗ്രാം വീഡിയോ ഡൗൺലോഡ് ആയിട്ടുണ്ട്!`);
             };
 
             mediaRecorder.start();
             recBadge.style.display = 'inline-block';
 
-            // Automatically record for 5 Seconds (Full 360 Rotation)
-            setTimeout(() => {
-                mediaRecorder.stop();
-            }, 5000);
+            let elapsedSeconds = 0;
+            const interval = setInterval(() => {
+                elapsedSeconds += 0.1;
+                const percent = (elapsedSeconds / selectedDuration) * 100;
+                timeProgress.style.width = `${Math.min(percent, 100)}%`;
+                timeText.innerText = `00:${Math.floor(elapsedSeconds) < 10 ? '0' + Math.floor(elapsedSeconds) : Math.floor(elapsedSeconds)} / 00:${selectedDuration}`;
+
+                if (elapsedSeconds >= selectedDuration) {
+                    clearInterval(interval);
+                    mediaRecorder.stop();
+                }
+            }, 100);
         }
+
+        window.onload = init3D;
     </script>
 </body>
 </html>
+
