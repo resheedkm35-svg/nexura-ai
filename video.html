@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexura.AI - Video Lab Studio</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Video Lab Studio Specific Layout */
+        .studio-container {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px 15px 40px 15px;
+        }
+
+        .back-nav {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #ffb700;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            padding: 6px 14px;
+            border: 1px solid rgba(255, 183, 0, 0.3);
+            border-radius: 20px;
+            background: rgba(0,0,0,0.4);
+            transition: all 0.3s ease;
+        }
+
+        .back-nav:hover {
+            background: #ffb700;
+            color: #000;
+        }
+
+        .studio-title {
+            font-size: 1.4rem;
+            color: #ffb700;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            margin-bottom: 20px;
+        }
+
+        .editor-grid {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 20px;
+            background: rgba(18, 20, 26, 0.85);
+            border: 1px solid rgba(255, 183, 0, 0.35);
+            border-radius: 16px;
+            padding: 20px;
+            backdrop-filter: blur(14px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+        }
+
+        .video-preview-box {
+            width: 100%;
+            height: 320px;
+            background: #000;
+            border: 1.5px dashed rgba(255, 183, 0, 0.4);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            cursor: pointer;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .tools-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .sidebar-title {
+            font-size: 0.85rem;
+            color: #a0a0a0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .action-btn {
+            background: rgba(255, 183, 0, 0.05);
+            border: 1px solid rgba(255, 183, 0, 0.3);
+            color: #ffffff;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 183, 0, 0.2);
+            border-color: #ffb700;
+        }
+
+        .tag {
+            color: #ffb700;
+            font-size: 0.65rem;
+            font-weight: 800;
+            background: rgba(255, 183, 0, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .export-btn {
+            margin-top: 15px;
+            width: 100%;
+            padding: 14px;
+            background: #ffb700;
+            border: none;
+            color: #000;
+            font-size: 0.85rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255, 183, 0, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(255, 183, 0, 0.6);
+        }
+
+        .status-box {
+            font-size: 0.75rem;
+            color: #ffb700;
+            text-align: center;
+            margin-top: 8px;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .editor-grid { grid-template-columns: 1fr; }
+            .video-preview-box { height: 200px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="brand-badge">NEXURA.AI</div>
+        <div class="system-status">
+            <span class="pulse-dot"></span>
+            SYSTEM ONLINE
+        </div>
+    </header>
+
+    <main class="studio-container">
+        <a href="index.html" class="back-nav">← DASHBOARD</a>
+
+        <h2 class="studio-title">🎬 AI VIDEO LAB STUDIO</h2>
+
+        <div class="editor-grid">
+            <div class="video-preview-box" id="dropArea">
+                <p style="font-size: 0.9rem; color: #fff; font-weight: 700;">📁 Upload or Drag Video Here</p>
+                <p style="font-size: 0.7rem; color: #ffb700; margin-top: 6px;">Supports MP4, MOV, WEBM (Up to 4K)</p>
+                <input type="file" id="videoInput" accept="video/*" style="display: none;">
+            </div>
+
+            <div class="tools-sidebar">
+                <div class="sidebar-title">AI Processing Modules</div>
+
+                <button class="action-btn" onclick="applyEffect('AI Background Removal')">
+                    <span>✨ AI BG Removal</span>
+                    <span class="tag">AUTO</span>
+                </button>
+
+                <button class="action-btn" onclick="applyEffect('Cinematic Gold Grade')">
+                    <span>🎨 Gold Color Grade</span>
+                    <span class="tag">4K HDR</span>
+                </button>
+
+                <button class="action-btn" onclick="applyEffect('Voice & Music Sync')">
+                    <span>🎵 Voiceover & Audio Sync</span>
+                    <span class="tag">AI SYNC</span>
+                </button>
+
+                <button class="action-btn" onclick="applyEffect('Frame Stabilization')">
+                    <span>📹 Motion Stabilization</span>
+                    <span class="tag">STABLE</span>
+                </button>
+
+                <button class="export-btn" onclick="startRender()">RENDER & EXPORT VIDEO</button>
+                <div class="status-box" id="statusText">⚡ Rendering Timeline... 0%</div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const dropArea = document.getElementById('dropArea');
+        const videoInput = document.getElementById('videoInput');
+
+        dropArea.addEventListener('click', () => videoInput.click());
+
+        videoInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                dropArea.innerHTML = `<video src="${URL.createObjectURL(file)}" controls style="width:100%; height:100%; object-fit:cover; border-radius:10px;"></video>`;
+            }
+        });
+
+        function applyEffect(effect) {
+            alert('Applying: ' + effect);
+        }
+
+        function startRender() {
+            const status = document.getElementById('statusText');
+            status.style.display = 'block';
+            let progress = 0;
+            const timer = setInterval(() => {
+                progress += 20;
+                status.innerText = '⚡ Rendering AI Timeline... ' + progress + '%';
+                if (progress >= 100) {
+                    clearInterval(timer);
+                    status.innerText = '✅ Video Rendered Successfully!';
+                }
+            }, 400);
+        }
+    </script>
+</body>
+</html>
