@@ -65,56 +65,127 @@ body, html {
     align-items: center;
 }
 
-/* Separate Center Logo Wrapper */
+/* Separate Center Banner Logo Wrapper */
 .logo-wrapper {
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px 0 30px 0;
+    padding: 15px 0 25px 0;
 }
 
-/* 3D Video Banner Logo (Curved Corners & Larger View) */
 .center-logo-video {
     width: 90%;
-    max-width: 360px;
-    height: 180px;
+    max-width: 350px;
+    height: 160px;
     object-fit: cover;
-    border-radius: 18px;            /* നാല് മൂലകളിലും ഉള്ള ഭംഗിയുള്ള വലിയ കർവ് */
+    border-radius: 16px;
     border: 1.5px solid rgba(255, 183, 0, 0.5);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 
                 0 0 20px rgba(255, 183, 0, 0.3);
     display: block;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease;
 }
 
-.center-logo-video:hover {
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.9), 
-                0 0 30px rgba(255, 183, 0, 0.5);
-}
-
-/* Card Grid Layout */
+/* EXACT MATCH - IMAGE 2 HORIZONTAL CARD GRID */
 .card-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+    gap: 15px;
     width: 100%;
 }
 
-/* Glassmorphism Card Design (Exact Original Properties) */
+/* GLASSMORPHISM CARD DESIGN (Exact Image 2 Style) */
 .card {
-    background: rgba(14, 16, 22, 0.85);
-    border: 1px solid rgba(255, 183, 0, 0.35);
-    border-radius: 16px;
-    padding: 22px 18px;
-    backdrop-filter: blur(12px);
+    background: rgba(18, 20, 26, 0.82);
+    border: 1px solid rgba(255, 183, 0, 0.3);
+    border-radius: 12px;
+    padding: 18px 16px;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    min-height: 210px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
 }
 
-/* Mobile Screen Layout Adjustments (Image 2 Style Horizontal Flow) */
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.card-num {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #a0a0a0;
+}
+
+.status-indicator {
+    font-size: 0.6rem;
+    font-weight: 700;
+    color: #ffb700;
+    background: rgba(255, 183, 0, 0.1);
+    border: 1px solid rgba(255, 183, 0, 0.3);
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 1px;
+}
+
+.status-indicator.lock {
+    color: #888;
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.card-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 6px;
+}
+
+.card-desc {
+    font-size: 0.72rem;
+    color: #b0b5c0;
+    line-height: 1.4;
+    margin-bottom: 18px;
+}
+
+.card-footer {
+    width: 100%;
+}
+
+/* GOLD BUTTON STYLING FROM IMAGE 2 */
+.launch-btn {
+    width: 100%;
+    padding: 9px 0;
+    background: transparent;
+    border: 1px solid #ffb700;
+    color: #ffb700;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.launch-btn:hover {
+    background: #ffb700;
+    color: #000;
+    box-shadow: 0 0 15px rgba(255, 183, 0, 0.4);
+}
+
+.launch-btn.disabled {
+    border-color: rgba(255, 255, 255, 0.15);
+    color: #555;
+    cursor: not-allowed;
+}
+
+/* Mobile Screen - Horizontal Scroll Arrangement (Image 2 Fit) */
 @media (max-width: 768px) {
     .dashboard-container {
         padding: 0 10px 30px 10px;
@@ -122,25 +193,25 @@ body, html {
 
     .center-logo-video {
         width: 95%;
-        height: 160px;
-        border-radius: 16px;
+        height: 145px;
     }
 
+    /* രണ്ടാമത്തെ ചിത്രത്തിലെ പോലെ 3 കാർഡുകളും ഒരേ ലൈനിൽ ഹൊറിസോണ്ടൽ സ്ക്രോളിൽ */
     .card-grid {
         display: flex;
         overflow-x: auto;
         scroll-snap-type: x mandatory;
-        padding-bottom: 15px;
+        padding-bottom: 12px;
         gap: 12px;
     }
 
     .card {
-        min-width: 270px;            /* രണ്ടാമത്തെ ചിത്രത്തിലെ പോലെ കാർഡുകൾ വശങ്ങളിലേക്ക് സ്ക്രോൾ ആകുന്ന രീതിയിൽ */
+        min-width: 250px;
+        max-width: 270px;
         scroll-snap-align: center;
         flex-shrink: 0;
     }
 
-    /* Hide scrollbar for clean UI */
     .card-grid::-webkit-scrollbar {
         display: none;
     }
@@ -149,3 +220,4 @@ body, html {
         scrollbar-width: none;
     }
 }
+
