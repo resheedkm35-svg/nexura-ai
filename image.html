@@ -68,7 +68,7 @@
         /* Tool Navigation Grid */
         .tools-nav-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 15px;
             margin-bottom: 25px;
         }
@@ -94,14 +94,14 @@
         }
 
         .tool-card-title {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: bold;
             color: var(--accent-green);
             margin-bottom: 6px;
         }
 
         .tool-card-desc {
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             opacity: 0.8;
             line-height: 1.4;
         }
@@ -126,7 +126,7 @@
 
         .controls-row {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
             gap: 12px;
             margin-bottom: 15px;
         }
@@ -139,7 +139,7 @@
         }
 
         label {
-            font-size: 0.75rem;
+            font-size: 0.73rem;
             font-weight: bold;
             display: block;
             margin-bottom: 6px;
@@ -158,9 +158,21 @@
             color: var(--accent-pink);
             padding: 12px;
             border-radius: 8px;
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             font-weight: bold;
             cursor: pointer;
+        }
+
+        .action-btn {
+            background: var(--accent-green);
+            color: #ffffff;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 0.78rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(5, 150, 105, 0.2);
         }
 
         /* Master Canvas Stage */
@@ -243,7 +255,6 @@
             z-index: 15;
         }
 
-        /* High-Tech Grid Overlay */
         .laser-grid-bg {
             position: absolute;
             width: 100%;
@@ -254,7 +265,6 @@
                 linear-gradient(to bottom, rgba(0, 255, 136, 0.1) 1px, transparent 1px);
         }
 
-        /* Horizontal Scanning Laser Beam */
         .laser-beam {
             position: absolute;
             width: 100%;
@@ -265,7 +275,6 @@
             animation: scanAnimation 1.8s infinite alternate ease-in-out;
         }
 
-        /* Scanning Glow Effect Behind Beam */
         .laser-glow {
             position: absolute;
             width: 100%;
@@ -285,7 +294,6 @@
             100% { top: calc(98% - 70px); }
         }
 
-        /* Sci-Fi HUD Status Box */
         .laser-hud-status {
             position: absolute;
             bottom: 20px;
@@ -303,6 +311,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            pointer-events: auto;
         }
 
         .hud-spinner {
@@ -327,7 +336,7 @@
         <div class="header-bar">
             <div>
                 <strong style="font-size: 1rem; color: var(--accent-green);">NEXURA.AI FULL-PRO STUDIO SUITE</strong>
-                <span style="font-size: 0.75rem; opacity: 0.7; margin-left: 8px;">(High Precision AI Engine)</span>
+                <span style="font-size: 0.75rem; opacity: 0.7; margin-left: 8px;">(iPhone Quality HDR Engine)</span>
             </div>
             <button class="theme-toggle-btn" id="theme-toggle">☀️ Light / 🌙 Dark Mode</button>
         </div>
@@ -336,17 +345,22 @@
         <div class="tools-nav-grid">
             <div class="tool-select-card active" onclick="switchToolModule('eraser-module', this)">
                 <div class="tool-card-title">✂️ 1. Quick Background Eraser</div>
-                <div class="tool-card-desc">സുതാര്യമായ (Transparent PNG) ഫയലുകൾ ബാക്ക്ഗ്രൗണ്ട് ഇല്ലാതെ പെട്ടെന്ന് ലഭിക്കാൻ.</div>
+                <div class="tool-card-desc">സുതാര്യമായ (Transparent PNG) കട്ടൗട്ട് എടുക്കാൻ.</div>
             </div>
 
             <div class="tool-select-card" onclick="switchToolModule('compositor-module', this)">
                 <div class="tool-card-title">🏙️ 2. Pro Scene Compositor</div>
-                <div class="tool-card-desc">പുതിയ ബാക്ക്ഗ്രൗണ്ട്, Edge Matting Softness, Realistic Light Wrap, Drop Shadow എന്നിവ ചേർക്കാൻ.</div>
+                <div class="tool-card-desc">പുതിയ ബാക്ക്ഗ്രൗണ്ട് തീമും റിയലിസ്റ്റിക് ഷാഡോയും ചേർക്കാൻ.</div>
+            </div>
+
+            <div class="tool-select-card" onclick="switchToolModule('iphone-touchup-module', this)">
+                <div class="tool-card-title">✨ 3. iPhone Camera & Face Studio</div>
+                <div class="tool-card-desc">മങ്ങിയ ഫോട്ടോ ഹൈലൈറ്റ് ചെയ്യാനും, ഡ്രസ്സ് & ഫേസ് തിളക്കമാക്കാനും.</div>
             </div>
 
             <div class="tool-select-card" onclick="switchToolModule('clarity-module', this)">
-                <div class="tool-card-title">💎 3. Neural Clarity & Color Enhancer</div>
-                <div class="tool-card-desc">Convolution Sharpening, High-Pass Clarity, സിനിമാറ്റിക് Tones എന്നിവ ക്രമീകരിക്കാൻ.</div>
+                <div class="tool-card-title">💎 4. Neural Clarity & Cinema Tones</div>
+                <div class="tool-card-desc">സിനിമാറ്റിക് കളർ ഗ്രേഡിംഗും ഷാർപ്പനിംഗും നൽകാൻ.</div>
             </div>
         </div>
 
@@ -354,10 +368,19 @@
             
             <!-- MODULE 1: ERASE BACKDROP -->
             <div id="eraser-module" class="tool-section-view active-view">
-                <label class="btn-upload">
-                    📤 UPLOAD IMAGE FOR TRANSPARENT PNG CUTOUT
-                    <input type="file" id="upload-eraser-file" accept="image/*" style="display:none;">
-                </label>
+                <div class="controls-row">
+                    <label class="btn-upload">
+                        📤 UPLOAD IMAGE FOR TRANSPARENT CUTOUT
+                        <input type="file" id="upload-eraser-file" accept="image/*" style="display:none;">
+                    </label>
+                    <button class="action-btn" id="rescan-btn" style="display:none;" onclick="triggerReScan()">♻️ RE-SCAN / CLEAN AGAIN</button>
+                </div>
+                <div class="controls-row" style="margin-top: 10px;">
+                    <div class="control-box">
+                        <label>Green Spill Cleaner: <span id="val-spill">0%</span></label>
+                        <input type="range" id="spill-range" min="0" max="100" value="0">
+                    </div>
+                </div>
             </div>
 
             <!-- MODULE 2: SCENE COMPOSITOR -->
@@ -378,21 +401,49 @@
                         <input type="range" id="edge-blur-range" min="0" max="20" value="0">
                     </div>
                     <div class="control-box">
-                        <label>Light Wrap Intensity: <span id="val-wrap">0%</span></label>
-                        <input type="range" id="light-wrap-range" min="0" max="100" value="0">
-                    </div>
-                    <div class="control-box">
                         <label>Drop Shadow Distance: <span id="val-shadow">0px</span></label>
                         <input type="range" id="shadow-range" min="0" max="50" value="0">
+                    </div>
+                    <div class="control-box">
+                        <label>Background Theme Vibrance: <span id="val-bg-vib">0%</span></label>
+                        <input type="range" id="bg-vib-range" min="0" max="100" value="0">
                     </div>
                 </div>
             </div>
 
-            <!-- MODULE 3: CLARITY ENHANCER -->
+            <!-- MODULE 3: IPHONE CAMERA & FACE STUDIO -->
+            <div id="iphone-touchup-module" class="tool-section-view">
+                <div class="controls-row">
+                    <label class="btn-upload" style="grid-column: span 2;">
+                        📱 UPLOAD PHOTO FOR IPHONE RETOUCH & HDR BOOST
+                        <input type="file" id="upload-iphone-file" accept="image/*" style="display:none;">
+                    </label>
+                </div>
+                <div class="controls-row">
+                    <div class="control-box">
+                        <label>iPhone HDR Pop / Clarity: <span id="val-hdr">0%</span></label>
+                        <input type="range" id="iphone-hdr-range" min="0" max="100" value="0">
+                    </div>
+                    <div class="control-box">
+                        <label>Dress Black / Color Pop: <span id="val-dress">0%</span></label>
+                        <input type="range" id="dress-pop-range" min="0" max="100" value="0">
+                    </div>
+                    <div class="control-box">
+                        <label>Face Skin Glow & Brightness: <span id="val-face">0%</span></label>
+                        <input type="range" id="face-glow-range" min="0" max="100" value="0">
+                    </div>
+                    <div class="control-box">
+                        <label>Hair Darkening Fix: <span id="val-hair">0%</span></label>
+                        <input type="range" id="hair-fix-range" min="0" max="100" value="0">
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODULE 4: CLARITY ENHANCER -->
             <div id="clarity-module" class="tool-section-view">
                 <div class="controls-row">
                     <label class="btn-upload" style="grid-column: span 2;">
-                        🖼️ UPLOAD IMAGE FOR ENHANCEMENT
+                        🖼️ UPLOAD IMAGE FOR CINEMATIC ENHANCEMENT
                         <input type="file" id="upload-clarity-file" accept="image/*" style="display:none;">
                     </label>
                 </div>
@@ -454,6 +505,7 @@
         import { removeBackground } from "https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.5.5/+esm";
 
         let currentActiveModule = 'eraser-module';
+        let rawOriginalFile = null;
         let rawSubjectImg = null;
         let customBgImg = null;
         let exportPresetWidth = 3840;
@@ -464,13 +516,13 @@
         const exportDownloadBtn = document.getElementById('export-download-btn');
         const laserOverlay = document.getElementById('laser-overlay');
         const hudPct = document.getElementById('hud-pct');
+        const rescanBtn = document.getElementById('rescan-btn');
 
         // Theme Switcher
         document.getElementById('theme-toggle').addEventListener('click', () => {
             document.body.classList.toggle('dark-mode');
         });
 
-        // Switch Module System
         window.switchToolModule = function(moduleId, element) {
             currentActiveModule = moduleId;
             document.querySelectorAll('.tool-select-card').forEach(card => card.classList.remove('active'));
@@ -487,10 +539,27 @@
             btn.classList.add('active');
         };
 
-        // File Processing via WASM AI Engine with Laser Scanner
+        // File Processing via WASM AI Engine with Real-Time Preview
         async function processBgRemoval(file) {
-            laserOverlay.style.display = "block";
-            hudPct.innerText = "0%";
+            rawOriginalFile = file;
+
+            const reader = new FileReader();
+            reader.onload = (evt) => {
+                const tempImg = new Image();
+                tempImg.onload = () => {
+                    masterCanvas.width = tempImg.naturalWidth;
+                    masterCanvas.height = tempImg.naturalHeight;
+                    ctx.clearRect(0, 0, masterCanvas.width, masterCanvas.height);
+                    ctx.drawImage(tempImg, 0, 0);
+                    placeholderMsg.style.display = "none";
+                    masterCanvas.style.display = "block";
+                    
+                    laserOverlay.style.display = "block";
+                    hudPct.innerText = "0%";
+                };
+                tempImg.src = evt.target.result;
+            };
+            reader.readAsDataURL(file);
 
             try {
                 const blob = await removeBackground(file, {
@@ -506,15 +575,22 @@
                 img.onload = () => {
                     rawSubjectImg = img;
                     laserOverlay.style.display = "none";
+                    rescanBtn.style.display = "block";
                     renderMasterCanvas();
                 };
                 img.src = URL.createObjectURL(blob);
             } catch (err) {
                 console.error(err);
                 laserOverlay.style.display = "none";
-                alert("പ്രോസസ്സിംഗിൽ തടസ്സം നേരിട്ടു.");
+                alert("പ്രൊസസ്സിംഗിൽ തടസ്സം നേരിട്ടു.");
             }
         }
+
+        window.triggerReScan = function() {
+            if(rawOriginalFile) {
+                processBgRemoval(rawOriginalFile);
+            }
+        };
 
         document.getElementById('upload-eraser-file').onchange = (e) => {
             if(e.target.files[0]) processBgRemoval(e.target.files[0]);
@@ -522,6 +598,22 @@
 
         document.getElementById('upload-comp-subject').onchange = (e) => {
             if(e.target.files[0]) processBgRemoval(e.target.files[0]);
+        };
+
+        document.getElementById('upload-iphone-file').onchange = (e) => {
+            const file = e.target.files[0];
+            if(file) {
+                const reader = new FileReader();
+                reader.onload = (evt) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        rawSubjectImg = img;
+                        renderMasterCanvas();
+                    };
+                    img.src = evt.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
         };
 
         document.getElementById('upload-comp-bg').onchange = (e) => {
@@ -565,17 +657,23 @@
 
             ctx.clearRect(0, 0, masterCanvas.width, masterCanvas.height);
 
-            // 1. Draw Background Layer (Compositor Mode)
+            // 1. Draw Background Layer with Vibrance (Compositor Mode)
             if(currentActiveModule === 'compositor-module' && customBgImg) {
+                ctx.save();
+                const bgVib = parseInt(document.getElementById('bg-vib-range').value);
+                if(bgVib > 0) {
+                    ctx.filter = `saturate(${100 + bgVib}%) contrast(${100 + bgVib/2}%)`;
+                }
                 ctx.drawImage(customBgImg, 0, 0, masterCanvas.width, masterCanvas.height);
+                ctx.restore();
             }
 
-            // 2. Draw Drop Shadow (Advanced Feature)
+            // 2. Draw Drop Shadow
             if(currentActiveModule === 'compositor-module') {
                 const shadowVal = parseInt(document.getElementById('shadow-range').value);
                 if(shadowVal > 0) {
                     ctx.save();
-                    ctx.shadowColor = "rgba(0, 0, 0, 0.6)";
+                    ctx.shadowColor = "rgba(0, 0, 0, 0.7)";
                     ctx.shadowBlur = shadowVal;
                     ctx.shadowOffsetX = shadowVal / 2;
                     ctx.shadowOffsetY = shadowVal / 2;
@@ -584,7 +682,7 @@
                 }
             }
 
-            // 3. Subject Drawing & Edge Matting Blur
+            // 3. Subject Drawing & Filters
             ctx.save();
             if(currentActiveModule === 'compositor-module') {
                 const blurVal = parseInt(document.getElementById('edge-blur-range').value);
@@ -602,20 +700,7 @@
             ctx.drawImage(rawSubjectImg, 0, 0);
             ctx.restore();
 
-            // 4. Advanced Light Wrap Engine
-            if(currentActiveModule === 'compositor-module' && customBgImg) {
-                const wrapVal = parseInt(document.getElementById('light-wrap-range').value);
-                if(wrapVal > 0) {
-                    ctx.save();
-                    ctx.globalCompositeOperation = 'source-atop';
-                    ctx.globalAlpha = wrapVal / 100;
-                    ctx.filter = 'blur(18px)';
-                    ctx.drawImage(customBgImg, 0, 0, masterCanvas.width, masterCanvas.height);
-                    ctx.restore();
-                }
-            }
-
-            // 5. Convolution Sharpness Matrix Engine
+            // 4. Convolution Sharpness Matrix Engine
             if(currentActiveModule === 'clarity-module') {
                 const sharpVal = parseInt(document.getElementById('clarity-range').value);
                 if(sharpVal > 0) {
@@ -623,9 +708,112 @@
                 }
             }
 
+            // 5. Green Spill Cleaner
+            if(currentActiveModule === 'eraser-module') {
+                const spillVal = parseInt(document.getElementById('spill-range').value);
+                if(spillVal > 0) {
+                    applySpillClean(spillVal);
+                }
+            }
+
+            // 6. iPhone Camera & Face Studio Engine (HDR, Dress Pop, Face Glow, Hair Darkening)
+            if(currentActiveModule === 'iphone-touchup-module') {
+                const hdrVal = parseInt(document.getElementById('iphone-hdr-range').value);
+                const dressVal = parseInt(document.getElementById('dress-pop-range').value);
+                const faceVal = parseInt(document.getElementById('face-glow-range').value);
+                const hairVal = parseInt(document.getElementById('hair-fix-range').value);
+
+                if(hdrVal > 0 || dressVal > 0 || faceVal > 0 || hairVal > 0) {
+                    applyIPhoneEnhancements(hdrVal, dressVal, faceVal, hairVal);
+                }
+            }
+
             placeholderMsg.style.display = "none";
             masterCanvas.style.display = "block";
             exportDownloadBtn.style.display = "block";
+        }
+
+        // Spill Cleaner Engine
+        function applySpillClean(intensity) {
+            const imgData = ctx.getImageData(0, 0, masterCanvas.width, masterCanvas.height);
+            const data = imgData.data;
+            const factor = intensity / 100;
+
+            for (let i = 0; i < data.length; i += 4) {
+                let r = data[i], g = data[i + 1], b = data[i + 2];
+                if (g > r && g > b) {
+                    g = g - (g - Math.max(r, b)) * factor;
+                    data[i + 1] = Math.min(255, Math.max(0, g));
+                }
+            }
+            ctx.putImageData(imgData, 0, 0);
+        }
+
+        // iPhone Style Touchup & HDR Pixel Engine
+        function applyIPhoneEnhancements(hdr, dress, face, hair) {
+            const imgData = ctx.getImageData(0, 0, masterCanvas.width, masterCanvas.height);
+            const data = imgData.data;
+            const h = masterCanvas.height;
+
+            for (let i = 0; i < data.length; i += 4) {
+                let r = data[i];
+                let g = data[i + 1];
+                let b = data[i + 2];
+                let a = data[i + 3];
+
+                if (a < 50) continue; // Skip transparent pixels
+
+                let pixelY = Math.floor((i / 4) / masterCanvas.width);
+
+                // 1. iPhone HDR Pop (Contrast & Vibrance boost)
+                if (hdr > 0) {
+                    let factor = hdr / 200;
+                    let avg = (r + g + b) / 3;
+                    r += (r - avg) * factor * 1.5;
+                    g += (g - avg) * factor * 1.5;
+                    b += (b - avg) * factor * 1.5;
+                }
+
+                // 2. Dress Black/Color Pop (Targets darker shirt/dress tones)
+                if (dress > 0 && pixelY > h * 0.45) {
+                    let dFactor = dress / 100;
+                    if (r < 90 && g < 90 && b < 90) { // Dark/Black clothing enhancement
+                        r = Math.max(0, r - (25 * dFactor));
+                        g = Math.max(0, g - (25 * dFactor));
+                        b = Math.max(0, b - (25 * dFactor));
+                    } else { // Colored dress pop
+                        r += r * 0.15 * dFactor;
+                        g += g * 0.15 * dFactor;
+                        b += b * 0.15 * dFactor;
+                    }
+                }
+
+                // 3. Face Skin Glow & Brightness (Targets upper region where face is usually located)
+                if (face > 0 && pixelY > h * 0.1 && pixelY < h * 0.55) {
+                    let fFactor = face / 200;
+                    // Detect skin-like tones (warm tones)
+                    if (r > g && g > b && r > 80) {
+                        r += (255 - r) * fFactor;
+                        g += (240 - g) * fFactor;
+                        b += (220 - b) * fFactor;
+                    }
+                }
+
+                // 4. Hair Darkening Fix (Targets topmost region for hair)
+                if (hair > 0 && pixelY < h * 0.35) {
+                    let hFactor = hair / 100;
+                    if (r < 110 && g < 110 && b < 110) { // Gray/faded hair correction to black
+                        r = Math.max(0, r - (40 * hFactor));
+                        g = Math.max(0, g - (40 * hFactor));
+                        b = Math.max(0, b - (40 * hFactor));
+                    }
+                }
+
+                data[i] = Math.min(255, Math.max(0, r));
+                data[i + 1] = Math.min(255, Math.max(0, g));
+                data[i + 2] = Math.min(255, Math.max(0, b));
+            }
+            ctx.putImageData(imgData, 0, 0);
         }
 
         // Sharpen Kernel Processing Engine
@@ -671,18 +859,43 @@
             renderMasterCanvas();
         };
 
-        document.getElementById('light-wrap-range').oninput = function() {
-            document.getElementById('val-wrap').innerText = this.value + '%';
-            renderMasterCanvas();
-        };
-
         document.getElementById('shadow-range').oninput = function() {
             document.getElementById('val-shadow').innerText = this.value + 'px';
             renderMasterCanvas();
         };
 
+        document.getElementById('bg-vib-range').oninput = function() {
+            document.getElementById('val-bg-vib').innerText = this.value + '%';
+            renderMasterCanvas();
+        };
+
+        document.getElementById('iphone-hdr-range').oninput = function() {
+            document.getElementById('val-hdr').innerText = this.value + '%';
+            renderMasterCanvas();
+        };
+
+        document.getElementById('dress-pop-range').oninput = function() {
+            document.getElementById('val-dress').innerText = this.value + '%';
+            renderMasterCanvas();
+        };
+
+        document.getElementById('face-glow-range').oninput = function() {
+            document.getElementById('val-face').innerText = this.value + '%';
+            renderMasterCanvas();
+        };
+
+        document.getElementById('hair-fix-range').oninput = function() {
+            document.getElementById('val-hair').innerText = this.value + '%';
+            renderMasterCanvas();
+        };
+
         document.getElementById('clarity-range').oninput = function() {
             document.getElementById('val-sharp').innerText = this.value + '%';
+            renderMasterCanvas();
+        };
+
+        document.getElementById('spill-range').oninput = function() {
+            document.getElementById('val-spill').innerText = this.value + '%';
             renderMasterCanvas();
         };
 
@@ -705,7 +918,7 @@
             expCtx.drawImage(masterCanvas, 0, 0, exportCanvas.width, exportCanvas.height);
 
             const link = document.createElement('a');
-            link.download = `Nexura_Master_Export_${exportPresetWidth}p_${Date.now()}.png`;
+            link.download = `Nexura_iPhone_HDR_Export_${exportPresetWidth}p_${Date.now()}.png`;
             link.href = exportCanvas.toDataURL('image/png', 1.0);
             link.click();
         });
