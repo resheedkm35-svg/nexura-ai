@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexura.AI - Pro Modular Studio Suite</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="studio-container">
+        
+        <div class="header-bar">
+            <div>
+                <strong style="font-size: 1rem; color: var(--accent-green);">NEXURA.AI FULL-PRO STUDIO SUITE</strong>
+                <span style="font-size: 0.75rem; opacity: 0.7; margin-left: 8px;">(High Precision AI Engine)</span>
+            </div>
+            <button class="theme-toggle-btn" id="theme-toggle">☀️ Light / 🌙 Dark Mode</button>
+        </div>
+
+        <!-- System Cards Navigation -->
+        <div class="tools-nav-grid">
+            <div class="tool-select-card active" onclick="switchToolModule('eraser-module', this)">
+                <div class="tool-card-title">✂️ 1. Quick Background Eraser</div>
+                <div class="tool-card-desc">സുതാര്യമായ (Transparent PNG) ഫയലുകൾ ബാക്ക്ഗ്രൗണ്ട് ഇല്ലാതെ പെട്ടെന്ന് ലഭിക്കാൻ.</div>
+            </div>
+
+            <div class="tool-select-card" onclick="switchToolModule('compositor-module', this)">
+                <div class="tool-card-title">🏙️ 2. Pro Scene Compositor</div>
+                <div class="tool-card-desc">പുതിയ ബാക്ക്ഗ്രൗണ്ട്, Edge Matting Softness, Realistic Light Wrap, Drop Shadow എന്നിവ ചേർക്കാൻ.</div>
+            </div>
+
+            <div class="tool-select-card" onclick="switchToolModule('clarity-module', this)">
+                <div class="tool-card-title">💎 3. Neural Clarity & Color Enhancer</div>
+                <div class="tool-card-desc">Convolution Sharpening, High-Pass Clarity, സിനിമാറ്റിക് Tones എന്നിവ ക്രമീകരിക്കാൻ.</div>
+            </div>
+        </div>
+
+        <div class="workspace-panel">
+
+            <!-- MODULE 1: ERASE BACKDROP -->
+            <div id="eraser-module" class="tool-section-view active-view">
+                <label class="btn-upload">
+                    📤 UPLOAD IMAGE FOR TRANSPARENT PNG CUTOUT
+                    <input type="file" id="upload-eraser-file" accept="image/*" style="display:none;">
+                </label>
+            </div>
+
+            <!-- MODULE 2: SCENE COMPOSITOR -->
+            <div id="compositor-module" class="tool-section-view">
+                <div class="controls-row">
+                    <label class="btn-upload">
+                        👤 1. UPLOAD SUBJECT
+                        <input type="file" id="upload-comp-subject" accept="image/*" style="display:none;">
+                    </label>
+                    <label class="btn-upload" style="border-color: var(--accent-green); color: var(--accent-green);">
+                        🏙️ 2. UPLOAD NEW BACKGROUND
+                        <input type="file" id="upload-comp-bg" accept="image/*" style="display:none;">
+                    </label>
+                </div>
+                <div class="controls-row">
+                    <div class="control-box">
+                        <label>Edge Matting Blur: <span id="val-blur">0px</span></label>
+                        <input type="range" id="edge-blur-range" min="0" max="20" value="0">
+                    </div>
+                    <div class="control-box">
+                        <label>Light Wrap Intensity: <span id="val-wrap">0%</span></label>
+                        <input type="range" id="light-wrap-range" min="0" max="100" value="0">
+                    </div>
+                    <div class="control-box">
+                        <label>Drop Shadow Distance: <span id="val-shadow">0px</span></label>
+                        <input type="range" id="shadow-range" min="0" max="50" value="0">
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODULE 3: CLARITY ENHANCER -->
+            <div id="clarity-module" class="tool-section-view">
+                <div class="controls-row">
+                    <label class="btn-upload" style="grid-column: span 2;">
+                        🖼️ UPLOAD IMAGE FOR ENHANCEMENT
+                        <input type="file" id="upload-clarity-file" accept="image/*" style="display:none;">
+                    </label>
+                </div>
+                <div class="controls-row">
+                    <div class="control-box">
+                        <label>Neural Sharpen Matrix: <span id="val-sharp">0%</span></label>
+                        <input type="range" id="clarity-range" min="0" max="100" value="0">
+                    </div>
+                    <div class="control-box">
+                        <label>Cinematic Tone Style:</label>
+                        <select id="color-style-select" style="width:100%; padding:8px; border-radius:6px; border:1px solid var(--border-color);">
+                            <option value="none">Standard Color</option>
+                            <option value="hollywood">Hollywood Teal & Orange</option>
+                            <option value="vivid">HDR Vivid Glow</option>
+                            <option value="warm">Warm Studio Portrait</option>
+                            <option value="noir">Moody Noir B&W</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MASTER WORKSPACE CANVAS WITH SCI-FI LASER ANIMATION -->
+            <div class="canvas-stage" id="canvas-stage-box">
+                <p id="placeholder-msg" style="font-size:0.85rem; opacity:0.6;">ചിത്രങ്ങൾ അപ്‌ലോഡ് ചെയ്തു എഡിറ്റിംഗ് ആരംഭിക്കുക.</p>
+                <canvas id="master-canvas" style="display:none;"></canvas>
+
+                <!-- Sci-Fi Laser Scanning Overlay System -->
+                <div class="laser-scan-container" id="laser-overlay">
+                    <div class="laser-grid-bg"></div>
+                    <div class="laser-glow"></div>
+                    <div class="laser-beam"></div>
+                    <div class="laser-hud-status">
+                        <div class="hud-spinner"></div>
+                        <span>AI NEURAL SCANNING... <b id="hud-pct">0%</b></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LOSSLESS EXPORT CONTROLS -->
+            <div class="export-bar">
+                <div>
+                    <label>Export Resolution (Lossless Studio Quality):</label>
+                    <div class="res-btn-group">
+                        <button class="res-btn" onclick="setResolution(1920, this)">1080p FHD</button>
+                        <button class="res-btn active" onclick="setResolution(3840, this)">⚡ 4K Ultra HD</button>
+                        <button class="res-btn" onclick="setResolution(7680, this)">💎 8K Super Resolution</button>
+                    </div>
+                </div>
+                <button class="download-btn" id="export-download-btn" style="display:none;">
+                    📥 DOWNLOAD MASTER PNG
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>
