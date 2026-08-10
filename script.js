@@ -1,24 +1,20 @@
-// Main Dashboard Navigation Logic
+// Nexura.AI - Ecosystem Dashboard Navigation Logic
 
-function openModule(moduleName) {
-    if (moduleName === 'voice') {
-        window.location.href = 'voice.html';
-    } else if (moduleName === 'image') {
-        window.location.href = 'image.html';
-    } else if (moduleName === 'video') {
-        window.location.href = 'video.html';
+function navigateTo(pageUrl) {
+    if (pageUrl) {
+        window.location.href = pageUrl;
+    } else {
+        alert("ഈ മോഡ്യൂൾ പ്രോസസ്സിംഗിലാണ്, ഉടൻ ലഭ്യമാകും!");
     }
 }
 
-// Button Click Listener Setup
+// Mobile Scroll & Active State Enhancements
 document.addEventListener('DOMContentLoaded', () => {
-    const buttons = document.querySelectorAll('.launch-btn:not(.disabled)');
+    console.log("Nexura.AI Ecosystem Online.");
     
-    buttons.forEach((btn, index) => {
-        btn.addEventListener('click', () => {
-            if (index === 0) openModule('voice');
-            if (index === 1) openModule('image');
-            if (index === 2) openModule('video');
-        });
-    });
+    // Optional: Auto-scroll to centered card on mobile view
+    const cardGrid = document.querySelector('.card-grid');
+    if (cardGrid && window.innerWidth <= 768) {
+        cardGrid.scrollLeft = 0;
+    }
 });
