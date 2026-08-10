@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Image & Graphic Studio - Nexura.AI</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .studio-box {
+            width: 100%;
+            max-width: 850px;
+            margin-top: 20px;
+        }
+        .control-group {
+            background: rgba(0, 0, 0, 0.45);
+            border: 1px solid rgba(255, 183, 0, 0.25);
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 20px;
+        }
+        .control-title {
+            color: #ffb700;
+            font-size: 0.85rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .slider-row {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 14px;
+        }
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: #ccc;
+        }
+        input[type="range"] {
+            width: 100%;
+            accent-color: #ffb700;
+            cursor: pointer;
+        }
+        select, textarea, input[type="text"] {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 183, 0, 0.3);
+            border-radius: 8px;
+            color: #fff;
+            padding: 10px;
+            font-size: 0.85rem;
+            outline: none;
+            margin-bottom: 12px;
+        }
+        .ratio-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .ratio-btn {
+            background: rgba(0,0,0,0.6);
+            border: 1px solid rgba(255,183,0,0.3);
+            color: #ccc;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            text-align: center;
+        }
+        .ratio-btn.active {
+            border-color: #ffb700;
+            color: #ffb700;
+            background: rgba(255,183,0,0.15);
+        }
+        .image-preview-box {
+            width: 100%;
+            min-height: 280px;
+            background: repeating-conic-gradient(#111 0% 25%, #222 0% 50%) 50% / 20px 20px;
+            border: 1px dashed rgba(255, 183, 0, 0.4);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+        .image-preview-box img {
+            max-width: 100%;
+            max-height: 500px;
+            border-radius: 6px;
+            transition: filter 0.2s ease;
+        }
+        .loading-spinner {
+            display: none;
+            color: #ffb700;
+            font-size: 0.9rem;
+            text-align: center;
+            padding: 10px;
+            font-weight: bold;
+        }
+        .bg-ai-btn {
+            background: linear-gradient(135deg, #ff007f, #7928ca);
+            border: none;
+            color: #fff;
+            font-weight: bold;
+        }
+        .bg-ai-btn:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="main-header">
+        <div class="brand-badge">NEXURA.AI / ADVANCED IMAGE STUDIO</div>
+        <button class="launch-btn" style="width: auto; padding: 6px 15px;" onclick="window.location.href='index.html'">← DASHBOARD</button>
+    </header>
+
+    <!-- Main Layout -->
+    <main class="dashboard-container">
+        
+        <div class="card studio-box">
+            <div class="card-header">
+                <span class="card-num">MODULE 02</span>
+                <div class="status-indicator">AI IMAGE STUDIO ONLINE</div>
+            </div>
+
+            <!-- SECTION 1: AI Text-To-Image Generator -->
+            <div class="control-group">
+                <div class="control-title">1. AI TEXT-TO-IMAGE GENERATOR</div>
+                
+                <label style="font-size:0.75rem; color:#aaa; display:block; margin-bottom:5px;">പ്രോംപ്റ്റ് നൽകുക (English):</label>
+                <textarea id="prompt-input" rows="3" placeholder="Ex: Futuristic cinematic robot, ultra detailed 8k, photorealistic lighting..."></textarea>
+                
+                <label style="font-size:0.75rem; color:#aaa; display:block; margin-bottom:5px;">ആർട്ട് സ്റ്റൈൽ (Art Style):</label>
+                <select id="style-preset">
+                    <option value="photorealistic">📸 Photorealistic / Hyper Real</option>
+                    <option value="cinematic">🎬 Cinematic Movie Still</option>
+                    <option value="anime">🎨 Anime / Concept Art</option>
+                    <option value="3d-render">🧊 3D Render / Unreal Engine</option>
+                    <option value="cyberpunk">🌆 Cyberpunk Neon Glow</option>
+                </select>
+
+                <label style="font-size:0.75rem; color:#aaa; display:block; margin-bottom:5px;">വലിപ്പം (Aspect Ratio):</label>
+                <div class="ratio-grid">
+                    <button class="ratio-btn active" data-width="1024" data-height="1024">1:1 (Square)</button>
+                    <button class="ratio-btn" data-width="1280" data-height="720">16:9 (Landscape)</button>
+                    <button class="ratio-btn" data-width="720" data-height="1280">9:16 (Portrait / Reel)</button>
+                </div>
+
+                <button class="launch-btn" id="generate-img-btn">🎨 GENERATE AI IMAGE</button>
+            </div>
+
+            <!-- SECTION 2: Image Upload -->
+            <div class="control-group">
+                <div class="control-title">2. UPLOAD EXTERNAL IMAGE FOR EDITING</div>
+                <label class="launch-btn" style="text-align:center; display:block; cursor:pointer;">
+                    📁 UPLOAD IMAGE FILE
+                    <input type="file" id="upload-image-file" accept="image/*" style="display:none;">
+                </label>
+            </div>
+
+            <!-- SECTION 3: ADVANCED AI BACKGROUND REMOVER -->
+            <div class="control-group" style="border-color: rgba(255, 0, 127, 0.4);">
+                <div class="control-title" style="color: #ff007f;">
+                    <span>3. ADVANCED AI BACKGROUND REMOVER</span>
+                    <span style="font-size: 0.65rem; background: #ff007f; color: #fff; padding: 2px 6px; border-radius: 4px;">PRECISION AI</span>
+                </div>
+                <p style="font-size: 0.75rem; color: #bbb; margin-bottom: 12px;">
+                    ചിത്രത്തിലെ ബാക്ഗ്രൗണ്ട് അഡ്വാൻസ്ഡ് മെഷീൻ ലേണിംഗ് മോഡൽ ഉപയോഗിച്ച് ഓട്ടോമാറ്റിക്കായി വേർതിരിച്ച് ട്രാൻസ്പേരന്റ് ആക്കുന്നു.
+                </p>
+                <button class="launch-btn bg-ai-btn" id="remove-bg-btn">✂️ REMOVE BACKGROUND (AI)</button>
+            </div>
+
+            <!-- SECTION 4: Image Adjustment Filters -->
+            <div class="control-group">
+                <div class="control-title">4. IMAGE ADJUSTMENT & FILTER RACK</div>
+
+                <div class="slider-row">
+                    <div class="slider-label">
+                        <span>Brightness (വെളിച്ചം)</span>
+                        <span id="bright-val">100%</span>
+                    </div>
+                    <input type="range" id="brightness" min="0" max="200" value="100">
+                </div>
+
+                <div class="slider-row">
+                    <div class="slider-label">
+                        <span>Contrast (വ്യക്തത)</span>
+                        <span id="contrast-val">100%</span>
+                    </div>
+                    <input type="range" id="contrast" min="0" max="200" value="100">
+                </div>
+
+                <div class="slider-row">
+                    <div class="slider-label">
+                        <span>Saturation (നിറത്തിന്റെ തീവ്രത)</span>
+                        <span id="saturate-val">100%</span>
+                    </div>
+                    <input type="range" id="saturation" min="0" max="200" value="100">
+                </div>
+
+                <div class="slider-row">
+                    <div class="slider-label">
+                        <span>Background Blur</span>
+                        <span id="blur-val">0px</span>
+                    </div>
+                    <input type="range" id="blur" min="0" max="10" value="0">
+                </div>
+            </div>
+
+            <!-- SECTION 5: Master Output & Download -->
+            <div class="control-group">
+                <div class="control-title">5. MASTER STUDIO OUTPUT</div>
+                
+                <div class="loading-spinner" id="loading-spinner">✨ പ്രോസസ്സിംഗ് നടക്കുന്നു... ദയവായി കാത്തിരിക്കൂ...</div>
+
+                <div class="image-preview-box">
+                    <p id="placeholder-text" style="color:#777; font-size:0.8rem;">ഇവിടെ ചിത്രം പ്രത്യക്ഷപ്പെടും.</p>
+                    <img id="main-preview" src="" style="display:none;" alt="Generated Output" crossorigin="anonymous">
+                </div>
+
+                <button class="launch-btn" id="download-img-btn" style="display:none; border-color:#00ff88; color:#00ff88; margin-top:15px;">
+                    📥 DOWNLOAD PNG (TRANSPARENT / HD)
+                </button>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Vanilla Javascript & Modules -->
+    <script type="module">
+        import imglyRemoveBackground from 'https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.4.5/+esm';
+
+        const removeBgBtn = document.getElementById('remove-bg-btn');
+        const loadingSpinner = document.getElementById('loading-spinner');
+        const mainPreview = document.getElementById('main-preview');
+        const placeholderText = document.getElementById('placeholder-text');
+        const downloadImgBtn = document.getElementById('download-img-btn');
+
+        // Advanced AI Background Removal Action
+        removeBgBtn.addEventListener('click', async () => {
+            if (!mainPreview.src || mainPreview.style.display === 'none') {
+                alert("ദയവായി ആദ്യം ഒരു ചിത്രം അപ്‌ലോഡ് ചെയ്യുകയോ AI വഴി ജനറേറ്റ് ചെയ്യുകയോ ചെയ്യുക!");
+                return;
+            }
+
+            loadingSpinner.innerText = "⚡ AI ബാക്ക്ഗ്രൗണ്ട് നീക്കം ചെയ്യുന്നു... (Browser ONNX Processing)";
+            loadingSpinner.style.display = "block";
+
+            try {
+                // Fetch high precision segmented image blob directly in browser memory
+                const blob = await imglyRemoveBackground(mainPreview.src);
+                const transparentUrl = URL.createObjectURL(blob);
+
+                mainPreview.src = transparentUrl;
+                loadingSpinner.style.display = "none";
+            } catch (error) {
+                console.error("BG Removal Error:", error);
+                alert("ബാക്ക്ഗ്രൗണ്ട് പ്രോസസ്സിംഗിൽ പിശക് സംഭവിച്ചു. ചിത്രം വലിപ്പം കുറച്ച് വീണ്ടും ശ്രമിക്കുക.");
+                loadingSpinner.style.display = "none";
+            }
+        });
+    </script>
+
+    <script>
+        // Aspect Ratio Selector Logic
+        let selectedWidth = 1024;
+        let selectedHeight = 1024;
+
+        const ratioBtns = document.querySelectorAll('.ratio-btn');
+        ratioBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                ratioBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                selectedWidth = btn.getAttribute('data-width');
+                selectedHeight = btn.getAttribute('data-height');
+            });
+        });
+
+        // Filter Adjustments Logic
+        const brightnessInput = document.getElementById('brightness');
+        const contrastInput = document.getElementById('contrast');
+        const saturationInput = document.getElementById('saturation');
+        const blurInput = document.getElementById('blur');
+        const mainPreview = document.getElementById('main-preview');
+
+        function applyFilters() {
+            const bright = brightnessInput.value;
+            const contrast = contrastInput.value;
+            const saturate = saturationInput.value;
+            const blur = blurInput.value;
+
+            document.getElementById('bright-val').innerText = bright + '%';
+            document.getElementById('contrast-val').innerText = contrast + '%';
+            document.getElementById('saturate-val').innerText = saturate + '%';
+            document.getElementById('blur-val').innerText = blur + 'px';
+
+            mainPreview.style.filter = `brightness(${bright}%) contrast(${contrast}%) saturate(${saturate}%) blur(${blur}px)`;
+        }
+
+        brightnessInput.oninput = applyFilters;
+        contrastInput.oninput = applyFilters;
+        saturationInput.oninput = applyFilters;
+        blurInput.oninput = applyFilters;
+
+        // AI Image Generation Logic
+        const generateBtn = document.getElementById('generate-img-btn');
+        const promptInput = document.getElementById('prompt-input');
+        const stylePreset = document.getElementById('style-preset');
+        const loadingSpinner = document.getElementById('loading-spinner');
+        const placeholderText = document.getElementById('placeholder-text');
+        const downloadImgBtn = document.getElementById('download-img-btn');
+
+        generateBtn.addEventListener('click', () => {
+            const prompt = promptInput.value.trim();
+            if (!prompt) {
+                alert("ദയവായി പ്രോംപ്റ്റ് നൽകുക!");
+                return;
+            }
+
+            const style = stylePreset.value;
+            const fullPrompt = encodeURIComponent(`${prompt}, ${style} style, high quality, 8k resolution`);
+            const seed = Math.floor(Math.random() * 1000000);
+            
+            const imageUrl = `https://pollinations.ai/p/${fullPrompt}?width=${selectedWidth}&height=${selectedHeight}&seed=${seed}&nologo=true`;
+
+            loadingSpinner.innerText = "✨ AI ചിത്രം തയ്യാറാകുന്നു, ദയവായി കാത്തിരിക്കൂ...";
+            loadingSpinner.style.display = "block";
+            placeholderText.style.display = "none";
+            mainPreview.style.display = "none";
+            downloadImgBtn.style.display = "none";
+
+            const tempImg = new Image();
+            tempImg.crossOrigin = "anonymous";
+            tempImg.src = imageUrl;
+            tempImg.onload = () => {
+                loadingSpinner.style.display = "none";
+                mainPreview.src = imageUrl;
+                mainPreview.style.display = "block";
+                downloadImgBtn.style.display = "block";
+            };
+        });
+
+        // Local Image Upload Logic
+        document.getElementById('upload-image-file').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    placeholderText.style.display = "none";
+                    mainPreview.src = event.target.result;
+                    mainPreview.style.display = "block";
+                    downloadImgBtn.style.display = "block";
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Download PNG Logic
+        downloadImgBtn.addEventListener('click', () => {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = mainPreview.naturalWidth || 1024;
+            canvas.height = mainPreview.naturalHeight || 1024;
+
+            ctx.filter = mainPreview.style.filter;
+            ctx.drawImage(mainPreview, 0, 0, canvas.width, canvas.height);
+
+            const link = document.createElement('a');
+            link.download = `Nexura_Studio_Output_${Date.now()}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        });
+    </script>
+</body>
+</html>
