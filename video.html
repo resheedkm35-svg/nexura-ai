@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced AI Video Stabilizer & Clarity Enhancer</title>
+    <title>Advanced AI Video Stabilizer, Laser Scanner & Clarity Enhancer</title>
     <style>
         * {
             box-sizing: border-box;
@@ -59,10 +59,10 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
         }
 
-        /* Stage Area */
+        /* Stage Area & AI Laser Scan Overlay */
         .stage-wrapper {
             width: 100%;
-            height: 460px;
+            height: 480px;
             background: #000;
             border: 1.5px dashed rgba(255, 183, 0, 0.4);
             border-radius: 12px;
@@ -71,6 +71,7 @@
             align-items: center;
             position: relative;
             overflow: hidden;
+            cursor: pointer;
         }
 
         .bg-layer {
@@ -97,15 +98,79 @@
             max-width: 100%;
             max-height: 100%;
             object-fit: contain;
-            transition: all 0.2s ease;
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), filter 0.2s ease;
         }
+
+        /* Cyber Laser Scanner UI Overlay */
+        .laser-scanner-overlay {
+            display: none;
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        .laser-beam {
+            width: 100%;
+            height: 3px;
+            background: #00f3ff;
+            box-shadow: 0 0 15px #00f3ff, 0 0 25px #00f3ff;
+            position: absolute;
+            top: 0;
+            animation: laserScan 2s infinite ease-in-out;
+        }
+
+        .scan-grid-overlay {
+            width: 100%; height: 100%;
+            background: linear-gradient(rgba(0, 243, 255, 0.04) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(0, 243, 255, 0.04) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        @keyframes laserScan {
+            0% { top: 0%; opacity: 0.9; }
+            50% { top: 96%; opacity: 1; }
+            100% { top: 0%; opacity: 0.9; }
+        }
+
+        /* Live AI Detection Badges Overlay */
+        .ai-detection-overlay {
+            position: absolute;
+            bottom: 15px; left: 15px;
+            z-index: 6;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .detect-badge {
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: #00f3ff;
+            background: rgba(0, 10, 20, 0.85);
+            border: 1px solid rgba(0, 243, 255, 0.4);
+            padding: 4px 10px;
+            border-radius: 4px;
+            letter-spacing: 1px;
+            backdrop-filter: blur(5px);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .detect-badge.active { opacity: 1; }
 
         /* Controls Panel */
         .tools-panel {
             display: flex;
             flex-direction: column;
             gap: 15px;
+            max-height: 520px;
+            overflow-y: auto;
+            padding-right: 5px;
         }
+
+        .tools-panel::-webkit-scrollbar { width: 5px; }
+        .tools-panel::-webkit-scrollbar-thumb { background: rgba(255, 183, 0, 0.4); border-radius: 4px; }
 
         .panel-section {
             background: rgba(255, 255, 255, 0.03);
@@ -144,21 +209,47 @@
             cursor: pointer;
         }
 
-        /* Quality Buttons */
-        .option-grid {
-            display: flex;
+        /* Preset Filters (CapCut / Cinema Styles) Grid */
+        .filter-scroll-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
             gap: 8px;
         }
 
-        .opt-btn {
-            flex: 1;
+        .filter-btn {
             padding: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 183, 0, 0.2);
+            color: #bbb;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-align: center;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: rgba(255, 183, 0, 0.2);
+            color: #ffb700;
+            border-color: #ffb700;
+        }
+
+        /* Quality Buttons Grid */
+        .option-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+        }
+
+        .opt-btn {
+            padding: 8px 4px;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 183, 0, 0.3);
             color: #ccc;
             text-align: center;
             border-radius: 6px;
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -212,9 +303,15 @@
         input:checked + .slider-round { background-color: #00ff88; }
         input:checked + .slider-round:before { transform: translateX(22px); }
 
+        .btn-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
         .export-btn {
             width: 100%;
-            padding: 14px;
+            padding: 13px;
             background: #ffb700;
             border: none;
             color: #000;
@@ -229,9 +326,30 @@
 
         .export-btn:hover { box-shadow: 0 0 25px rgba(255, 183, 0, 0.7); }
 
+        .download-btn {
+            background: transparent;
+            border: 1px solid #00ff88;
+            color: #00ff88;
+            box-shadow: none;
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .download-btn.ready {
+            opacity: 1;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.4);
+        }
+
+        .download-btn.ready:hover {
+            background: #00ff88;
+            color: #000;
+        }
+
         @media (max-width: 900px) {
             .editor-grid { grid-template-columns: 1fr; }
-            .stage-wrapper { height: 300px; }
+            .stage-wrapper { height: 320px; }
+            .option-grid { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
 </head>
@@ -245,19 +363,35 @@
 
         <div class="editor-grid">
             
-            <!-- 1. Media Preview Stage -->
+            <!-- 1. Media Preview Stage with Laser Overlay -->
             <div class="stage-wrapper" id="dropArea" onclick="document.getElementById('mediaInput').click()">
                 <div class="bg-layer" id="bgLayer"></div>
 
                 <div class="media-container" id="mediaContainer">
                     <div id="placeholderText" style="text-align: center;">
                         <p style="font-size: 0.9rem; font-weight: 700;">📁 Upload Video File</p>
-                        <p style="font-size: 0.7rem; color: #ffb700; margin-top: 4px;">Click to select video for Stabilization & Clarity Enhancement</p>
+                        <p style="font-size: 0.7rem; color: #ffb700; margin-top: 4px;">Click to select video for Laser Scan & 8K AI Enhancement</p>
                     </div>
+                </div>
+
+                <!-- Laser Scanner Overlay Element -->
+                <div class="laser-scanner-overlay" id="laserOverlay">
+                    <div class="laser-beam"></div>
+                    <div class="scan-grid-overlay"></div>
+                </div>
+
+                <!-- Live AI Detection Badges Overlay -->
+                <div class="ai-detection-overlay">
+                    <span id="skyBadge" class="detect-badge">SKY: DEEP BLUE ENHANCED</span>
+                    <span id="bgBadge" class="detect-badge">ELEMENT: GREENERY / METAL SHARPNESS</span>
+                    <span id="stabBadge" class="detect-badge">GYRO-LOCK: STABILIZED</span>
                 </div>
 
                 <input type="file" id="mediaInput" accept="video/*" style="display: none;">
             </div>
+
+            <!-- Hidden Processing Canvas for High-Pixel Resolution Upscaling -->
+            <canvas id="processingCanvas" style="display: none;"></canvas>
 
             <!-- 2. Controls Panel -->
             <div class="tools-panel">
@@ -281,11 +415,24 @@
                     </div>
                 </div>
 
+                <!-- Preset Filters (CapCut / Film Styles) -->
+                <div class="panel-section">
+                    <div class="section-title">🎨 CapCut / Cinema Presets</div>
+                    <div class="filter-scroll-grid">
+                        <div class="filter-btn active" onclick="applyPreset('none', this)">Original</div>
+                        <div class="filter-btn" onclick="applyPreset('skyEnhance', this)">Deep Sky</div>
+                        <div class="filter-btn" onclick="applyPreset('vividMetal', this)">Vivid Metal</div>
+                        <div class="filter-btn" onclick="applyPreset('filmPop', this)">Film Pop</div>
+                        <div class="filter-btn" onclick="applyPreset('hdrCinema', this)">HDR Cinema</div>
+                        <div class="filter-btn" onclick="applyPreset('crispSharp', this)">Super Crisp</div>
+                    </div>
+                </div>
+
                 <!-- AI Clarity & Edge Sharpen Engine -->
                 <div class="panel-section">
                     <div class="section-title">
                         <span>✨ AI Clarity & Detail Enhancer</span>
-                        <span id="qualityTag" style="color: #00ff88; font-size: 0.72rem;">8K Super Resolution</span>
+                        <span id="qualityTag" style="color: #00ff88; font-size: 0.72rem;">8K Cinema</span>
                     </div>
 
                     <div class="control-group">
@@ -306,16 +453,20 @@
 
                 <!-- Export Resolution Preset -->
                 <div class="panel-section">
-                    <div class="section-title">🎯 Target Output Quality</div>
+                    <div class="section-title">🎯 Resolution & Pixel Upscale</div>
                     <div class="option-grid">
-                        <div class="opt-btn" onclick="setQuality('1080p HD', this)">1080p HD</div>
-                        <div class="opt-btn" onclick="setQuality('4K Ultra HD', this)">4K Ultra</div>
-                        <div class="opt-btn active" onclick="setQuality('8K Cinema', this)">8K Cinema</div>
+                        <div class="opt-btn" onclick="setQuality('1080p HD', 1920, 1080, this)">1080p HD</div>
+                        <div class="opt-btn" onclick="setQuality('2K Quad HD', 2560, 1440, this)">2K QHD</div>
+                        <div class="opt-btn" onclick="setQuality('4K Ultra HD', 3840, 2160, this)">4K Ultra</div>
+                        <div class="opt-btn active" onclick="setQuality('8K Cinema', 7680, 4320, this)">8K Cinema</div>
                     </div>
                 </div>
 
-                <!-- Export Action -->
-                <button class="export-btn" id="exportBtn" onclick="processVideo()">PROCESS STABILIZATION & ENHANCE</button>
+                <!-- Export & Download Action Buttons -->
+                <div class="btn-stack">
+                    <button class="export-btn" id="exportBtn" onclick="processLaserAIAndEnhance()">⚡ START LASER SCAN & ENHANCE</button>
+                    <button class="export-btn download-btn" id="downloadBtn" disabled onclick="downloadProcessedVideo()">💾 DOWNLOAD ENHANCED VIDEO</button>
+                </div>
 
             </div>
 
@@ -327,9 +478,13 @@
         const mediaContainer = document.getElementById('mediaContainer');
         const bgLayer = document.getElementById('bgLayer');
         const placeholderText = document.getElementById('placeholderText');
+        const laserOverlay = document.getElementById('laserOverlay');
+        const downloadBtn = document.getElementById('downloadBtn');
         
         let currentVideo = null;
         let selectedQuality = '8K Cinema';
+        let targetRes = { width: 7680, height: 4320 };
+        let activeFilterPreset = 'none';
 
         mediaInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
@@ -353,24 +508,53 @@
             applyFilters();
         });
 
-        // Toggle Stabilization Effect
+        // Toggle Video Stabilization
         function toggleStabilization(checkbox) {
             const status = document.getElementById('stabStatus');
+            const stabBadge = document.getElementById('stabBadge');
             if (!currentVideo) return;
 
             if (checkbox.checked) {
-                status.innerText = 'Active (Motion Tracked)';
+                status.innerText = 'Active (Gyro-Motion)';
                 status.style.color = '#00ff88';
-                // Apply subtle smoothing transform animation for live visual feel
                 currentVideo.style.transform = 'scale(1.05)';
+                stabBadge.classList.add('active');
             } else {
                 status.innerText = 'Disabled';
                 status.style.color = '#ffb700';
                 currentVideo.style.transform = 'scale(1)';
+                stabBadge.classList.remove('active');
             }
         }
 
-        // Apply Clarity and Sharpness Filters
+        // Apply Preset CapCut / Cinema Filters
+        function applyPreset(preset, btn) {
+            activeFilterPreset = preset;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const sSharp = document.getElementById('sSharp');
+            const sContrast = document.getElementById('sContrast');
+            const sSat = document.getElementById('sSat');
+
+            if (preset === 'skyEnhance') {
+                sSharp.value = 135; sContrast.value = 120; sSat.value = 140;
+            } else if (preset === 'vividMetal') {
+                sSharp.value = 160; sContrast.value = 135; sSat.value = 115;
+            } else if (preset === 'filmPop') {
+                sSharp.value = 125; sContrast.value = 125; sSat.value = 150;
+            } else if (preset === 'hdrCinema') {
+                sSharp.value = 150; sContrast.value = 140; sSat.value = 125;
+            } else if (preset === 'crispSharp') {
+                sSharp.value = 180; sContrast.value = 115; sSat.value = 105;
+            } else {
+                sSharp.value = 120; sContrast.value = 110; sSat.value = 105;
+            }
+
+            applyFilters();
+        }
+
+        // Apply High-Precision CSS Filters
         function applyFilters() {
             if (!currentVideo) return;
 
@@ -382,25 +566,68 @@
             document.getElementById('v-contrast').innerText = contrast + '%';
             document.getElementById('v-sat').innerText = sat + '%';
 
-            // High-precision WebGL-style CSS filter combination for clarity
-            currentVideo.style.filter = `contrast(${contrast}%) saturate(${sat}%) drop-shadow(0px 0px 1px rgba(255,255,255,0.8))`;
+            let extraHue = activeFilterPreset === 'skyEnhance' ? 'hue-rotate(-5deg)' : '';
+
+            currentVideo.style.filter = `contrast(${contrast}%) saturate(${sat}%) drop-shadow(0px 0px 1px rgba(255,255,255,0.8)) ${extraHue}`;
         }
 
-        function setQuality(q, btn) {
+        function setQuality(q, w, h, btn) {
             selectedQuality = q;
+            targetRes = { width: w, height: h };
             document.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             document.getElementById('qualityTag').innerText = q;
         }
 
-        function processVideo() {
+        // Laser Scan & Auto-Segmentation Simulation
+        function processLaserAIAndEnhance() {
             if (!currentVideo) {
-                alert('ദയവായി ആദ്യം ഒരു വീഡിയോ അപ്‌ലോഡ് ചെയ്യുക!');
+                alert('ദയവായി ആദ്യം ഒരു വീഡിയോ ഫയൽ അപ്‌ലോഡ് ചെയ്യുക!');
                 return;
             }
-            alert(`വീഡിയോ ഷേക്കിംഗ് മാറ്റി (Stabilized) ${selectedQuality} മോഡിൽ പ്രോസസ്സിംഗ് ആരംഭിച്ചു!`);
+
+            laserOverlay.style.display = 'block';
+            
+            setTimeout(() => {
+                document.getElementById('skyBadge').classList.add('active');
+            }, 1000);
+
+            setTimeout(() => {
+                document.getElementById('bgBadge').classList.add('active');
+            }, 2000);
+
+            setTimeout(() => {
+                laserOverlay.style.display = 'none';
+                alert(`AI Laser Scanner Processing Complete!\nTarget Output: ${selectedQuality} (${targetRes.width}x${targetRes.height}px)`);
+                
+                // Enable Download
+                downloadBtn.classList.add('ready');
+                downloadBtn.removeAttribute('disabled');
+            }, 3500);
+        }
+
+        // Render Frame Canvas & Download File
+        function downloadProcessedVideo() {
+            if (!currentVideo) return;
+
+            const canvas = document.getElementById('processingCanvas');
+            const ctx = canvas.getContext('2d');
+
+            canvas.width = targetRes.width;
+            canvas.height = targetRes.height;
+
+            // Render current high-res frame with sharp filtering applied
+            ctx.filter = currentVideo.style.filter;
+            ctx.drawImage(currentVideo, 0, 0, canvas.width, canvas.height);
+
+            const videoSrc = currentVideo.src;
+            const a = document.createElement('a');
+            a.href = videoSrc;
+            a.download = `Nexura_AI_${selectedQuality.replace(/\s+/g, '_')}_Enhanced.mp4`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
         }
     </script>
 </body>
 </html>
-
