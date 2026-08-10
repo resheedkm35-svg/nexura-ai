@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice & AI Music Studio - Nexura.AI</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .studio-box {
+            width: 100%;
+            max-width: 850px;
+            margin-top: 20px;
+        }
+        .control-group {
+            background: rgba(0, 0, 0, 0.45);
+            border: 1px solid rgba(255, 183, 0, 0.25);
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 20px;
+        }
+        .control-title {
+            color: #ffb700;
+            font-size: 0.85rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .slider-row {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 14px;
+        }
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: #ccc;
+        }
+        input[type="range"] {
+            width: 100%;
+            accent-color: #ffb700;
+            cursor: pointer;
+        }
+        select, textarea, input[type="text"] {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 183, 0, 0.3);
+            border-radius: 8px;
+            color: #fff;
+            padding: 10px;
+            font-size: 0.85rem;
+            outline: none;
+            margin-bottom: 12px;
+        }
+        .btn-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        audio {
+            width: 100%;
+            margin-top: 15px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="main-header">
+        <div class="brand-badge">NEXURA.AI / AI AUDIO & MUSIC STUDIO</div>
+        <button class="launch-btn" style="width: auto; padding: 6px 15px;" onclick="window.location.href='index.html'">← DASHBOARD</button>
+    </header>
+
+    <!-- Main Studio Layout -->
+    <main class="dashboard-container">
+        
+        <div class="card studio-box">
+            <div class="card-header">
+                <span class="card-num">MODULE 01</span>
+                <div class="status-indicator">AI MUSIC ENGINE ONLINE</div>
+            </div>
+
+            <!-- SECTION 1: AI Text To Speech -->
+            <div class="control-group">
+                <div class="control-title">1. AI TEXT-TO-SPEECH GENERATOR</div>
+                <textarea id="tts-input" rows="3" placeholder="ഇവിടെ ടൈപ്പ് ചെയ്യുക... (മലയാളം അല്ലെങ്കിൽ ഇംഗ്ലീഷ്)"></textarea>
+                <div class="btn-grid">
+                    <button class="launch-btn" id="tts-play-btn">🔊 SPEAK TEXT</button>
+                    <button class="launch-btn" id="tts-stop-btn">⏹️ STOP SPEECH</button>
+                </div>
+            </div>
+
+            <!-- SECTION 2: Audio Recording & Upload -->
+            <div class="control-group">
+                <div class="control-title">2. VOICE INPUT (റെക്കോർഡിംഗ് / ഫയൽ അപ്‌ലോഡ്)</div>
+                <div class="btn-grid">
+                    <button class="launch-btn" id="record-btn">🔴 START MIC RECORD</button>
+                    <label class="launch-btn" style="text-align:center; display:block; cursor:pointer;">
+                        📁 UPLOAD VOICE FILE
+                        <input type="file" id="audio-file" accept="audio/*" style="display:none;">
+                    </label>
+                </div>
+                <p id="input-status" style="font-size: 0.75rem; color: #aaa; text-align: center;">വോയിസ് റെക്കോർഡ് ചെയ്യുകയോ ഫയൽ നൽകുകയോ ചെയ്യുക.</p>
+            </div>
+
+            <!-- SECTION 3: Text-To-Music AI Generator -->
+            <div class="control-group">
+                <div class="control-title">3. AI TEXT-TO-MUSIC GENERATOR (100% COPYRIGHT-FREE)</div>
+                <label style="font-size:0.75rem; color:#aaa; display:block; margin-bottom:5px;">നിങ്ങൾക്ക് ആവശ്യമുള്ള മ്യൂസിക് പ്രോംപ്റ്റ് നൽകുക:</label>
+                <input type="text" id="music-prompt" placeholder="Ex: Cinematic piano, Lo-Fi beats, Cyberpunk synth, Acoustic ambient...">
+                
+                <div class="btn-grid">
+                    <button class="launch-btn" id="generate-music-btn">🎹 GENERATE AI MUSIC TRACK</button>
+                    <label class="launch-btn" style="text-align:center; display:block; cursor:pointer;">
+                        🎵 UPLOAD CUSTOM BGM
+                        <input type="file" id="bgm-file" accept="audio/*" style="display:none;">
+                    </label>
+                </div>
+
+                <div class="slider-row">
+                    <div class="slider-label">
+                        <span>BGM Volume Balance (ബാക്ക്ഗ്രൗണ്ട് മ്യൂസിക് വോളിയം)</span>
+                        <span id="bgm-vol-val">30%</span>
+                    </div>
+                    <input type="range" id="bgm-volume" min="0" max="100" value="30">
+                </div>
+                <p id="music-status" style="font-size: 0.75rem; color: #ffb700; text-align: center;"></p>
+            </div>
+
+            <!-- SECTION 4: Studio FX & Noise Cleaner -->
+            <div class="control-group">
+                <div class="control-title">4. STUDIO FX & NOISE CLEANER</div>
+                
+                <div class="slider-row">
+                    <div class="slider-label">
+                        <span>Noise Cut / Hum Reduction (പശ്ചാത്തല ശബ്ദം ഒഴിവാക്കാൻ)</span>
+                        <span id="noise-val">80 Hz</span>
+                    </div>
+                    <input type="range" id="noise-cut" min="20" max="300" value="80">
+                </div>
+
+                <div class="slider-row">
+                    <div class="slider-label">
+                        <span>Studio Bass (ഗാംഭീര്യം)</span>
+                        <span id="bass-val">0 dB</span>
+                    </div>
+                    <input type="range" id="bass" min="-10" max="15" value="0">
+                </div>
+
+                <div class="slider-row">
+                    <div class="slider-label">
+                        <span>Voice Clarity / Treble (വ്യക്തത)</span>
+                        <span id="treble-val">0 dB</span>
+                    </div>
+                    <input type="range" id="treble" min="-10" max="15" value="0">
+                </div>
+            </div>
+
+            <!-- SECTION 5: Master Process & Output -->
+            <div class="control-group">
+                <div class="control-title">5. MASTER STUDIO OUTPUT</div>
+                <button class="launch-btn" id="process-btn">✨ PROCESS & ENHANCE MASTER AUDIO</button>
+                <audio id="audio-player" controls style="display:none;"></audio>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script>
+        // 1. Text To Speech Engine
+        const ttsInput = document.getElementById('tts-input');
+        const ttsPlayBtn = document.getElementById('tts-play-btn');
+        const ttsStopBtn = document.getElementById('tts-stop-btn');
+
+        ttsPlayBtn.addEventListener('click', () => {
+            const text = ttsInput.value.trim();
+            if (text !== '') {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'ml-IN';
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert('ടെക്സ്റ്റ് ബോക്സിൽ വിവരങ്ങൾ നൽകുക!');
+            }
+        });
+
+        ttsStopBtn.addEventListener('click', () => {
+            window.speechSynthesis.cancel();
+        });
+
+        // 2. Audio & Music Setup
+        let mediaRecorder;
+        let audioChunks = [];
+        let vocalBlob = null;
+        let bgmBufferGenerated = null;
+        let audioContext;
+
+        const recordBtn = document.getElementById('record-btn');
+        const audioFileInput = document.getElementById('audio-file');
+        const bgmFileInput = document.getElementById('bgm-file');
+        const inputStatus = document.getElementById('input-status');
+        const musicStatus = document.getElementById('music-status');
+        const processBtn = document.getElementById('process-btn');
+        const audioPlayer = document.getElementById('audio-player');
+        const generateMusicBtn = document.getElementById('generate-music-btn');
+
+        // Sliders
+        document.getElementById('noise-cut').oninput = (e) => document.getElementById('noise-val').innerText = e.target.value + ' Hz';
+        document.getElementById('bass').oninput = (e) => document.getElementById('bass-val').innerText = e.target.value + ' dB';
+        document.getElementById('treble').oninput = (e) => document.getElementById('treble-val').innerText = e.target.value + ' dB';
+        document.getElementById('bgm-volume').oninput = (e) => document.getElementById('bgm-vol-val').innerText = e.target.value + '%';
+
+        // Live Mic Recording
+        recordBtn.addEventListener('click', async () => {
+            if (!mediaRecorder || mediaRecorder.state === "inactive") {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    audioChunks = [];
+
+                    mediaRecorder.ondataavailable = event => audioChunks.push(event.data);
+                    mediaRecorder.onstop = () => {
+                        vocalBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                        inputStatus.innerText = "തൽസമയ വോയിസ് റെക്കോർഡിംഗ് സിദ്ധമായി!";
+                    };
+
+                    mediaRecorder.start();
+                    recordBtn.innerText = "⏹️ STOP RECORDING";
+                    recordBtn.style.borderColor = "#ff4444";
+                    inputStatus.innerText = "റെക്കോർഡിംഗ് നടക്കുന്നു...";
+                } catch (err) {
+                    alert("മൈക്രോഫോൺ അനുമതി ലഭ്യമായില്ല!");
+                }
+            } else {
+                mediaRecorder.stop();
+                recordBtn.innerText = "🔴 START MIC RECORD";
+                recordBtn.style.borderColor = "#ffb700";
+            }
+        });
+
+        // Vocal File Upload
+        audioFileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                vocalBlob = file;
+                inputStatus.innerText = `വോയിസ് ഫയൽ ചേർത്തു: ${file.name}`;
+            }
+        });
+
+        // 3. Procedural AI Text-To-Music Generator Engine
+        generateMusicBtn.addEventListener('click', () => {
+            const prompt = document.getElementById('music-prompt').value.toLowerCase().trim() || "cinematic";
+            musicStatus.innerText = "AI മ്യൂസിക് ട്രാക്ക് നിർമ്മിക്കുന്നു... ദയവായി കാത്തിരിക്കൂ.";
+
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const duration = 15; // 15 Seconds generated loop
+            const sampleRate = audioContext.sampleRate;
+            const buffer = audioContext.createBuffer(2, sampleRate * duration, sampleRate);
+
+            let baseFreq = 110; // A2
+            if (prompt.includes('lo-fi') || prompt.includes('chill')) baseFreq = 130.81; // C3
+            if (prompt.includes('cyber') || prompt.includes('synth')) baseFreq = 82.41; // E2
+            if (prompt.includes('piano') || prompt.includes('acoustic')) baseFreq = 146.83; // D3
+
+            for (let channel = 0; channel < 2; channel++) {
+                const data = buffer.getChannelData(channel);
+                for (let i = 0; i < buffer.length; i++) {
+                    const t = i / sampleRate;
+                    const chord = (Math.sin(2 * Math.PI * baseFreq * t) + 
+                                  Math.sin(2 * Math.PI * (baseFreq * 1.25) * t) + 
+                                  Math.sin(2 * Math.PI * (baseFreq * 1.5) * t)) * 0.1;
+                    
+                    const beat = (t % 0.5 < 0.05) ? Math.sin(2 * Math.PI * 60 * t) * 0.2 : 0;
+                    data[i] = (chord + beat) * Math.exp(- (t % 2) * 0.5);
+                }
+            }
+
+            bgmBufferGenerated = buffer;
+            musicStatus.innerText = `✨ പുതിയ AI മ്യൂസിക് ട്രാക്ക് സജ്ജമായി! Style: "${prompt}"`;
+        });
+
+        // Custom BGM File Upload
+        bgmFileInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                bgmBufferGenerated = await audioContext.decodeAudioData(await file.arrayBuffer());
+                musicStatus.innerText = `Custom BGM ഫയൽ ലോഡ് ചെയ്തു: ${file.name}`;
+            }
+        });
+
+        // 4. Processing & Master Output Engine
+        processBtn.addEventListener('click', async () => {
+            if (!vocalBlob) {
+                alert("ദയവായി ആദ്യം ഒരു വോയിസ് റെക്കോർഡ് ചെയ്യുകയോ ഫയൽ അപ്‌ലോഡ് ചെയ്യുകയോ ചെയ്യുക!");
+                return;
+            }
+
+            inputStatus.innerText = "സ്റ്റുഡിയോ എഞ്ചിൻ മാസ്റ്ററിംഗ് ചെയ്യുന്നു...";
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+            // Decode Vocal
+            const vocalBuffer = await audioContext.decodeAudioData(await vocalBlob.arrayBuffer());
+            const vocalSource = audioContext.createBufferSource();
+            vocalSource.buffer = vocalBuffer;
+
+            // Audio Filters
+            const noiseFilter = audioContext.createBiquadFilter();
+            noiseFilter.type = "highpass";
+            noiseFilter.frequency.value = parseFloat(document.getElementById('noise-cut').value);
+
+            const bassFilter = audioContext.createBiquadFilter();
+            bassFilter.type = "lowshelf";
+            bassFilter.frequency.value = 250;
+            bassFilter.gain.value = parseFloat(document.getElementById('bass').value);
+
+            const trebleFilter = audioContext.createBiquadFilter();
+            trebleFilter.type = "highshelf";
+            trebleFilter.frequency.value = 4000;
+            trebleFilter.gain.value = parseFloat(document.getElementById('treble').value);
+
+            const compressor = audioContext.createDynamicsCompressor();
+            compressor.threshold.value = -20;
+            compressor.ratio.value = 6;
+
+            // Vocal Connections
+            vocalSource.connect(noiseFilter);
+            noiseFilter.connect(bassFilter);
+            bassFilter.connect(trebleFilter);
+            trebleFilter.connect(compressor);
+            compressor.connect(audioContext.destination);
+
+            // BGM Connection
+            if (bgmBufferGenerated) {
+                const bgmSource = audioContext.createBufferSource();
+                bgmSource.buffer = bgmBufferGenerated;
+                bgmSource.loop = true;
+
+                const bgmGain = audioContext.createGain();
+                const bgmVol = parseFloat(document.getElementById('bgm-volume').value) / 100;
+                bgmGain.gain.value = bgmVol;
+
+                bgmSource.connect(bgmGain);
+                bgmGain.connect(audioContext.destination);
+                bgmSource.start(0);
+            }
+
+            vocalSource.start(0);
+
+            const originalUrl = URL.createObjectURL(vocalBlob);
+            audioPlayer.src = originalUrl;
+            audioPlayer.style.display = 'block';
+            audioPlayer.play();
+
+            inputStatus.innerText = "പ്രോസസിംഗ് പൂർത്തിയായി! മാസ്റ്റർ വോയിസും AI മ്യൂസിക്കും പ്ലേ ആകുന്നുണ്ട്.";
+        });
+    </script>
+</body>
+</html>
