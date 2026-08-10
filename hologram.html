@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Hologram & Cinematic Relighting Studio</title>
+    <title>3D Hologram Logo Spinner & Video Exporter</title>
     <style>
         * {
             box-sizing: border-box;
@@ -13,14 +13,14 @@
         }
 
         body {
-            background-color: #08090b;
+            background-color: #06080d;
             color: #ffffff;
             padding: 20px;
             overflow-x: hidden;
         }
 
         .studio-container {
-            max-width: 1250px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
@@ -43,28 +43,29 @@
         }
 
         .studio-title {
-            color: #ffb700;
+            color: #00ffcc;
             font-size: 1.3rem;
             font-weight: 800;
             letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
         }
 
         .editor-grid {
             display: grid;
             grid-template-columns: 1.3fr 1fr;
             gap: 20px;
-            background: rgba(18, 20, 26, 0.9);
-            border: 1px solid rgba(255, 183, 0, 0.3);
+            background: rgba(13, 17, 23, 0.9);
+            border: 1px solid rgba(0, 255, 204, 0.3);
             border-radius: 16px;
             padding: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
         }
 
-        /* Holographic Stage Area */
+        /* 3D Holographic Canvas Stage */
         .stage-wrapper {
             width: 100%;
             height: 480px;
-            background: radial-gradient(circle, #0d1b2a 0%, #000000 100%);
+            background: radial-gradient(circle, #001220 0%, #000000 100%);
             border: 1.5px dashed rgba(0, 243, 255, 0.4);
             border-radius: 12px;
             display: flex;
@@ -75,64 +76,20 @@
             cursor: pointer;
         }
 
-        .hologram-grid-floor {
-            position: absolute;
-            bottom: 0;
-            width: 200%;
-            height: 50%;
-            background-image: linear-gradient(rgba(0, 243, 255, 0.15) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(0, 243, 255, 0.15) 1px, transparent 1px);
-            background-size: 30px 30px;
-            transform: perspective(300px) rotateX(65deg);
-            pointer-events: none;
-        }
-
-        .media-container {
-            position: relative;
+        canvas#holoCanvas {
             width: 100%;
             height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            display: block;
             z-index: 2;
         }
 
-        .media-element {
-            max-width: 85%;
-            max-height: 85%;
-            object-fit: contain;
-            /* Hologram Scanline & Glowing Filter Effect */
-            filter: drop-shadow(0 0 10px rgba(0, 243, 255, 0.6)) hue-rotate(15deg);
-            opacity: 0.9;
-            transition: all 0.3s ease;
-        }
-
-        /* Cyber Hologram Scanner Line */
-        .holo-scanner {
-            display: none;
+        .upload-placeholder {
             position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 5;
+            z-index: 3;
+            text-align: center;
             pointer-events: none;
         }
 
-        .holo-beam {
-            width: 100%;
-            height: 4px;
-            background: #00ffcc;
-            box-shadow: 0 0 20px #00ffcc, 0 0 40px #00ffcc;
-            position: absolute;
-            top: 0;
-            animation: holoScan 2s infinite ease-in-out;
-        }
-
-        @keyframes holoScan {
-            0% { top: 0%; opacity: 0.9; }
-            50% { top: 96%; opacity: 1; }
-            100% { top: 0%; opacity: 0.9; }
-        }
-
-        /* Live Projection Status Badges */
         .holo-badges {
             position: absolute;
             top: 15px; left: 15px;
@@ -151,44 +108,34 @@
             padding: 4px 10px;
             border-radius: 4px;
             letter-spacing: 1px;
-            backdrop-filter: blur(5px);
         }
 
-        /* Controls Panel */
+        /* Controls */
         .tools-panel {
             display: flex;
             flex-direction: column;
             gap: 15px;
-            max-height: 520px;
-            overflow-y: auto;
-            padding-right: 5px;
         }
-
-        .tools-panel::-webkit-scrollbar { width: 5px; }
-        .tools-panel::-webkit-scrollbar-thumb { background: rgba(255, 183, 0, 0.4); border-radius: 4px; }
 
         .panel-section {
             background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 183, 0, 0.2);
+            border: 1px solid rgba(0, 255, 204, 0.2);
             padding: 15px;
             border-radius: 10px;
         }
 
         .section-title {
             font-size: 0.85rem;
-            color: #ffb700;
-            margin-bottom: 10px;
+            color: #00ffcc;
+            margin-bottom: 12px;
             font-weight: 700;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
 
         .control-group {
             display: flex;
             flex-direction: column;
             gap: 4px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
         .control-label {
@@ -204,43 +151,17 @@
             cursor: pointer;
         }
 
-        /* Relighting Color Options Grid */
-        .light-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-        }
-
-        .light-btn {
-            padding: 8px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #bbb;
-            font-size: 0.7rem;
-            font-weight: 700;
-            text-align: center;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .light-btn.active {
-            background: rgba(0, 255, 204, 0.2);
-            color: #00ffcc;
-            border-color: #00ffcc;
-            box-shadow: 0 0 10px rgba(0, 255, 204, 0.3);
-        }
-
         .btn-stack {
             display: flex;
             flex-direction: column;
             gap: 10px;
+            margin-top: 10px;
         }
 
         .action-btn {
             width: 100%;
             padding: 13px;
-            background: #ffb700;
+            background: #00ffcc;
             border: none;
             color: #000;
             font-size: 0.85rem;
@@ -248,35 +169,23 @@
             letter-spacing: 1px;
             border-radius: 8px;
             cursor: pointer;
-            box-shadow: 0 0 15px rgba(255, 183, 0, 0.4);
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
             transition: all 0.3s ease;
         }
 
-        .action-btn:hover { box-shadow: 0 0 25px rgba(255, 183, 0, 0.7); }
+        .action-btn:hover { box-shadow: 0 0 25px rgba(0, 255, 204, 0.7); }
 
-        .download-btn {
-            background: transparent;
-            border: 1px solid #00ffcc;
-            color: #00ffcc;
-            box-shadow: none;
-            opacity: 0.5;
-            cursor: not-allowed;
+        .record-btn {
+            background: #ff0055;
+            color: #fff;
+            box-shadow: 0 0 15px rgba(255, 0, 85, 0.4);
         }
 
-        .download-btn.ready {
-            opacity: 1;
-            cursor: pointer;
-            box-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
-        }
-
-        .download-btn.ready:hover {
-            background: #00ffcc;
-            color: #000;
-        }
+        .record-btn:hover { box-shadow: 0 0 25px rgba(255, 0, 85, 0.7); }
 
         @media (max-width: 900px) {
             .editor-grid { grid-template-columns: 1fr; }
-            .stage-wrapper { height: 320px; }
+            .stage-wrapper { height: 350px; }
         }
     </style>
 </head>
@@ -285,76 +194,53 @@
     <div class="studio-container">
         <div class="header-bar">
             <a href="index.html" class="back-btn">← DASHBOARD</a>
-            <h2 class="studio-title">🌐 HOLOGRAM & CINEMATIC RELIGHTING STUDIO</h2>
+            <h2 class="studio-title">🌀 3D HOLOGRAM LOGO SPINNER & VIDEO GENERATOR</h2>
         </div>
 
         <div class="editor-grid">
             
-            <!-- 1. Hologram Stage Preview -->
-            <div class="stage-wrapper" id="dropArea" onclick="document.getElementById('mediaInput').click()">
-                <div class="hologram-grid-floor"></div>
+            <!-- 3D Hologram Render Stage -->
+            <div class="stage-wrapper" onclick="document.getElementById('logoInput').click()">
+                <canvas id="holoCanvas" width="600" height="480"></canvas>
 
-                <div class="media-container" id="mediaContainer">
-                    <div id="placeholderText" style="text-align: center; z-index: 2;">
-                        <p style="font-size: 0.9rem; font-weight: 700;">🔮 Upload Asset for Hologram Projection</p>
-                        <p style="font-size: 0.7rem; color: #00ffcc; margin-top: 4px;">Click to select video or image file</p>
-                    </div>
+                <div class="upload-placeholder" id="uploadPlaceholder">
+                    <p style="font-size: 0.9rem; font-weight: 700; color: #fff;">🔮 Upload Logo Image</p>
+                    <p style="font-size: 0.75rem; color: #00ffcc; margin-top: 4px;">PNG / JPG ഫയൽ തിരഞ്ഞടുക്കുക</p>
                 </div>
 
-                <!-- Hologram Scanner Overlay -->
-                <div class="holo-scanner" id="holoScanner">
-                    <div class="holo-beam"></div>
-                </div>
-
-                <!-- Live Status Badges -->
                 <div class="holo-badges">
-                    <span class="badge">STATUS: 3D HOLOGRAPHIC MESH ACTIVE</span>
-                    <span class="badge" id="lightBadge">LIGHTING: CYBER CYAN</span>
+                    <span class="badge" id="statusBadge">STATUS: WAITING FOR LOGO</span>
+                    <span class="badge" id="recBadge" style="display:none; color:#ff0055; border-color:#ff0055;">🔴 RECORDING VIDEO...</span>
                 </div>
 
-                <input type="file" id="mediaInput" accept="video/*, image/*" style="display: none;">
+                <input type="file" id="logoInput" accept="image/*" style="display: none;">
             </div>
 
-            <canvas id="exportCanvas" style="display: none;"></canvas>
-
-            <!-- 2. Relighting & Hologram Controls Panel -->
+            <!-- Controls Panel -->
             <div class="tools-panel">
                 
-                <!-- Relighting Temperature & Color Studio -->
                 <div class="panel-section">
-                    <div class="section-title">💡 Cinematic Relighting Presets</div>
-                    <div class="light-grid">
-                        <div class="light-btn active" onclick="setRelighting('cyan', this)">Cyan</div>
-                        <div class="light-btn" onclick="setRelighting('gold', this)">Gold</div>
-                        <div class="light-btn" onclick="setRelighting('neonRed', this)">Laser Red</div>
-                        <div class="light-btn" onclick="setRelighting('matrixGreen', this)">Matrix</div>
+                    <div class="section-title">⚙️ 3D Rotation & Hologram Settings</div>
+
+                    <div class="control-group">
+                        <div class="control-label"><span>Rotation Speed (കറക്കത്തിന്റെ വേഗത)</span><span id="v-speed">Speed: 2</span></div>
+                        <input type="range" class="slider" id="spinSpeed" min="1" max="10" value="2">
+                    </div>
+
+                    <div class="control-group">
+                        <div class="control-label"><span>Hologram Glow (നിയോൺ വെളിച്ചം)</span><span id="v-glow">20px</span></div>
+                        <input type="range" class="slider" id="holoGlow" min="5" max="50" value="20">
+                    </div>
+
+                    <div class="control-group">
+                        <div class="control-label"><span>Scanline Transparency</span><span id="v-opac">80%</span></div>
+                        <input type="range" class="slider" id="holoOpac" min="30" max="100" value="80">
                     </div>
                 </div>
 
-                <!-- Hologram Frequency & Glow Controls -->
-                <div class="panel-section">
-                    <div class="section-title">✨ Holographic Depth & Glow</div>
-
-                    <div class="control-group">
-                        <div class="control-label"><span>Hologram Opacity / Transparency</span><span id="v-opac">85%</span></div>
-                        <input type="range" class="slider" id="sOpac" min="40" max="100" value="85" oninput="applyHoloFilters()">
-                    </div>
-
-                    <div class="control-group">
-                        <div class="control-label"><span>Neon Glow Intensity</span><span id="v-glow">15px</span></div>
-                        <input type="range" class="slider" id="sGlow" min="0" max="30" value="15" oninput="applyHoloFilters()">
-                    </div>
-
-                    <div class="control-group">
-                        <div class="control-label"><span>Scanline Frequency</span><span id="v-scan">50%</span></div>
-                        <input type="range" class="slider" id="sScan" min="10" max="100" value="50" oninput="applyHoloFilters()">
-                    </div>
-                </div>
-
-                <!-- Action & Download Buttons -->
+                <!-- Export Video Controls -->
                 <div class="btn-stack">
-                    <button class="action-btn" onclick="startHoloProjectionScan()">⚡ INITIALIZE HOLOGRAPHIC SCAN</button>
-                    <button class="action-btn download-btn" id="downloadBtn" disabled onclick="downloadHologramAsset()">💾 DOWNLOAD HOLOGRAPHIC RENDER</button>
+                    <button class="action-btn record-btn" id="recordBtn" onclick="renderAndRecordVideo()">📹 RECORD & DOWNLOAD HOLOGRAM VIDEO</button>
                 </div>
 
             </div>
@@ -363,114 +249,148 @@
     </div>
 
     <script>
-        const mediaInput = document.getElementById('mediaInput');
-        const mediaContainer = document.getElementById('mediaContainer');
-        const placeholderText = document.getElementById('placeholderText');
-        const holoScanner = document.getElementById('holoScanner');
-        const downloadBtn = document.getElementById('downloadBtn');
-        
-        let currentMedia = null;
-        let activeLightMode = 'cyan';
-        let mediaType = null;
+        const logoInput = document.getElementById('logoInput');
+        const canvas = document.getElementById('holoCanvas');
+        const ctx = canvas.getContext('2d');
+        const uploadPlaceholder = document.getElementById('uploadPlaceholder');
+        const statusBadge = document.getElementById('statusBadge');
+        const recBadge = document.getElementById('recBadge');
 
-        mediaInput.addEventListener('change', (e) => {
+        let loadedImage = null;
+        let rotationAngle = 0;
+        let isAnimating = false;
+
+        // Sliders
+        const spinSpeed = document.getElementById('spinSpeed');
+        const holoGlow = document.getElementById('holoGlow');
+        const holoOpac = document.getElementById('holoOpac');
+
+        logoInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (!file) return;
 
-            const url = URL.createObjectURL(file);
-            placeholderText.style.display = 'none';
-
-            if(currentMedia) currentMedia.remove();
-
-            mediaType = file.type.startsWith('video') ? 'video' : 'image';
-
-            if (mediaType === 'video') {
-                currentMedia = document.createElement('video');
-                currentMedia.src = url;
-                currentMedia.controls = true;
-                currentMedia.autoplay = true;
-                currentMedia.loop = true;
-            } else {
-                currentMedia = document.createElement('img');
-                currentMedia.src = url;
-            }
-
-            currentMedia.className = 'media-element';
-            mediaContainer.appendChild(currentMedia);
-            applyHoloFilters();
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    loadedImage = img;
+                    uploadPlaceholder.style.display = 'none';
+                    statusBadge.innerText = 'STATUS: 3D HOLOGRAM ACTIVE';
+                    if (!isAnimating) {
+                        isAnimating = true;
+                        animateHologram();
+                    }
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
         });
 
-        // Relighting Mode Selector
-        function setRelighting(mode, btn) {
-            activeLightMode = mode;
-            document.querySelectorAll('.light-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            
-            document.getElementById('lightBadge').innerText = `LIGHTING: ${mode.toUpperCase()}`;
-            applyHoloFilters();
-        }
+        // 3D Rotation Animation Loop
+        function animateHologram() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Apply Hologram & Relighting Filters
-        function applyHoloFilters() {
-            if (!currentMedia) return;
+            // Draw Hologram Floor Grid
+            drawGridFloor();
 
-            const opac = document.getElementById('sOpac').value / 100;
-            const glow = document.getElementById('sGlow').value;
+            if (loadedImage) {
+                const speed = parseFloat(spinSpeed.value) * 0.02;
+                const glow = holoGlow.value;
+                const opacity = holoOpac.value / 100;
 
-            document.getElementById('v-opac').innerText = Math.round(opac * 100) + '%';
-            document.getElementById('v-glow').innerText = glow + 'px';
-            document.getElementById('v-scan').innerText = document.getElementById('sScan').value + '%';
+                rotationAngle += speed;
 
-            let hueRotate = '0deg';
-            let shadowColor = 'rgba(0, 243, 255, 0.8)';
+                ctx.save();
+                ctx.translate(canvas.width / 2, canvas.height / 2 - 20);
 
-            if (activeLightMode === 'cyan') {
-                hueRotate = '15deg';
-                shadowColor = `rgba(0, 243, 255, ${opac})`;
-            } else if (activeLightMode === 'gold') {
-                hueRotate = '120deg';
-                shadowColor = `rgba(255, 183, 0, ${opac})`;
-            } else if (activeLightMode === 'neonRed') {
-                hueRotate = '300deg';
-                shadowColor = `rgba(255, 0, 85, ${opac})`;
-            } else if (activeLightMode === 'matrixGreen') {
-                hueRotate = '80deg';
-                shadowColor = `rgba(0, 255, 136, ${opac})`;
+                // Simulate 3D Y-Axis Scale Rotation
+                const scaleX = Math.cos(rotationAngle);
+                ctx.scale(scaleX, 1);
+
+                // Cyan Holographic Glow Effect
+                ctx.shadowColor = '#00ffcc';
+                ctx.shadowBlur = glow;
+                ctx.globalAlpha = opacity;
+
+                const imgWidth = 180;
+                const imgHeight = (loadedImage.height / loadedImage.width) * imgWidth;
+
+                ctx.drawImage(loadedImage, -imgWidth / 2, -imgHeight / 2, imgWidth, imgHeight);
+                ctx.restore();
+
+                // Hologram Laser Scanline Overlay
+                drawScanlines();
             }
 
-            currentMedia.style.opacity = opac;
-            currentMedia.style.filter = `drop-shadow(0 0 ${glow}px ${shadowColor}) hue-rotate(${hueRotate})`;
+            requestAnimationFrame(animateHologram);
         }
 
-        // Laser Scan & Hologram Projection Activation
-        function startHoloProjectionScan() {
-            if (!currentMedia) {
-                alert('ദയവായി ആദ്യം ഒരു വീഡിയോ അല്ലെങ്കിൽ ഫോട്ടോ അപ്‌ലോഡ് ചെയ്യുക!');
+        // Draw 3D Grid Floor
+        function drawGridFloor() {
+            ctx.save();
+            ctx.strokeStyle = 'rgba(0, 255, 204, 0.15)';
+            ctx.lineWidth = 1;
+
+            const startY = canvas.height - 100;
+            for (let i = -canvas.width; i < canvas.width * 2; i += 30) {
+                ctx.beginPath();
+                ctx.moveTo(canvas.width / 2, startY - 80);
+                ctx.lineTo(i, canvas.height);
+                ctx.stroke();
+            }
+
+            for (let y = startY - 80; y < canvas.height; y += 15) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+                ctx.stroke();
+            }
+            ctx.restore();
+        }
+
+        // Scanlines Overlay Effect
+        function drawScanlines() {
+            ctx.save();
+            ctx.fillStyle = 'rgba(0, 255, 204, 0.04)';
+            for (let i = 0; i < canvas.height; i += 4) {
+                ctx.fillRect(0, i, canvas.width, 2);
+            }
+            ctx.restore();
+        }
+
+        // Record 3D Animation and Export Video
+        function renderAndRecordVideo() {
+            if (!loadedImage) {
+                alert('ദയവായി റെക്കോർഡ് ചെയ്യുന്നതിന് മുമ്പ് ഒരു ലോഗോ അപ്‌ലോഡ് ചെയ്യുക!');
                 return;
             }
 
-            holoScanner.style.display = 'block';
+            const stream = canvas.captureStream(60); // 60 FPS Video Stream
+            const mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+            const chunks = [];
 
+            mediaRecorder.ondataavailable = (e) => chunks.push(e.data);
+            mediaRecorder.onstop = () => {
+                const blob = new Blob(chunks, { type: 'video/webm' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'NewDezire_3D_Hologram_Logo.webm';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+
+                recBadge.style.display = 'none';
+                alert('3D ഹോളോഗ്രാം വീഡിയോ വിജയകരമായി റെക്കോർഡ് ചെയ്തു ડൗൺലോഡ് ആയിട്ടുണ്ട്!');
+            };
+
+            mediaRecorder.start();
+            recBadge.style.display = 'inline-block';
+
+            // Automatically record for 5 Seconds (Full 360 Rotation)
             setTimeout(() => {
-                holoScanner.style.display = 'none';
-                alert('Holographic Mesh Projection & Relighting Complete!');
-                
-                downloadBtn.classList.add('ready');
-                downloadBtn.removeAttribute('disabled');
-            }, 3000);
-        }
-
-        // Download Holographic Render Asset
-        function downloadHologramAsset() {
-            if (!currentMedia) return;
-
-            const mediaSrc = currentMedia.src;
-            const a = document.createElement('a');
-            a.href = mediaSrc;
-            a.download = `Nexura_Hologram_Render_${activeLightMode}.${mediaType === 'video' ? 'mp4' : 'png'}`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+                mediaRecorder.stop();
+            }, 5000);
         }
     </script>
 </body>
