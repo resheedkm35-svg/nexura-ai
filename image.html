@@ -3,29 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Image & Studio - Nexura.AI</title>
+    <title>Nexura.AI - Professional Studio & Cinematic Matting</title>
     <link rel="stylesheet" href="style.css">
     <style>
         .studio-box {
             width: 100%;
-            max-width: 950px;
+            max-width: 1100px;
             margin: 20px auto;
         }
 
         .tool-card {
-            background: rgba(0, 0, 0, 0.55);
-            border: 1px solid rgba(255, 183, 0, 0.3);
-            border-radius: 12px;
-            padding: 18px;
+            background: rgba(10, 10, 18, 0.85);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 14px;
+            padding: 20px;
             margin-bottom: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.7);
+            backdrop-filter: blur(12px);
         }
 
         .control-title {
-            color: #ffb700;
+            color: #00ff88;
             font-size: 0.85rem;
             font-weight: bold;
             letter-spacing: 1px;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -33,23 +35,23 @@
 
         .feature-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
             gap: 12px;
             margin-bottom: 15px;
         }
 
         .feature-box {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            padding: 10px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 12px;
         }
 
         .feature-label {
-            font-size: 0.75rem;
+            font-size: 0.76rem;
             color: #ff007f;
             font-weight: bold;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             display: block;
         }
 
@@ -63,40 +65,44 @@
         .slider-label {
             display: flex;
             justify-content: space-between;
-            font-size: 0.7rem;
+            font-size: 0.72rem;
             color: #ccc;
         }
 
         input[type="range"] {
             width: 100%;
-            accent-color: #ffb700;
+            accent-color: #00ff88;
             cursor: pointer;
         }
 
         select, button {
             width: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(255, 183, 0, 0.3);
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(0, 255, 136, 0.3);
             border-radius: 6px;
             color: #fff;
-            padding: 8px;
+            padding: 9px;
             font-size: 0.8rem;
             outline: none;
             cursor: pointer;
+            transition: all 0.2s ease;
         }
 
-        /* 3D Parallax Stage */
+        select:hover, button:hover {
+            border-color: #00ff88;
+        }
+
         .parallax-stage {
-            perspective: 1000px;
+            perspective: 1200px;
             width: 100%;
         }
 
         .image-preview-box {
             width: 100%;
-            min-height: 380px;
+            min-height: 460px;
             background-image: repeating-conic-gradient(#111 0% 25%, #1a1a1a 0% 50%);
             background-size: 20px 20px;
-            border: 1px dashed rgba(255, 183, 0, 0.4);
+            border: 1px dashed rgba(0, 255, 136, 0.4);
             border-radius: 12px;
             display: flex;
             align-items: center;
@@ -110,7 +116,7 @@
 
         .image-preview-box canvas {
             max-width: 100%;
-            max-height: 520px;
+            max-height: 580px;
             border-radius: 6px;
             cursor: grab;
         }
@@ -118,21 +124,38 @@
             cursor: grabbing;
         }
 
+        .status-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid #00ff88;
+            padding: 15px 25px;
+            border-radius: 30px;
+            color: #00ff88;
+            font-size: 0.85rem;
+            font-weight: bold;
+            display: none;
+            z-index: 10;
+            box-shadow: 0 0 25px rgba(0, 255, 136, 0.4);
+        }
+
         .toggle-container {
             display: flex;
             align-items: center;
             gap: 10px;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.04);
             padding: 8px 12px;
             border-radius: 6px;
             margin-bottom: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .toggle-container input[type="checkbox"] {
             width: 18px;
             height: 18px;
-            accent-color: #ff007f;
+            accent-color: #00ff88;
             cursor: pointer;
         }
 
@@ -162,113 +185,99 @@
 <body>
 
     <header class="main-header">
-        <div class="brand-badge">NEXURA.AI / ADVANCED STUDIO</div>
+        <div class="brand-badge">NEXURA.AI / PROFESSIONAL CINEMATIC STUDIO</div>
         <button class="launch-btn" style="width: auto; padding: 6px 15px;" onclick="window.location.href='index.html'">← DASHBOARD</button>
     </header>
 
     <main class="dashboard-container">
         <div class="card studio-box">
             
-            <!-- TOOL PANEL -->
             <div class="tool-card">
-                <div class="control-title" style="color: #ff007f;">
-                    <span>iOS ADVANCED IMAGE STUDIO & PURE PNG ENGINE</span>
-                    <span style="font-size: 0.65rem; background: #ff007f; color: #fff; padding: 2px 6px; border-radius: 4px;">iOS 18 PRO ENGINE</span>
+                <div class="control-title">
+                    <span>🎬 CINEMATIC MATTING & ADVANCED AI COMPOSITING ENGINE</span>
+                    <span style="font-size: 0.65rem; background: #00ff88; color: #000; padding: 2px 6px; border-radius: 4px; font-weight: bold;">PRO v5.0</span>
                 </div>
 
-                <!-- FILE UPLOAD -->
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
-                    <label class="launch-btn" style="text-align:center; display:block; cursor:pointer; background: rgba(255,255,255,0.05); border-color:#ff007f; font-size:0.75rem;">
-                        📁 1. MAIN LOGO / IMAGE
-                        <input type="file" id="upload-bg-file" accept="image/*" style="display:none;">
+                    <label class="launch-btn" style="text-align:center; display:block; cursor:pointer; background: rgba(255,255,255,0.05); border-color:#00ff88; font-size:0.75rem; color:#00ff88;">
+                        👤 1. UPLOAD SUBJECT (HUMAN / OBJECT / LOGO)
+                        <input type="file" id="upload-subject-file" accept="image/*" style="display:none;">
                     </label>
 
-                    <label class="launch-btn" style="text-align:center; display:block; cursor:pointer; background: rgba(0, 255, 136, 0.05); border-color:#00ff88; font-size:0.75rem; color:#00ff88;">
-                        🖼️ 2. NEW BG IMAGE (OPTIONAL)
+                    <label class="launch-btn" style="text-align:center; display:block; cursor:pointer; background: rgba(255, 0, 127, 0.05); border-color:#ff007f; font-size:0.75rem; color:#ff007f;">
+                        🏙️ 2. UPLOAD NEW BACKGROUND SCENE
                         <input type="file" id="upload-new-bg-file" accept="image/*" style="display:none;">
                     </label>
                 </div>
 
-                <!-- OPTIONAL BACKDROP COLOR TOGGLE (OFF BY DEFAULT FOR PURE TRANSPARENCY) -->
                 <div class="toggle-container">
                     <input type="checkbox" id="enable-bg-color-toggle">
                     <label for="enable-bg-color-toggle" style="font-size:0.75rem; color:#fff; cursor:pointer;">
-                        Enable Solid Backdrop Color (ആവശ്യമെങ്കിൽ മാത്രം ഓൺ ആക്കുക - Default: Off / Pure Transparent)
+                        Enable Solid Color Backdrop (Default: Pure Transparent PNG)
                     </label>
-                    <input type="color" id="canvas-bg-picker" value="#000000" style="width:28px; height:22px; border:none; cursor:pointer; background:none; margin-left:auto;">
+                    <input type="color" id="canvas-bg-picker" value="#0a0a12" style="width:28px; height:22px; border:none; cursor:pointer; background:none; margin-left:auto;">
                 </div>
 
-                <!-- 6 ADVANCED iOS FEATURES RACK -->
                 <div class="feature-grid">
                     
-                    <!-- 1. Photographic Styles -->
                     <div class="feature-box">
-                        <span class="feature-label">📸 Photographic Styles</span>
-                        <select id="photo-style-select">
-                            <option value="none">Standard / Original</option>
-                            <option value="rich-contrast">Rich Contrast (iOS)</option>
-                            <option value="vibrant-gold">Vibrant Metallic Gold</option>
-                            <option value="warm-studio">Warm Studio Light</option>
-                            <option value="dramatic-cool">Dramatic Cool Shadow</option>
-                        </select>
+                        <span class="feature-label">💎 AI Clarity & Upscaler</span>
+                        <div class="slider-row">
+                            <div class="slider-label"><span>Neural Clarity / Sharpness</span><span id="clarity-val">0%</span></div>
+                            <input type="range" id="clarity-range" min="0" max="100" value="0">
+                        </div>
+                        <p style="font-size:0.62rem; color:#888;">ചിത്രത്തിലെ ഡീറ്റെയിൽസും വ്യക്തതയും വർദ്ധിപ്പിക്കുന്നു.</p>
                     </div>
 
-                    <!-- 2. Portrait Mode & Lighting -->
                     <div class="feature-box">
-                        <span class="feature-label">🎭 Portrait Mode & Light</span>
+                        <span class="feature-label">🌿 Edge Matting & Feather</span>
+                        <div class="slider-row">
+                            <div class="slider-label"><span>Edge Smoothness</span><span id="edge-val">100%</span></div>
+                            <input type="range" id="edge-polish-range" min="50" max="200" value="100">
+                        </div>
+                        <div class="slider-row">
+                            <div class="slider-label"><span>Alpha Threshold</span><span id="thresh-val">2</span></div>
+                            <input type="range" id="alpha-thresh-range" min="0" max="20" value="2">
+                        </div>
+                    </div>
+
+                    <div class="feature-box">
+                        <span class="feature-label">☀️ Light Wrap & Shadow</span>
+                        <div class="slider-row">
+                            <div class="slider-label"><span>Scene Light Wrap</span><span id="wrap-val">0%</span></div>
+                            <input type="range" id="light-wrap-range" min="0" max="100" value="0">
+                        </div>
                         <div class="slider-row">
                             <div class="slider-label"><span>Background Blur</span><span id="blur-val">0px</span></div>
                             <input type="range" id="bg-blur-range" min="0" max="30" value="0">
                         </div>
-                        <select id="studio-light-select">
-                            <option value="none">No Spotlight</option>
-                            <option value="center">Studio Backlight</option>
-                            <option value="contour">Contour Glow Edge</option>
+                    </div>
+
+                    <div class="feature-box">
+                        <span class="feature-label">🎨 Cinematic Color Grade</span>
+                        <select id="photo-style-select">
+                            <option value="none">Original Studio Balance</option>
+                            <option value="hollywood-teal">Hollywood Teal & Orange</option>
+                            <option value="hdr-vibrant">HDR Pro Vivid</option>
+                            <option value="warm-portrait">Warm Cinematic Portrait</option>
+                            <option value="moody-noir">Moody Noir Shadow</option>
                         </select>
                     </div>
 
-                    <!-- 3. Touch Drag, Scale & Rotate -->
                     <div class="feature-box">
-                        <span class="feature-label">🖐️ Gesture Controls</span>
+                        <span class="feature-label">🖐️ Scale & Eraser</span>
                         <div class="slider-row">
-                            <div class="slider-label"><span>Scale / Zoom</span><span id="scale-val">100%</span></div>
+                            <div class="slider-label"><span>Subject Scale</span><span id="scale-val">100%</span></div>
                             <input type="range" id="logo-scale-range" min="20" max="250" value="100">
                         </div>
-                        <div class="slider-row">
-                            <div class="slider-label"><span>Rotation</span><span id="angle-val">0°</span></div>
-                            <input type="range" id="logo-angle-range" min="-180" max="180" value="0">
-                        </div>
+                        <button id="eraser-toggle-btn">🧹 Manual Eraser Tool</button>
                     </div>
 
-                    <!-- 4. Smart Eraser & Spill Removal -->
                     <div class="feature-box">
-                        <span class="feature-label">🧹 Touch Eraser & Spill</span>
-                        <button id="eraser-toggle-btn" style="margin-bottom:8px;">🧹 Manual Eraser Tool</button>
-                        <div class="slider-row">
-                            <div class="slider-label"><span>Green Spill Purge</span><span id="spill-val">80%</span></div>
-                            <input type="range" id="spill-range" min="0" max="100" value="80">
-                        </div>
-                    </div>
-
-                    <!-- 5. 3D Parallax Tilt Control -->
-                    <div class="feature-box">
-                        <span class="feature-label">🧊 3D Gyro/Tilt Effect</span>
+                        <span class="feature-label">🧊 3D Gyro Stage</span>
                         <div class="toggle-container" style="padding:4px; margin:0; border:none; background:none;">
                             <input type="checkbox" id="parallax-toggle" checked>
                             <label for="parallax-toggle" style="font-size:0.75rem; color:#ccc;">Interactive 3D Motion</label>
-                        </div>
-                    </div>
-
-                    <!-- 6. Chroma Sensitivity & Gold Polish -->
-                    <div class="feature-box">
-                        <span class="feature-label">✨ Color Key & Gold Pop</span>
-                        <div style="display:flex; gap:6px; align-items:center; margin-bottom:6px;">
-                            <input type="color" id="target-bg-color" value="#00ff00" style="width:30px; height:20px; border:none;">
-                            <button id="eyedropper-btn" style="font-size:0.7rem; padding:4px;">🖌️ Pick Color</button>
-                        </div>
-                        <div class="slider-row">
-                            <div class="slider-label"><span>Gold Boost</span><span id="gold-val">130%</span></div>
-                            <input type="range" id="gold-boost-range" min="100" max="200" value="130">
                         </div>
                     </div>
 
@@ -276,22 +285,21 @@
 
             </div>
 
-            <!-- MASTER CANVAS (WITH 3D PARALLAX STAGE) -->
-            <div style="background: rgba(0, 0, 0, 0.45); border: 1px solid rgba(255, 183, 0, 0.25); border-radius: 12px; padding: 18px;">
+            <div style="background: rgba(0, 0, 0, 0.45); border: 1px solid rgba(0, 255, 136, 0.25); border-radius: 12px; padding: 18px;">
                 <div class="control-title">
-                    <span>MASTER STUDIO CANVAS (PURE ALPHA OUTPUT)</span>
+                    <span>MASTER COMPOSITING CANVAS (ULTRA-HD EXPORT)</span>
                 </div>
 
                 <div class="parallax-stage">
                     <div class="image-preview-box" id="preview-container">
-                        <p id="placeholder-text" style="color:#777; font-size:0.8rem;">ഇവിടെ ചിത്രം പ്രത്യക്ഷപ്പെടും.</p>
+                        <div id="status-overlay" class="status-overlay">⚡ പ്രൊഫഷണൽ AI പ്രോസസ്സിംഗ് നടക്കുന്നു...</div>
+                        <p id="placeholder-text" style="color:#777; font-size:0.8rem;">സബ്ജക്റ്റും പുതിയ ബാക്ക്ഗ്രൗണ്ടും ഇവിടെ അപ്‌ലോഡ് ചെയ്യുക.</p>
                         <canvas id="studio-canvas" style="display:none;"></canvas>
                     </div>
                 </div>
 
-                <!-- EXPORT RESOLUTION OPTION -->
                 <div style="margin-top:15px;">
-                    <label style="font-size:0.75rem; color:#00ff88; font-weight:bold;">ഡൗൺലോഡ് റെസല്യൂഷൻ (Auto-Upscale):</label>
+                    <label style="font-size:0.75rem; color:#00ff88; font-weight:bold;">ഡൗൺലോഡ് റെസല്യൂഷൻ (Lossless Studio Export):</label>
                     <div class="res-grid">
                         <button class="res-btn" onclick="setExportResolution(1920, this)">1080p FHD</button>
                         <button class="res-btn active" onclick="setExportResolution(3840, this)">⚡ 4K Ultra HD</button>
@@ -300,47 +308,75 @@
                 </div>
 
                 <button class="launch-btn" id="download-img-btn" style="display:none; border-color:#00ff88; color:#00ff88; background: rgba(0,255,136,0.1); margin-top:10px;">
-                    📥 DOWNLOAD ULTRA-HIGH CLARITY TRANSPARENT PNG
+                    📥 DOWNLOAD CINEMATIC HIGH-CLARITY PNG
                 </button>
             </div>
 
         </div>
     </main>
 
-    <script>
+    <script type="module">
+        import { removeBackground } from "https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.5.5/+esm";
+
         let rawSubjectImage = null;
         let customBackgroundImage = null;
         let processedFgCanvas = document.createElement('canvas');
 
-        // Logo Position & Gesture State
         let logoX = 0, logoY = 0;
         let logoScale = 1.0;
         let logoAngle = 0;
         let isDraggingLogo = false;
         let dragStartX = 0, dragStartY = 0;
 
-        // Eraser State
         let isEraserActive = false;
         let isEraserDrawing = false;
-        let exportWidthPreset = 3840; // 4K Default
+        let exportWidthPreset = 3840;
 
         const studioCanvas = document.getElementById('studio-canvas');
         const ctx = studioCanvas.getContext('2d');
         const previewContainer = document.getElementById('preview-container');
         const placeholderText = document.getElementById('placeholder-text');
+        const statusOverlay = document.getElementById('status-overlay');
         const downloadImgBtn = document.getElementById('download-img-btn');
 
-        // Resolution Switcher
-        function setExportResolution(width, element) {
+        window.setExportResolution = function(width, element) {
             exportWidthPreset = width;
             document.querySelectorAll('.res-btn').forEach(btn => btn.classList.remove('active'));
             element.classList.add('active');
-        }
+        };
 
-        // Upload Subject Image
-        document.getElementById('upload-bg-file').addEventListener('change', function(e) {
+        // 1. Upload Subject Image & Universal AI Background Removal
+        document.getElementById('upload-subject-file').addEventListener('change', async function(e) {
             const file = e.target.files[0];
-            if (file) {
+            if (!file) return;
+
+            statusOverlay.style.display = "block";
+            statusOverlay.innerText = "⚡ പ്രൊഫഷണൽ AI ബാക്ക്ഗ്രൗണ്ട് റിമൂവൽ നടക്കുന്നു...";
+
+            try {
+                const blob = await removeBackground(file, {
+                    progress: (key, current, total) => {
+                        const pct = Math.round((current / total) * 100);
+                        if (!isNaN(pct)) {
+                            statusOverlay.innerText = `⚡ AI മാപ്പിംഗ്: ${pct}%`;
+                        }
+                    }
+                });
+
+                const img = new Image();
+                img.onload = () => {
+                    rawSubjectImage = img;
+                    logoX = rawSubjectImage.naturalWidth / 2;
+                    logoY = rawSubjectImage.naturalHeight / 2;
+                    statusOverlay.style.display = "none";
+                    refineAndProcessSubject();
+                };
+                img.src = URL.createObjectURL(blob);
+
+            } catch (err) {
+                console.error("AI BG Removal Error:", err);
+                statusOverlay.innerText = "❌ ചിത്രം നേരിട്ട് ലോഡ് ചെയ്യുന്നു...";
+                
                 const reader = new FileReader();
                 reader.onload = (evt) => {
                     const img = new Image();
@@ -348,7 +384,8 @@
                         rawSubjectImage = img;
                         logoX = rawSubjectImage.naturalWidth / 2;
                         logoY = rawSubjectImage.naturalHeight / 2;
-                        extractColorAndEnhance();
+                        statusOverlay.style.display = "none";
+                        refineAndProcessSubject();
                     };
                     img.src = evt.target.result;
                 };
@@ -356,7 +393,7 @@
             }
         });
 
-        // Upload Optional Background
+        // 2. Upload New Background Scene
         document.getElementById('upload-new-bg-file').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
@@ -373,24 +410,79 @@
             }
         });
 
-        // Master Composite Rendering Engine
+        // 3. Neural Clarity, Upscaling & Universal Alpha Matting
+        function refineAndProcessSubject() {
+            if (!rawSubjectImage) return;
+
+            processedFgCanvas.width = rawSubjectImage.naturalWidth;
+            processedFgCanvas.height = rawSubjectImage.naturalHeight;
+            const fgCtx = processedFgCanvas.getContext('2d');
+            fgCtx.drawImage(rawSubjectImage, 0, 0);
+
+            const imgData = fgCtx.getImageData(0, 0, processedFgCanvas.width, processedFgCanvas.height);
+            const data = imgData.data;
+
+            const polish = parseInt(document.getElementById('edge-polish-range').value) / 100;
+            const threshold = parseInt(document.getElementById('alpha-thresh-range').value);
+            const clarityLevel = parseInt(document.getElementById('clarity-range').value);
+
+            // Universal Alpha Edge Matting (Safe for Humans, Hair, Logos & Metals)
+            for (let i = 0; i < data.length; i += 4) {
+                let a = data[i + 3];
+
+                if (a <= threshold) {
+                    data[i + 3] = 0;
+                } else if (a < 255) {
+                    data[i + 3] = Math.min(255, a * polish);
+                }
+            }
+
+            fgCtx.putImageData(imgData, 0, 0);
+
+            // Apply Neural Clarity & High-Pass Sharpening if requested
+            if (clarityLevel > 0) {
+                applyNeuralClarity(fgCtx, processedFgCanvas.width, processedFgCanvas.height, clarityLevel);
+            }
+
+            renderCompositeCanvas();
+        }
+
+        // Neural Clarity Filter Implementation
+        function applyNeuralClarity(ctx, width, height, strength) {
+            const imgData = ctx.getImageData(0, 0, width, height);
+            const data = imgData.data;
+            const factor = strength / 100 * 0.4;
+
+            for (let i = 0; i < data.length; i += 4) {
+                if (data[i + 3] === 0) continue; // Skip transparent
+                
+                // Enhance local contrast and micro-details
+                let r = data[i], g = data[i+1], b = data[i+2];
+                let avg = (r + g + b) / 3;
+
+                data[i] = Math.min(255, Math.max(0, r + (r - avg) * factor));
+                data[i+1] = Math.min(255, Math.max(0, g + (g - avg) * factor));
+                data[i+2] = Math.min(255, Math.max(0, b + (b - avg) * factor));
+            }
+            ctx.putImageData(imgData, 0, 0);
+        }
+
+        // 4. Master Compositing Engine (Subject + New Background + Light Wrap)
         function renderCompositeCanvas() {
             if (!rawSubjectImage) return;
 
             studioCanvas.width = rawSubjectImage.naturalWidth;
             studioCanvas.height = rawSubjectImage.naturalHeight;
 
-            // 1. Clear Canvas to Pure Alpha Transparency
             ctx.clearRect(0, 0, studioCanvas.width, studioCanvas.height);
 
-            // 2. Optional Solid Backdrop Color (Only rendered if user explicitly turned it ON)
             const isBgColorEnabled = document.getElementById('enable-bg-color-toggle').checked;
             if (isBgColorEnabled) {
                 ctx.fillStyle = document.getElementById('canvas-bg-picker').value;
                 ctx.fillRect(0, 0, studioCanvas.width, studioCanvas.height);
             }
 
-            // 3. Optional Custom Background Image with Portrait Blur
+            // Render New Background Image with optional Blur
             if (customBackgroundImage) {
                 ctx.save();
                 const blurVal = parseInt(document.getElementById('bg-blur-range').value);
@@ -399,31 +491,30 @@
                 ctx.restore();
             }
 
-            // 4. Studio Backlight / Contour Glow Effect
-            const lightStyle = document.getElementById('studio-light-select').value;
-            if (lightStyle === 'center') {
-                ctx.save();
-                let grad = ctx.createRadialGradient(logoX, logoY, 10, logoX, logoY, studioCanvas.width * 0.4);
-                grad.addColorStop(0, 'rgba(255, 215, 0, 0.35)');
-                grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
-                ctx.fillStyle = grad;
-                ctx.fillRect(0, 0, studioCanvas.width, studioCanvas.height);
-                ctx.restore();
-            }
-
-            // 5. Apply iOS Photographic Style Filters & Render Foreground Logo
+            // Render Subject with Transforms & Grading
             ctx.save();
             ctx.translate(logoX, logoY);
             ctx.rotate((logoAngle * Math.PI) / 180);
             ctx.scale(logoScale, logoScale);
 
+            // Cinematic Color Grading Styles
             const photoStyle = document.getElementById('photo-style-select').value;
-            if (photoStyle === 'rich-contrast') ctx.filter = 'contrast(125%) saturate(110%)';
-            if (photoStyle === 'vibrant-gold') ctx.filter = 'saturate(160%) contrast(110%) brightness(105%)';
-            if (photoStyle === 'warm-studio') ctx.filter = 'sepia(25%) contrast(105%) brightness(102%)';
-            if (photoStyle === 'dramatic-cool') ctx.filter = 'hue-rotate(180deg) contrast(130%)';
+            if (photoStyle === 'hollywood-teal') ctx.filter = 'contrast(125%) saturate(110%) hue-rotate(15deg)';
+            if (photoStyle === 'hdr-vibrant') ctx.filter = 'saturate(150%) contrast(115%) brightness(105%)';
+            if (photoStyle === 'warm-portrait') ctx.filter = 'sepia(25%) contrast(108%) brightness(102%)';
+            if (photoStyle === 'moody-noir') ctx.filter = 'grayscale(80%) contrast(140%) brightness(95%)';
 
             ctx.drawImage(processedFgCanvas, -processedFgCanvas.width / 2, -processedFgCanvas.height / 2);
+
+            // Light Wrap Integration (Merging background ambient light onto subject edges)
+            const lightWrapVal = parseInt(document.getElementById('light-wrap-range').value);
+            if (customBackgroundImage && lightWrapVal > 0) {
+                ctx.globalCompositeOperation = 'source-atop';
+                ctx.globalAlpha = lightWrapVal / 100;
+                ctx.filter = 'blur(20px)';
+                ctx.drawImage(customBackgroundImage, -processedFgCanvas.width / 2, -processedFgCanvas.height / 2, processedFgCanvas.width, processedFgCanvas.height);
+            }
+
             ctx.restore();
 
             placeholderText.style.display = "none";
@@ -431,59 +522,7 @@
             downloadImgBtn.style.display = "block";
         }
 
-        // Chroma Removal & Spill Suppressor
-        function extractColorAndEnhance() {
-            if (!rawSubjectImage) return;
-
-            processedFgCanvas.width = rawSubjectImage.naturalWidth;
-            processedFgCanvas.height = rawSubjectImage.naturalHeight;
-            const fgCtx = processedFgCanvas.getContext('2d');
-            fgCtx.drawImage(rawSubjectImage, 0, 0);
-
-            const targetHex = document.getElementById('target-bg-color').value;
-            const spillPurge = parseInt(document.getElementById('spill-range').value);
-            const goldBoost = parseInt(document.getElementById('gold-boost-range').value) / 100;
-
-            const tr = parseInt(targetHex.slice(1, 3), 16);
-            const tg = parseInt(targetHex.slice(3, 5), 16);
-            const tb = parseInt(targetHex.slice(5, 7), 16);
-
-            const imgData = fgCtx.getImageData(0, 0, processedFgCanvas.width, processedFgCanvas.height);
-            const data = imgData.data;
-
-            for (let i = 0; i < data.length; i += 4) {
-                let r = data[i], g = data[i + 1], b = data[i + 2], a = data[i + 3];
-
-                const dist = Math.sqrt((r - tr) ** 2 + (g - tg) ** 2 + (b - tb) ** 2);
-
-                if (dist < 50) {
-                    data[i + 3] = 0;
-                    continue;
-                }
-
-                if (spillPurge > 0 && a > 0) {
-                    if (g > r * 0.82 && g > b * 0.82) {
-                        const greenExcess = g - Math.max(r, b);
-                        if (greenExcess > (100 - spillPurge) * 0.3) {
-                            data[i + 3] = Math.max(0, a - (greenExcess * (spillPurge / 20)));
-                        }
-                    }
-                }
-
-                if (data[i + 3] > 30 && goldBoost > 1.0) {
-                    if (r > 80 && g > 60 && b < 180) {
-                        data[i] = Math.min(255, r * goldBoost);
-                        data[i + 1] = Math.min(255, g * (goldBoost * 0.95));
-                        data[i + 2] = Math.max(0, b * (1 / goldBoost));
-                    }
-                }
-            }
-
-            fgCtx.putImageData(imgData, 0, 0);
-            renderCompositeCanvas();
-        }
-
-        /* ---------------- GESTURE & TOUCH DRAG CONTROLS ---------------- */
+        // Gesture Drag & Touch Eraser
         studioCanvas.addEventListener('mousedown', (e) => {
             if (isEraserActive) { isEraserDrawing = true; eraseAtPoint(e.clientX, e.clientY); return; }
             isDraggingLogo = true;
@@ -513,10 +552,9 @@
             isEraserDrawing = false;
         });
 
-        /* ---------------- MANUAL ERASER ENGINE ---------------- */
         document.getElementById('eraser-toggle-btn').addEventListener('click', function() {
             isEraserActive = !isEraserActive;
-            this.style.background = isEraserActive ? '#ff0055' : 'rgba(0,0,0,0.6)';
+            this.style.background = isEraserActive ? '#ff0055' : 'rgba(0,0,0,0.7)';
             studioCanvas.style.cursor = isEraserActive ? 'crosshair' : 'grab';
         });
 
@@ -539,21 +577,21 @@
             renderCompositeCanvas();
         }
 
-        /* ---------------- 3D PARALLAX TILT EFFECT ---------------- */
+        // 3D Parallax Stage Motion
         previewContainer.addEventListener('mousemove', (e) => {
             if (!document.getElementById('parallax-toggle').checked) return;
             const rect = previewContainer.getBoundingClientRect();
             const x = e.clientX - rect.left - rect.width / 2;
             const y = e.clientY - rect.top - rect.height / 2;
 
-            previewContainer.style.transform = `rotateY(${x / 20}deg) rotateX(${-y / 20}deg)`;
+            previewContainer.style.transform = `rotateY(${x / 25}deg) rotateX(${-y / 25}deg)`;
         });
 
         previewContainer.addEventListener('mouseleave', () => {
             previewContainer.style.transform = 'rotateY(0deg) rotateX(0deg)';
         });
 
-        /* ---------------- UI CONTROLS BINDING ---------------- */
+        // Event Listeners for Controls
         document.getElementById('enable-bg-color-toggle').onchange = renderCompositeCanvas;
         document.getElementById('canvas-bg-picker').oninput = renderCompositeCanvas;
         document.getElementById('photo-style-select').onchange = renderCompositeCanvas;
@@ -561,38 +599,29 @@
             document.getElementById('blur-val').innerText = this.value + 'px';
             renderCompositeCanvas();
         };
-        document.getElementById('studio-light-select').onchange = renderCompositeCanvas;
+        document.getElementById('light-wrap-range').oninput = function() {
+            document.getElementById('wrap-val').innerText = this.value + '%';
+            renderCompositeCanvas();
+        };
+        document.getElementById('clarity-range').oninput = function() {
+            document.getElementById('clarity-val').innerText = this.value + '%';
+            if (rawSubjectImage) refineAndProcessSubject();
+        };
+        document.getElementById('edge-polish-range').oninput = function() {
+            document.getElementById('edge-val').innerText = this.value + '%';
+            if (rawSubjectImage) refineAndProcessSubject();
+        };
+        document.getElementById('alpha-thresh-range').oninput = function() {
+            document.getElementById('thresh-val').innerText = this.value;
+            if (rawSubjectImage) refineAndProcessSubject();
+        };
         document.getElementById('logo-scale-range').oninput = function() {
             logoScale = parseInt(this.value) / 100;
             document.getElementById('scale-val').innerText = this.value + '%';
             renderCompositeCanvas();
         };
-        document.getElementById('logo-angle-range').oninput = function() {
-            logoAngle = parseInt(this.value);
-            document.getElementById('angle-val').innerText = this.value + '°';
-            renderCompositeCanvas();
-        };
-        document.getElementById('spill-range').oninput = function() {
-            document.getElementById('spill-val').innerText = this.value + '%';
-            if (rawSubjectImage) extractColorAndEnhance();
-        };
-        document.getElementById('gold-boost-range').oninput = function() {
-            document.getElementById('gold-val').innerText = this.value + '%';
-            if (rawSubjectImage) extractColorAndEnhance();
-        };
 
-        // Eyedropper Tool
-        document.getElementById('eyedropper-btn').addEventListener('click', () => {
-            if ('EyeDropper' in window) {
-                const eyeDropper = new EyeDropper();
-                eyeDropper.open().then(result => {
-                    document.getElementById('target-bg-color').value = result.sRGBHex;
-                    extractColorAndEnhance();
-                });
-            }
-        });
-
-        /* ---------------- 4K / 8K TRANSPARENT PNG EXPORT ENGINE ---------------- */
+        // LOSSLESS HIGH-RESOLUTION 4K/8K EXPORT ENGINE
         downloadImgBtn.addEventListener('click', () => {
             if (!studioCanvas.width) return;
 
@@ -608,7 +637,6 @@
 
             const scaleRatio = exportCanvas.width / studioCanvas.width;
 
-            // Render Offscreen with high scale
             expCtx.save();
             expCtx.scale(scaleRatio, scaleRatio);
 
@@ -629,14 +657,22 @@
             expCtx.scale(logoScale, logoScale);
 
             expCtx.drawImage(processedFgCanvas, -processedFgCanvas.width / 2, -processedFgCanvas.height / 2);
+
+            const lightWrapVal = parseInt(document.getElementById('light-wrap-range').value);
+            if (customBackgroundImage && lightWrapVal > 0) {
+                expCtx.globalCompositeOperation = 'source-atop';
+                expCtx.globalAlpha = lightWrapVal / 100;
+                expCtx.filter = 'blur(20px)';
+                expCtx.drawImage(customBackgroundImage, -processedFgCanvas.width / 2, -processedFgCanvas.height / 2, processedFgCanvas.width, processedFgCanvas.height);
+            }
+
             expCtx.restore();
 
             const link = document.createElement('a');
-            link.download = `Nexura_Transparent_Logo_${exportWidthPreset}p_${Date.now()}.png`;
+            link.download = `Nexura_Cinematic_Pro_${exportWidthPreset}p_${Date.now()}.png`;
             link.href = exportCanvas.toDataURL('image/png', 1.0);
             link.click();
         });
     </script>
 </body>
 </html>
-
