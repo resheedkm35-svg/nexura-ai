@@ -231,20 +231,92 @@
             box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
         }
 
-        .status-badge {
+        /* Futuristic Laser Overlay Stage */
+        .laser-scan-container {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: var(--bg-card);
-            border: 2px solid var(--accent-green);
-            padding: 15px 30px;
-            border-radius: 30px;
-            font-weight: bold;
-            font-size: 0.9rem;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
             display: none;
-            z-index: 10;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            z-index: 15;
+        }
+
+        /* High-Tech Grid Overlay */
+        .laser-grid-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-size: 30px 30px;
+            background-image: 
+                linear-gradient(to right, rgba(0, 255, 136, 0.1) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 255, 136, 0.1) 1px, transparent 1px);
+        }
+
+        /* Horizontal Scanning Laser Beam */
+        .laser-beam {
+            position: absolute;
+            width: 100%;
+            height: 4px;
+            background: #00ff88;
+            box-shadow: 0 0 15px #00ff88, 0 0 30px #00ff88, 0 0 50px #00ff88;
+            top: 0;
+            animation: scanAnimation 1.8s infinite alternate ease-in-out;
+        }
+
+        /* Scanning Glow Effect Behind Beam */
+        .laser-glow {
+            position: absolute;
+            width: 100%;
+            height: 80px;
+            background: linear-gradient(to bottom, rgba(0, 255, 136, 0.25), transparent);
+            top: 0;
+            animation: scanGlowAnimation 1.8s infinite alternate ease-in-out;
+        }
+
+        @keyframes scanAnimation {
+            0% { top: 0%; }
+            100% { top: 98%; }
+        }
+
+        @keyframes scanGlowAnimation {
+            0% { top: -40px; }
+            100% { top: calc(98% - 70px); }
+        }
+
+        /* Sci-Fi HUD Status Box */
+        .laser-hud-status {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(10, 10, 18, 0.9);
+            border: 1px solid #00ff88;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+            padding: 10px 24px;
+            border-radius: 20px;
+            color: #00ff88;
+            font-family: monospace;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .hud-spinner {
+            width: 12px;
+            height: 12px;
+            border: 2px solid #00ff88;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spinHUD 0.8s linear infinite;
+        }
+
+        @keyframes spinHUD {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -280,8 +352,6 @@
 
         <div class="workspace-panel">
             
-            <div id="status-overlay" class="status-badge">⚡ AI പ്രോസസ്സിംഗ് നടക്കുന്നു: <span id="progress-text">0%</span></div>
-
             <!-- MODULE 1: ERASE BACKDROP -->
             <div id="eraser-module" class="tool-section-view active-view">
                 <label class="btn-upload">
@@ -290,7 +360,7 @@
                 </label>
             </div>
 
-            <!-- MODULE 2: SCENE COMPOSITOR (WITH ALL FORMER ADVANCED CONTROLS) -->
+            <!-- MODULE 2: SCENE COMPOSITOR -->
             <div id="compositor-module" class="tool-section-view">
                 <div class="controls-row">
                     <label class="btn-upload">
@@ -318,7 +388,7 @@
                 </div>
             </div>
 
-            <!-- MODULE 3: CLARITY ENHANCER (WITH CONVOLUTION MATRIX ENGINE) -->
+            <!-- MODULE 3: CLARITY ENHANCER -->
             <div id="clarity-module" class="tool-section-view">
                 <div class="controls-row">
                     <label class="btn-upload" style="grid-column: span 2;">
@@ -345,9 +415,20 @@
             </div>
 
             <!-- MASTER WORKSPACE CANVAS -->
-            <div class="canvas-stage">
+            <div class="canvas-stage" id="canvas-stage-box">
                 <p id="placeholder-msg" style="font-size:0.85rem; opacity:0.6;">ചിത്രങ്ങൾ അപ്‌ലോഡ് ചെയ്തു എഡിറ്റിംഗ് ആരംഭിക്കുക.</p>
                 <canvas id="master-canvas" style="display:none;"></canvas>
+
+                <!-- Sci-Fi Laser Overlay System -->
+                <div class="laser-scan-container" id="laser-overlay">
+                    <div class="laser-grid-bg"></div>
+                    <div class="laser-glow"></div>
+                    <div class="laser-beam"></div>
+                    <div class="laser-hud-status">
+                        <div class="hud-spinner"></div>
+                        <span>AI NEURAL SCANNING... <b id="hud-pct">0%</b></span>
+                    </div>
+                </div>
             </div>
 
             <!-- LOSSLESS EXPORT CONTROLS -->
@@ -379,10 +460,10 @@
 
         const masterCanvas = document.getElementById('master-canvas');
         const ctx = masterCanvas.getContext('2d');
-        const statusOverlay = document.getElementById('status-overlay');
-        const progressText = document.getElementById('progress-text');
         const placeholderMsg = document.getElementById('placeholder-msg');
         const exportDownloadBtn = document.getElementById('export-download-btn');
+        const laserOverlay = document.getElementById('laser-overlay');
+        const hudPct = document.getElementById('hud-pct');
 
         // Theme Switcher
         document.getElementById('theme-toggle').addEventListener('click', () => {
@@ -406,30 +487,32 @@
             btn.classList.add('active');
         };
 
-        // File Processing via WASM AI Engine
+        // File Processing via WASM AI Engine with Laser Scanner
         async function processBgRemoval(file) {
-            statusOverlay.style.display = "block";
-            progressText.innerText = "0%";
+            laserOverlay.style.display = "block";
+            hudPct.innerText = "0%";
 
             try {
                 const blob = await removeBackground(file, {
                     progress: (key, current, total) => {
                         const pct = Math.round((current / total) * 100);
-                        if (!isNaN(pct)) progressText.innerText = `${pct}%`;
+                        if (!isNaN(pct)) {
+                            hudPct.innerText = `${pct}%`;
+                        }
                     }
                 });
 
                 const img = new Image();
                 img.onload = () => {
                     rawSubjectImg = img;
-                    statusOverlay.style.display = "none";
+                    laserOverlay.style.display = "none";
                     renderMasterCanvas();
                 };
                 img.src = URL.createObjectURL(blob);
             } catch (err) {
                 console.error(err);
-                statusOverlay.style.display = "none";
-                alert("AI സപ്പോർട്ടിൽ ചെറിയ തടസ്സം നേരിട്ടു. ഒറിജിനൽ ചിത്രം ലോഡ് ചെയ്യുന്നു.");
+                laserOverlay.style.display = "none";
+                alert("പ്രോസസ്സിംഗിൽ തടസ്സം നേരിട്ടു.");
             }
         }
 
@@ -519,7 +602,7 @@
             ctx.drawImage(rawSubjectImg, 0, 0);
             ctx.restore();
 
-            // 4. Advanced Light Wrap Engine (Multi-pass Alpha Compositing)
+            // 4. Advanced Light Wrap Engine
             if(currentActiveModule === 'compositor-module' && customBgImg) {
                 const wrapVal = parseInt(document.getElementById('light-wrap-range').value);
                 if(wrapVal > 0) {
@@ -532,7 +615,7 @@
                 }
             }
 
-            // 5. Convolution Sharpness Matrix Engine (Neural Sharpen)
+            // 5. Convolution Sharpness Matrix Engine
             if(currentActiveModule === 'clarity-module') {
                 const sharpVal = parseInt(document.getElementById('clarity-range').value);
                 if(sharpVal > 0) {
