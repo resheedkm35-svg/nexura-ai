@@ -11,13 +11,52 @@
             max-width: 850px;
             margin-top: 20px;
         }
-        .control-group {
+
+        /* Tool Switcher Navigation Tabs */
+        .studio-tabs {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .tab-btn {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 183, 0, 0.3);
+            color: #ccc;
+            padding: 12px 8px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .tab-btn.active {
+            border-color: #ffb700;
+            color: #ffb700;
+            background: rgba(255, 183, 0, 0.15);
+            box-shadow: 0 0 10px rgba(255, 183, 0, 0.2);
+        }
+
+        /* Dynamic Tool Cards */
+        .tool-card {
+            display: none;
             background: rgba(0, 0, 0, 0.45);
             border: 1px solid rgba(255, 183, 0, 0.25);
             border-radius: 12px;
             padding: 18px;
             margin-bottom: 20px;
+            animation: fadeIn 0.3s ease-in-out;
         }
+        .tool-card.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .control-title {
             color: #ffb700;
             font-size: 0.85rem;
@@ -77,6 +116,8 @@
             color: #ffb700;
             background: rgba(255,183,0,0.15);
         }
+
+        /* Transparent Checkerboard Canvas */
         .image-preview-box {
             width: 100%;
             min-height: 280px;
@@ -129,11 +170,18 @@
         <div class="card studio-box">
             <div class="card-header">
                 <span class="card-num">MODULE 02</span>
-                <div class="status-indicator">AI IMAGE STUDIO ONLINE</div>
+                <div class="status-indicator">SELECT A STUDIO TOOL</div>
             </div>
 
-            <!-- SECTION 1: AI Text-To-Image Generator -->
-            <div class="control-group">
+            <!-- TOOL SELECTION TABS -->
+            <div class="studio-tabs">
+                <button class="tab-btn active" onclick="switchTool('generator-card', this)">🎨 AI GENERATOR</button>
+                <button class="tab-btn" onclick="switchTool('bg-remover-card', this)">✂️ BG REMOVER</button>
+                <button class="tab-btn" onclick="switchTool('editor-card', this)">🎛️ PHOTO EDITOR</button>
+            </div>
+
+            <!-- CARD 1: AI Text-To-Image Generator -->
+            <div id="generator-card" class="tool-card active">
                 <div class="control-title">1. AI TEXT-TO-IMAGE GENERATOR</div>
                 
                 <label style="font-size:0.75rem; color:#aaa; display:block; margin-bottom:5px;">പ്രോംപ്റ്റ് നൽകുക (English):</label>
@@ -158,30 +206,32 @@
                 <button class="launch-btn" id="generate-img-btn">🎨 GENERATE AI IMAGE</button>
             </div>
 
-            <!-- SECTION 2: Image Upload -->
-            <div class="control-group">
-                <div class="control-title">2. UPLOAD EXTERNAL IMAGE FOR EDITING</div>
-                <label class="launch-btn" style="text-align:center; display:block; cursor:pointer;">
-                    📁 UPLOAD IMAGE FILE
-                    <input type="file" id="upload-image-file" accept="image/*" style="display:none;">
-                </label>
-            </div>
-
-            <!-- SECTION 3: ADVANCED AI BACKGROUND REMOVER -->
-            <div class="control-group" style="border-color: rgba(255, 0, 127, 0.4);">
+            <!-- CARD 2: ADVANCED AI BACKGROUND REMOVER -->
+            <div id="bg-remover-card" class="tool-card" style="border-color: rgba(255, 0, 127, 0.4);">
                 <div class="control-title" style="color: #ff007f;">
-                    <span>3. ADVANCED AI BACKGROUND REMOVER</span>
+                    <span>2. ADVANCED AI BACKGROUND REMOVER</span>
                     <span style="font-size: 0.65rem; background: #ff007f; color: #fff; padding: 2px 6px; border-radius: 4px;">PRECISION AI</span>
                 </div>
                 <p style="font-size: 0.75rem; color: #bbb; margin-bottom: 12px;">
-                    ചിത്രത്തിലെ ബാക്ഗ്രൗണ്ട് അഡ്വാൻസ്ഡ് മെഷീൻ ലേണിംഗ് മോഡൽ ഉപയോഗിച്ച് ഓട്ടോമാറ്റിക്കായി വേർതിരിച്ച് ട്രാൻസ്പേരന്റ് ആക്കുന്നു.
+                    ചിത്രത്തിലെ ബാക്ഗ്രൗണ്ട് അഡ്വാൻസ്ഡ് AI ഉപയോഗിച്ച് കൃത്യമായി വേർതിരിച്ച് ട്രാൻസ്പേരന്റ് (Transparent PNG) ആക്കുന്നു.
                 </p>
-                <button class="launch-btn bg-ai-btn" id="remove-bg-btn">✂️ REMOVE BACKGROUND (AI)</button>
+
+                <label class="launch-btn" style="text-align:center; display:block; cursor:pointer; margin-bottom: 12px; background: rgba(255,255,255,0.05); border-color:#ff007f;">
+                    📁 UPLOAD IMAGE FILE
+                    <input type="file" id="upload-bg-file" accept="image/*" style="display:none;">
+                </label>
+
+                <button class="launch-btn bg-ai-btn" id="remove-bg-btn">✂️ REMOVE BACKGROUND NOW</button>
             </div>
 
-            <!-- SECTION 4: Image Adjustment Filters -->
-            <div class="control-group">
-                <div class="control-title">4. IMAGE ADJUSTMENT & FILTER RACK</div>
+            <!-- CARD 3: Image Adjustment Filters -->
+            <div id="editor-card" class="tool-card">
+                <div class="control-title">3. IMAGE ADJUSTMENT & FILTER RACK</div>
+
+                <label class="launch-btn" style="text-align:center; display:block; cursor:pointer; margin-bottom: 15px; background: rgba(255,255,255,0.05);">
+                    📁 UPLOAD IMAGE FILE
+                    <input type="file" id="upload-editor-file" accept="image/*" style="display:none;">
+                </label>
 
                 <div class="slider-row">
                     <div class="slider-label">
@@ -216,9 +266,9 @@
                 </div>
             </div>
 
-            <!-- SECTION 5: Master Output & Download -->
-            <div class="control-group">
-                <div class="control-title">5. MASTER STUDIO OUTPUT</div>
+            <!-- MASTER OUTPUT CANVAS & DOWNLOAD -->
+            <div style="background: rgba(0, 0, 0, 0.45); border: 1px solid rgba(255, 183, 0, 0.25); border-radius: 12px; padding: 18px;">
+                <div class="control-title">MASTER STUDIO CANVAS</div>
                 
                 <div class="loading-spinner" id="loading-spinner">✨ പ്രോസസ്സിംഗ് നടക്കുന്നു... ദയവായി കാത്തിരിക്കൂ...</div>
 
@@ -236,20 +286,17 @@
 
     </main>
 
-    <!-- Vanilla Javascript & Modules -->
+    <!-- JS Module for Background Removal -->
     <script type="module">
         import imglyRemoveBackground from 'https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.4.5/+esm';
 
         const removeBgBtn = document.getElementById('remove-bg-btn');
         const loadingSpinner = document.getElementById('loading-spinner');
         const mainPreview = document.getElementById('main-preview');
-        const placeholderText = document.getElementById('placeholder-text');
-        const downloadImgBtn = document.getElementById('download-img-btn');
 
-        // Advanced AI Background Removal Action
         removeBgBtn.addEventListener('click', async () => {
             if (!mainPreview.src || mainPreview.style.display === 'none') {
-                alert("ദയവായി ആദ്യം ഒരു ചിത്രം അപ്‌ലോഡ് ചെയ്യുകയോ AI വഴി ജനറേറ്റ് ചെയ്യുകയോ ചെയ്യുക!");
+                alert("ദയവായി ആദ്യം ഒരു ചിത്രം അപ്‌ലോഡ് ചെയ്യുക!");
                 return;
             }
 
@@ -257,7 +304,6 @@
             loadingSpinner.style.display = "block";
 
             try {
-                // Fetch high precision segmented image blob directly in browser memory
                 const blob = await imglyRemoveBackground(mainPreview.src);
                 const transparentUrl = URL.createObjectURL(blob);
 
@@ -271,7 +317,17 @@
         });
     </script>
 
+    <!-- Interface Logic & Tabs -->
     <script>
+        // Tab Switcher Logic
+        function switchTool(cardId, element) {
+            document.querySelectorAll('.tool-card').forEach(card => card.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(cardId).classList.add('active');
+            element.classList.add('active');
+        }
+
         // Aspect Ratio Selector Logic
         let selectedWidth = 1024;
         let selectedHeight = 1024;
@@ -350,9 +406,9 @@
             };
         });
 
-        // Local Image Upload Logic
-        document.getElementById('upload-image-file').addEventListener('change', (e) => {
-            const file = e.target.files[0];
+        // Image Upload Logic (Shared)
+        function handleFileUpload(inputElement) {
+            const file = inputElement.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = (event) => {
@@ -363,9 +419,12 @@
                 };
                 reader.readAsDataURL(file);
             }
-        });
+        }
 
-        // Download PNG Logic
+        document.getElementById('upload-bg-file').addEventListener('change', function() { handleFileUpload(this); });
+        document.getElementById('upload-editor-file').addEventListener('change', function() { handleFileUpload(this); });
+
+        // Download HD Image Logic
         downloadImgBtn.addEventListener('click', () => {
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
@@ -384,3 +443,4 @@
     </script>
 </body>
 </html>
+
