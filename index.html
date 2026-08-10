@@ -5,6 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nexura.AI - Ecosystem Dashboard</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Video Logo Specific Styling */
+        .center-logo-video {
+            width: 140px;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid #00ff88;
+            box-shadow: 0 0 25px rgba(0, 255, 136, 0.4), inset 0 0 15px rgba(0, 255, 136, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .center-logo-video:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(0, 255, 136, 0.7);
+        }
+
+        .logo-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+    </style>
 </head>
 <body>
 
@@ -20,9 +44,12 @@
     <!-- Main Dashboard Container -->
     <main class="dashboard-container">
         
-        <!-- Separate Logo Component -->
+        <!-- Animated 3D Logo Component -->
         <div class="logo-wrapper">
-            <img src="logo.png" alt="Nexura Logo" class="center-logo">
+            <video class="center-logo-video" autoplay loop muted playsinline>
+                <source src="logo-intro.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
         </div>
 
         <!-- 3 Core Cards Grid -->
