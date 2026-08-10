@@ -71,24 +71,27 @@ body, html {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 25px 0;
+    padding: 20px 0 30px 0;
 }
 
-/* NEW: 3D Animated Video Logo Styling */
+/* 3D Video Banner Logo (Curved Corners & Larger View) */
 .center-logo-video {
-    width: 140px;                   /* ലോഗോയുടെ വീതി */
-    height: 140px;                  /* ലോഗോയുടെ ഉയരം (റൗണ്ട് ഷേപ്പിനായി ഒരേ അളവ് വേണം) */
-    object-fit: cover;               /* വീഡിയോ കൃത്യമായി ഫ്രെയിമിൽ ഇരിക്കാൻ */
-    border-radius: 50%;              /* റൗണ്ട് ബാഡ്ജ് ഷേപ്പ് നൽകാൻ */
-    border: 2px solid #ffb700;       /* നിങ്ങളുടെ Gold Theme Border */
-    box-shadow: 0 0 20px rgba(255, 183, 0, 0.35), inset 0 0 10px rgba(255, 183, 0, 0.2);
+    width: 90%;
+    max-width: 360px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 18px;            /* നാല് മൂലകളിലും ഉള്ള ഭംഗിയുള്ള വലിയ കർവ് */
+    border: 1.5px solid rgba(255, 183, 0, 0.5);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 
+                0 0 20px rgba(255, 183, 0, 0.3);
+    display: block;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    cursor: pointer;
 }
 
 .center-logo-video:hover {
-    transform: scale(1.05);          /* മാൗസ് ഹോവർ ചെയ്യുമ്പോൾ ചെറിയ സിനിമാറ്റിക് സൂം */
-    box-shadow: 0 0 35px rgba(255, 183, 0, 0.6);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.9), 
+                0 0 30px rgba(255, 183, 0, 0.5);
 }
 
 /* Card Grid Layout */
@@ -99,7 +102,7 @@ body, html {
     width: 100%;
 }
 
-/* Glassmorphism Card Design */
+/* Glassmorphism Card Design (Exact Original Properties) */
 .card {
     background: rgba(14, 16, 22, 0.85);
     border: 1px solid rgba(255, 183, 0, 0.35);
@@ -111,13 +114,38 @@ body, html {
     justify-content: space-between;
 }
 
-/* Responsive Scaling for Mobile Screens */
+/* Mobile Screen Layout Adjustments (Image 2 Style Horizontal Flow) */
 @media (max-width: 768px) {
-    .card-grid {
-        grid-template-columns: 1fr;
+    .dashboard-container {
+        padding: 0 10px 30px 10px;
     }
+
     .center-logo-video {
-        width: 110px;
-        height: 110px;
+        width: 95%;
+        height: 160px;
+        border-radius: 16px;
+    }
+
+    .card-grid {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        padding-bottom: 15px;
+        gap: 12px;
+    }
+
+    .card {
+        min-width: 270px;            /* രണ്ടാമത്തെ ചിത്രത്തിലെ പോലെ കാർഡുകൾ വശങ്ങളിലേക്ക് സ്ക്രോൾ ആകുന്ന രീതിയിൽ */
+        scroll-snap-align: center;
+        flex-shrink: 0;
+    }
+
+    /* Hide scrollbar for clean UI */
+    .card-grid::-webkit-scrollbar {
+        display: none;
+    }
+    .card-grid {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
     }
 }
