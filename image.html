@@ -3,16 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Image & Graphic Studio - Nexura.AI</title>
+    <title>AI Image & Studio - Nexura.AI</title>
     <link rel="stylesheet" href="style.css">
     <style>
         .studio-box {
             width: 100%;
-            max-width: 850px;
+            max-width: 900px;
             margin-top: 20px;
         }
 
-        /* Tool Switcher Navigation Tabs */
         .studio-tabs {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -38,7 +37,6 @@
             box-shadow: 0 0 10px rgba(255, 183, 0, 0.2);
         }
 
-        /* Dynamic Tool Cards */
         .tool-card {
             display: none;
             background: rgba(0, 0, 0, 0.45);
@@ -117,11 +115,52 @@
             background: rgba(255,183,0,0.15);
         }
 
-        /* Transparent Checkerboard Canvas */
+        .bg-mode-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .bg-mode-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 0, 127, 0.3);
+            color: #bbb;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            text-align: center;
+        }
+        .bg-mode-btn.active {
+            border-color: #ff007f;
+            background: rgba(255, 0, 127, 0.2);
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .picker-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 12px;
+        }
+
+        .upload-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
         .image-preview-box {
             width: 100%;
-            min-height: 280px;
-            background: repeating-conic-gradient(#111 0% 25%, #222 0% 50%) 50% / 20px 20px;
+            min-height: 320px;
+            background-image: repeating-conic-gradient(#111 0% 25%, #222 0% 50%);
+            background-size: 20px 20px;
             border: 1px dashed rgba(255, 183, 0, 0.4);
             border-radius: 8px;
             display: flex;
@@ -131,11 +170,10 @@
             overflow: hidden;
             position: relative;
         }
-        .image-preview-box img {
+        .image-preview-box canvas {
             max-width: 100%;
             max-height: 500px;
             border-radius: 6px;
-            transition: filter 0.2s ease;
         }
         .loading-spinner {
             display: none;
@@ -151,296 +189,315 @@
             color: #fff;
             font-weight: bold;
         }
-        .bg-ai-btn:hover {
-            opacity: 0.9;
-        }
     </style>
 </head>
 <body>
 
-    <!-- Header -->
     <header class="main-header">
-        <div class="brand-badge">NEXURA.AI / ADVANCED IMAGE STUDIO</div>
+        <div class="brand-badge">NEXURA.AI / ADVANCED STUDIO</div>
         <button class="launch-btn" style="width: auto; padding: 6px 15px;" onclick="window.location.href='index.html'">← DASHBOARD</button>
     </header>
 
-    <!-- Main Layout -->
     <main class="dashboard-container">
-        
         <div class="card studio-box">
             <div class="card-header">
                 <span class="card-num">MODULE 02</span>
-                <div class="status-indicator">SELECT A STUDIO TOOL</div>
+                <div class="status-indicator">PRECISION STUDIO ONLINE</div>
             </div>
 
-            <!-- TOOL SELECTION TABS -->
+            <!-- TABS -->
             <div class="studio-tabs">
-                <button class="tab-btn active" onclick="switchTool('generator-card', this)">🎨 AI GENERATOR</button>
-                <button class="tab-btn" onclick="switchTool('bg-remover-card', this)">✂️ BG REMOVER</button>
+                <button class="tab-btn active" onclick="switchTool('bg-remover-card', this)">✂️ ADVANCED BG REMOVER</button>
+                <button class="tab-btn" onclick="switchTool('generator-card', this)">🎨 AI GENERATOR</button>
                 <button class="tab-btn" onclick="switchTool('editor-card', this)">🎛️ PHOTO EDITOR</button>
             </div>
 
-            <!-- CARD 1: AI Text-To-Image Generator -->
-            <div id="generator-card" class="tool-card active">
-                <div class="control-title">1. AI TEXT-TO-IMAGE GENERATOR</div>
+            <!-- CARD 1: ADVANCED BG REMOVER & BACKGROUND CHANGER -->
+            <div id="bg-remover-card" class="tool-card active" style="border-color: rgba(255, 0, 127, 0.4);">
+                <div class="control-title" style="color: #ff007f;">
+                    <span>ADVANCED BG REMOVER & NEW BG COMPOSITER</span>
+                    <span style="font-size: 0.65rem; background: #ff007f; color: #fff; padding: 2px 6px; border-radius: 4px;">MULTI-LAYER</span>
+                </div>
+
+                <!-- Dual File Upload (Subject + New Background) -->
+                <div class="upload-grid">
+                    <label class="launch-btn" style="text-align:center; display:block; cursor:pointer; background: rgba(255,255,255,0.05); border-color:#ff007f; font-size:0.75rem;">
+                        📁 1. MAIN LOGO / IMAGE
+                        <input type="file" id="upload-bg-file" accept="image/*" style="display:none;">
+                    </label>
+
+                    <label class="launch-btn" style="text-align:center; display:block; cursor:pointer; background: rgba(0, 255, 136, 0.05); border-color:#00ff88; font-size:0.75rem; color:#00ff88;">
+                        🖼️ 2. NEW BG IMAGE (OPTIONAL)
+                        <input type="file" id="upload-new-bg-file" accept="image/*" style="display:none;">
+                    </label>
+                </div>
+
+                <div class="bg-mode-grid">
+                    <button class="bg-mode-btn active" id="mode-key-btn" onclick="setBgEngineMode('color-key')">🎯 Color Keying (Logos/Graphics)</button>
+                    <button class="bg-mode-btn" id="mode-ai-btn" onclick="setBgEngineMode('ai-neural')">🤖 AI Neural (Objects/Photos)</button>
+                </div>
+
+                <div id="color-key-controls">
+                    <div class="picker-box">
+                        <span style="font-size:0.75rem; color:#ccc;">നീക്കം ചെയ്യേണ്ട കളർ:</span>
+                        <input type="color" id="target-bg-color" value="#ffffff" style="width:35px; height:25px; border:none; cursor:pointer; background:none;">
+                        <button class="ratio-btn" id="eyedropper-btn" style="margin-bottom:0; padding:4px 8px;">🖌️ Click Image to Pick</button>
+                    </div>
+
+                    <div class="slider-row">
+                        <div class="slider-label">
+                            <span>Color Distance / Sensitivity (വ്യക്തത)</span>
+                            <span id="tolerance-val">35</span>
+                        </div>
+                        <input type="range" id="tolerance-range" min="1" max="150" value="35">
+                    </div>
+                </div>
+
+                <button class="launch-btn bg-ai-btn" id="execute-bg-btn">✂️ PROCESS & MERGE BACKGROUND</button>
+            </div>
+
+            <!-- CARD 2: AI GENERATOR -->
+            <div id="generator-card" class="tool-card">
+                <div class="control-title">AI TEXT-TO-IMAGE GENERATOR</div>
+                <textarea id="prompt-input" rows="3" placeholder="Ex: Futuristic cinematic robot, ultra detailed 8k..."></textarea>
                 
-                <label style="font-size:0.75rem; color:#aaa; display:block; margin-bottom:5px;">പ്രോംപ്റ്റ് നൽകുക (English):</label>
-                <textarea id="prompt-input" rows="3" placeholder="Ex: Futuristic cinematic robot, ultra detailed 8k, photorealistic lighting..."></textarea>
-                
-                <label style="font-size:0.75rem; color:#aaa; display:block; margin-bottom:5px;">ആർട്ട് സ്റ്റൈൽ (Art Style):</label>
                 <select id="style-preset">
                     <option value="photorealistic">📸 Photorealistic / Hyper Real</option>
                     <option value="cinematic">🎬 Cinematic Movie Still</option>
-                    <option value="anime">🎨 Anime / Concept Art</option>
-                    <option value="3d-render">🧊 3D Render / Unreal Engine</option>
-                    <option value="cyberpunk">🌆 Cyberpunk Neon Glow</option>
+                    <option value="3d-render">🧊 3D Render / Vector Emblem</option>
                 </select>
 
-                <label style="font-size:0.75rem; color:#aaa; display:block; margin-bottom:5px;">വലിപ്പം (Aspect Ratio):</label>
                 <div class="ratio-grid">
                     <button class="ratio-btn active" data-width="1024" data-height="1024">1:1 (Square)</button>
                     <button class="ratio-btn" data-width="1280" data-height="720">16:9 (Landscape)</button>
-                    <button class="ratio-btn" data-width="720" data-height="1280">9:16 (Portrait / Reel)</button>
                 </div>
 
                 <button class="launch-btn" id="generate-img-btn">🎨 GENERATE AI IMAGE</button>
             </div>
 
-            <!-- CARD 2: ADVANCED AI BACKGROUND REMOVER -->
-            <div id="bg-remover-card" class="tool-card" style="border-color: rgba(255, 0, 127, 0.4);">
-                <div class="control-title" style="color: #ff007f;">
-                    <span>2. ADVANCED AI BACKGROUND REMOVER</span>
-                    <span style="font-size: 0.65rem; background: #ff007f; color: #fff; padding: 2px 6px; border-radius: 4px;">PRECISION AI</span>
-                </div>
-                <p style="font-size: 0.75rem; color: #bbb; margin-bottom: 12px;">
-                    ചിത്രത്തിലെ ബാക്ഗ്രൗണ്ട് അഡ്വാൻസ്ഡ് AI ഉപയോഗിച്ച് കൃത്യമായി വേർതിരിച്ച് ട്രാൻസ്പേരന്റ് (Transparent PNG) ആക്കുന്നു.
-                </p>
-
-                <label class="launch-btn" style="text-align:center; display:block; cursor:pointer; margin-bottom: 12px; background: rgba(255,255,255,0.05); border-color:#ff007f;">
-                    📁 UPLOAD IMAGE FILE
-                    <input type="file" id="upload-bg-file" accept="image/*" style="display:none;">
-                </label>
-
-                <button class="launch-btn bg-ai-btn" id="remove-bg-btn">✂️ REMOVE BACKGROUND NOW</button>
-            </div>
-
-            <!-- CARD 3: Image Adjustment Filters -->
+            <!-- CARD 3: PHOTO EDITOR -->
             <div id="editor-card" class="tool-card">
-                <div class="control-title">3. IMAGE ADJUSTMENT & FILTER RACK</div>
-
-                <label class="launch-btn" style="text-align:center; display:block; cursor:pointer; margin-bottom: 15px; background: rgba(255,255,255,0.05);">
-                    📁 UPLOAD IMAGE FILE
-                    <input type="file" id="upload-editor-file" accept="image/*" style="display:none;">
-                </label>
-
+                <div class="control-title">IMAGE ADJUSTMENT & FILTER RACK</div>
                 <div class="slider-row">
-                    <div class="slider-label">
-                        <span>Brightness (വെളിച്ചം)</span>
-                        <span id="bright-val">100%</span>
-                    </div>
+                    <div class="slider-label"><span>Brightness</span><span id="bright-val">100%</span></div>
                     <input type="range" id="brightness" min="0" max="200" value="100">
                 </div>
-
                 <div class="slider-row">
-                    <div class="slider-label">
-                        <span>Contrast (വ്യക്തത)</span>
-                        <span id="contrast-val">100%</span>
-                    </div>
+                    <div class="slider-label"><span>Contrast</span><span id="contrast-val">100%</span></div>
                     <input type="range" id="contrast" min="0" max="200" value="100">
                 </div>
-
                 <div class="slider-row">
-                    <div class="slider-label">
-                        <span>Saturation (നിറത്തിന്റെ തീവ്രത)</span>
-                        <span id="saturate-val">100%</span>
-                    </div>
+                    <div class="slider-label"><span>Saturation</span><span id="saturate-val">100%</span></div>
                     <input type="range" id="saturation" min="0" max="200" value="100">
-                </div>
-
-                <div class="slider-row">
-                    <div class="slider-label">
-                        <span>Background Blur</span>
-                        <span id="blur-val">0px</span>
-                    </div>
-                    <input type="range" id="blur" min="0" max="10" value="0">
                 </div>
             </div>
 
-            <!-- MASTER OUTPUT CANVAS & DOWNLOAD -->
+            <!-- MASTER STUDIO CANVAS -->
             <div style="background: rgba(0, 0, 0, 0.45); border: 1px solid rgba(255, 183, 0, 0.25); border-radius: 12px; padding: 18px;">
-                <div class="control-title">MASTER STUDIO CANVAS</div>
+                <div class="control-title">
+                    <span>MASTER STUDIO CANVAS</span>
+                    <div style="display:flex; gap:6px; align-items:center;">
+                        <span style="font-size:0.65rem; color:#aaa;">Canvas Backdrop:</span>
+                        <input type="color" id="canvas-bg-picker" value="#000000" title="Change Color" style="width:20px; height:20px; border:none; cursor:pointer;">
+                    </div>
+                </div>
                 
                 <div class="loading-spinner" id="loading-spinner">✨ പ്രോസസ്സിംഗ് നടക്കുന്നു... ദയവായി കാത്തിരിക്കൂ...</div>
 
-                <div class="image-preview-box">
+                <div class="image-preview-box" id="preview-container">
                     <p id="placeholder-text" style="color:#777; font-size:0.8rem;">ഇവിടെ ചിത്രം പ്രത്യക്ഷപ്പെടും.</p>
-                    <img id="main-preview" src="" style="display:none;" alt="Generated Output" crossorigin="anonymous">
+                    <canvas id="studio-canvas" style="display:none;"></canvas>
                 </div>
 
                 <button class="launch-btn" id="download-img-btn" style="display:none; border-color:#00ff88; color:#00ff88; margin-top:15px;">
-                    📥 DOWNLOAD PNG (TRANSPARENT / HD)
+                    📥 DOWNLOAD HIGH CLARITY HD IMAGE
                 </button>
             </div>
 
         </div>
-
     </main>
 
-    <!-- JS Module for Background Removal -->
     <script type="module">
         import imglyRemoveBackground from 'https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.4.5/+esm';
-
-        const removeBgBtn = document.getElementById('remove-bg-btn');
-        const loadingSpinner = document.getElementById('loading-spinner');
-        const mainPreview = document.getElementById('main-preview');
-
-        removeBgBtn.addEventListener('click', async () => {
-            if (!mainPreview.src || mainPreview.style.display === 'none') {
-                alert("ദയവായി ആദ്യം ഒരു ചിത്രം അപ്‌ലോഡ് ചെയ്യുക!");
-                return;
-            }
-
-            loadingSpinner.innerText = "⚡ AI ബാക്ക്ഗ്രൗണ്ട് നീക്കം ചെയ്യുന്നു... (Browser ONNX Processing)";
-            loadingSpinner.style.display = "block";
-
-            try {
-                const blob = await imglyRemoveBackground(mainPreview.src);
-                const transparentUrl = URL.createObjectURL(blob);
-
-                mainPreview.src = transparentUrl;
-                loadingSpinner.style.display = "none";
-            } catch (error) {
-                console.error("BG Removal Error:", error);
-                alert("ബാക്ക്ഗ്രൗണ്ട് പ്രോസസ്സിംഗിൽ പിശക് സംഭവിച്ചു. ചിത്രം വലിപ്പം കുറച്ച് വീണ്ടും ശ്രമിക്കുക.");
-                loadingSpinner.style.display = "none";
-            }
-        });
+        window.imglyRemoveBackground = imglyRemoveBackground;
     </script>
 
-    <!-- Interface Logic & Tabs -->
     <script>
-        // Tab Switcher Logic
+        let currentEngineMode = 'color-key';
+        let rawSubjectImage = null;      // Extracted Foreground Layer
+        let customBackgroundImage = null; // New Background Layer
+        let processedFgCanvas = document.createElement('canvas'); // Offscreen Transparent Canvas
+
+        const studioCanvas = document.getElementById('studio-canvas');
+        const ctx = studioCanvas.getContext('2d');
+        const placeholderText = document.getElementById('placeholder-text');
+        const downloadImgBtn = document.getElementById('download-img-btn');
+        const loadingSpinner = document.getElementById('loading-spinner');
+
         function switchTool(cardId, element) {
             document.querySelectorAll('.tool-card').forEach(card => card.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            
             document.getElementById(cardId).classList.add('active');
             element.classList.add('active');
         }
 
-        // Aspect Ratio Selector Logic
-        let selectedWidth = 1024;
-        let selectedHeight = 1024;
-
-        const ratioBtns = document.querySelectorAll('.ratio-btn');
-        ratioBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                ratioBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                selectedWidth = btn.getAttribute('data-width');
-                selectedHeight = btn.getAttribute('data-height');
-            });
-        });
-
-        // Filter Adjustments Logic
-        const brightnessInput = document.getElementById('brightness');
-        const contrastInput = document.getElementById('contrast');
-        const saturationInput = document.getElementById('saturation');
-        const blurInput = document.getElementById('blur');
-        const mainPreview = document.getElementById('main-preview');
-
-        function applyFilters() {
-            const bright = brightnessInput.value;
-            const contrast = contrastInput.value;
-            const saturate = saturationInput.value;
-            const blur = blurInput.value;
-
-            document.getElementById('bright-val').innerText = bright + '%';
-            document.getElementById('contrast-val').innerText = contrast + '%';
-            document.getElementById('saturate-val').innerText = saturate + '%';
-            document.getElementById('blur-val').innerText = blur + 'px';
-
-            mainPreview.style.filter = `brightness(${bright}%) contrast(${contrast}%) saturate(${saturate}%) blur(${blur}px)`;
+        function setBgEngineMode(mode) {
+            currentEngineMode = mode;
+            document.getElementById('mode-key-btn').classList.toggle('active', mode === 'color-key');
+            document.getElementById('mode-ai-btn').classList.toggle('active', mode === 'ai-neural');
+            document.getElementById('color-key-controls').style.display = (mode === 'color-key') ? 'block' : 'none';
         }
 
-        brightnessInput.oninput = applyFilters;
-        contrastInput.oninput = applyFilters;
-        saturationInput.oninput = applyFilters;
-        blurInput.oninput = applyFilters;
-
-        // AI Image Generation Logic
-        const generateBtn = document.getElementById('generate-img-btn');
-        const promptInput = document.getElementById('prompt-input');
-        const stylePreset = document.getElementById('style-preset');
-        const loadingSpinner = document.getElementById('loading-spinner');
-        const placeholderText = document.getElementById('placeholder-text');
-        const downloadImgBtn = document.getElementById('download-img-btn');
-
-        generateBtn.addEventListener('click', () => {
-            const prompt = promptInput.value.trim();
-            if (!prompt) {
-                alert("ദയവായി പ്രോംപ്റ്റ് നൽകുക!");
-                return;
-            }
-
-            const style = stylePreset.value;
-            const fullPrompt = encodeURIComponent(`${prompt}, ${style} style, high quality, 8k resolution`);
-            const seed = Math.floor(Math.random() * 1000000);
-            
-            const imageUrl = `https://pollinations.ai/p/${fullPrompt}?width=${selectedWidth}&height=${selectedHeight}&seed=${seed}&nologo=true`;
-
-            loadingSpinner.innerText = "✨ AI ചിത്രം തയ്യാറാകുന്നു, ദയവായി കാത്തിരിക്കൂ...";
-            loadingSpinner.style.display = "block";
-            placeholderText.style.display = "none";
-            mainPreview.style.display = "none";
-            downloadImgBtn.style.display = "none";
-
-            const tempImg = new Image();
-            tempImg.crossOrigin = "anonymous";
-            tempImg.src = imageUrl;
-            tempImg.onload = () => {
-                loadingSpinner.style.display = "none";
-                mainPreview.src = imageUrl;
-                mainPreview.style.display = "block";
-                downloadImgBtn.style.display = "block";
-            };
-        });
-
-        // Image Upload Logic (Shared)
-        function handleFileUpload(inputElement) {
-            const file = inputElement.files[0];
+        // Upload Main Subject Image
+        document.getElementById('upload-bg-file').addEventListener('change', function(e) {
+            const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = (event) => {
-                    placeholderText.style.display = "none";
-                    mainPreview.src = event.target.result;
-                    mainPreview.style.display = "block";
-                    downloadImgBtn.style.display = "block";
+                reader.onload = (evt) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        rawSubjectImage = img;
+                        renderCompositeCanvas();
+                    };
+                    img.src = evt.target.result;
                 };
                 reader.readAsDataURL(file);
             }
+        });
+
+        // Upload Custom New Background Image
+        document.getElementById('upload-new-bg-file').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (evt) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        customBackgroundImage = img;
+                        renderCompositeCanvas();
+                    };
+                    img.src = evt.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // 2-Layer Composite Rendering (Background Layer + Foreground Subject Layer)
+        function renderCompositeCanvas() {
+            if (!rawSubjectImage) return;
+
+            studioCanvas.width = rawSubjectImage.naturalWidth;
+            studioCanvas.height = rawSubjectImage.naturalHeight;
+
+            ctx.clearRect(0, 0, studioCanvas.width, studioCanvas.height);
+
+            // Layer 1: Draw New Custom Background Image (if uploaded)
+            if (customBackgroundImage) {
+                ctx.drawImage(customBackgroundImage, 0, 0, studioCanvas.width, studioCanvas.height);
+            }
+
+            // Layer 2: Draw Extracted Foreground Subject/Logo
+            if (processedFgCanvas.width > 0) {
+                ctx.drawImage(processedFgCanvas, 0, 0);
+            } else {
+                ctx.drawImage(rawSubjectImage, 0, 0);
+            }
+
+            placeholderText.style.display = "none";
+            studioCanvas.style.display = "block";
+            downloadImgBtn.style.display = "block";
         }
 
-        document.getElementById('upload-bg-file').addEventListener('change', function() { handleFileUpload(this); });
-        document.getElementById('upload-editor-file').addEventListener('change', function() { handleFileUpload(this); });
+        // Process Foreground Color-Key Extraction
+        function extractColorKey() {
+            if (!rawSubjectImage) return;
 
-        // Download HD Image Logic
+            processedFgCanvas.width = rawSubjectImage.naturalWidth;
+            processedFgCanvas.height = rawSubjectImage.naturalHeight;
+            const fgCtx = processedFgCanvas.getContext('2d');
+            fgCtx.drawImage(rawSubjectImage, 0, 0);
+
+            const targetHex = document.getElementById('target-bg-color').value;
+            const tolerance = parseInt(document.getElementById('tolerance-range').value);
+
+            const tr = parseInt(targetHex.slice(1, 3), 16);
+            const tg = parseInt(targetHex.slice(3, 5), 16);
+            const tb = parseInt(targetHex.slice(5, 7), 16);
+
+            const imgData = fgCtx.getImageData(0, 0, processedFgCanvas.width, processedFgCanvas.height);
+            const data = imgData.data;
+
+            for (let i = 0; i < data.length; i += 4) {
+                const dist = Math.sqrt((data[i] - tr) ** 2 + (data[i + 1] - tg) ** 2 + (data[i + 2] - tb) ** 2);
+                if (dist < tolerance) {
+                    data[i + 3] = 0; // Set Transparent
+                }
+            }
+
+            fgCtx.putImageData(imgData, 0, 0);
+            renderCompositeCanvas();
+        }
+
+        // Eyedropper Control
+        document.getElementById('eyedropper-btn').addEventListener('click', () => {
+            if ('EyeDropper' in window) {
+                const eyeDropper = new EyeDropper();
+                eyeDropper.open().then(result => {
+                    document.getElementById('target-bg-color').value = result.sRGBHex;
+                    if (currentEngineMode === 'color-key') extractColorKey();
+                });
+            }
+        });
+
+        // Execute Processing
+        document.getElementById('execute-bg-btn').addEventListener('click', async () => {
+            if (!rawSubjectImage) {
+                alert("ദയവായി മെയിൻ ലോ​ഗോയോ ചിത്രമോ അപ്‌ലോഡ് ചെയ്യുക!");
+                return;
+            }
+
+            if (currentEngineMode === 'color-key') {
+                extractColorKey();
+            } else if (currentEngineMode === 'ai-neural') {
+                loadingSpinner.innerText = "⚡ AI ബാക്ക്ഗ്രൗണ്ട് സെഗ്‌മെന്റേഷൻ നടക്കുന്നു...";
+                loadingSpinner.style.display = "block";
+                try {
+                    const tempCanvas = document.createElement('canvas');
+                    tempCanvas.width = rawSubjectImage.naturalWidth;
+                    tempCanvas.height = rawSubjectImage.naturalHeight;
+                    tempCanvas.getContext('2d').drawImage(rawSubjectImage, 0, 0);
+
+                    const blob = await window.imglyRemoveBackground(tempCanvas.toDataURL());
+                    const transparentUrl = URL.createObjectURL(blob);
+                    
+                    const img = new Image();
+                    img.onload = () => {
+                        processedFgCanvas.width = img.naturalWidth;
+                        processedFgCanvas.height = img.naturalHeight;
+                        processedFgCanvas.getContext('2d').drawImage(img, 0, 0);
+                        renderCompositeCanvas();
+                        loadingSpinner.style.display = "none";
+                    };
+                    img.src = transparentUrl;
+                } catch (err) {
+                    alert("AI പ്രോസസ്സിംഗിൽ പിശക് സംഭവിച്ചു.");
+                    loadingSpinner.style.display = "none";
+                }
+            }
+        });
+
+        document.getElementById('tolerance-range').oninput = function() {
+            document.getElementById('tolerance-val').innerText = this.value;
+            if (rawSubjectImage && currentEngineMode === 'color-key') extractColorKey();
+        };
+
+        // Download PNG Control
         downloadImgBtn.addEventListener('click', () => {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            
-            canvas.width = mainPreview.naturalWidth || 1024;
-            canvas.height = mainPreview.naturalHeight || 1024;
-
-            ctx.filter = mainPreview.style.filter;
-            ctx.drawImage(mainPreview, 0, 0, canvas.width, canvas.height);
-
             const link = document.createElement('a');
-            link.download = `Nexura_Studio_Output_${Date.now()}.png`;
-            link.href = canvas.toDataURL('image/png');
+            link.download = `Nexura_Merged_Studio_${Date.now()}.png`;
+            link.href = studioCanvas.toDataURL('image/png');
             link.click();
         });
     </script>
 </body>
 </html>
-
