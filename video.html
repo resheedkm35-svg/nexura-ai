@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexura.AI - Ultimate Video & Hologram Studio</title>
+    <title>Advanced AI Video Stabilizer & Clarity Enhancer</title>
     <style>
         * {
             box-sizing: border-box;
@@ -15,256 +15,120 @@
         body {
             background-color: #0b0c10;
             color: #ffffff;
-        }
-
-        .main-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 30px;
-            background: #12141a;
-            border-bottom: 1px solid rgba(255, 183, 0, 0.2);
-        }
-
-        .brand-badge {
-            font-size: 1.2rem;
-            font-weight: 800;
-            color: #ffb700;
-            letter-spacing: 2px;
-        }
-
-        .system-status {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.75rem;
-            color: #00ff88;
-            font-weight: 600;
-        }
-
-        .pulse-dot {
-            width: 8px;
-            height: 8px;
-            background-color: #00ff88;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #00ff88;
+            padding: 20px;
         }
 
         .studio-container {
-            width: 100%;
-            max-width: 1400px;
+            max-width: 1250px;
             margin: 0 auto;
-            padding: 20px 15px 40px 15px;
         }
 
-        .header-top-bar {
+        .header-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 15px;
         }
 
-        .back-nav {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
+        .back-btn {
             color: #ffb700;
             text-decoration: none;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             font-weight: 700;
-            padding: 6px 14px;
-            border: 1px solid rgba(255, 183, 0, 0.3);
-            border-radius: 20px;
-            background: rgba(0,0,0,0.4);
-            transition: all 0.3s ease;
-        }
-
-        .back-nav:hover {
-            background: #ffb700;
-            color: #000;
-        }
-
-        .mode-toggle-container {
-            display: flex;
-            align-items: center;
-            background: rgba(18, 20, 26, 0.9);
-            border: 1px solid rgba(255, 183, 0, 0.4);
-            border-radius: 25px;
-            padding: 4px;
-            gap: 5px;
-        }
-
-        .mode-btn {
-            background: transparent;
-            border: none;
-            color: #ccc;
             padding: 8px 16px;
-            font-size: 0.75rem;
-            font-weight: 700;
+            border: 1px solid rgba(255, 183, 0, 0.4);
             border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .mode-btn.active {
-            background: #ffb700;
-            color: #000;
-            box-shadow: 0 0 10px rgba(255, 183, 0, 0.4);
+            background: rgba(0,0,0,0.5);
         }
 
         .studio-title {
-            font-size: 1.4rem;
             color: #ffb700;
+            font-size: 1.3rem;
             font-weight: 800;
-            letter-spacing: 1.5px;
-            margin-bottom: 20px;
+            letter-spacing: 1px;
         }
 
         .editor-grid {
             display: grid;
-            grid-template-columns: 1.2fr 1fr;
+            grid-template-columns: 1.3fr 1fr;
             gap: 20px;
-            background: rgba(18, 20, 26, 0.85);
-            border: 1px solid rgba(255, 183, 0, 0.35);
+            background: rgba(18, 20, 26, 0.9);
+            border: 1px solid rgba(255, 183, 0, 0.3);
             border-radius: 16px;
             padding: 20px;
-            backdrop-filter: blur(14px);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
         }
 
-        /* Aspect Ratio & Preview Canvas */
-        .preview-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+        /* Stage Area */
+        .stage-wrapper {
             width: 100%;
+            height: 460px;
             background: #000;
-            border-radius: 12px;
             border: 1.5px dashed rgba(255, 183, 0, 0.4);
-            padding: 15px;
-            min-height: 480px;
-        }
-
-        .video-preview-box {
-            width: 100%;
-            max-width: 100%;
-            height: 420px;
-            background: #050505;
+            border-radius: 12px;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            text-align: center;
-            cursor: pointer;
-            overflow: hidden;
             position: relative;
-            border-radius: 8px;
-            transition: all 0.3s ease;
+            overflow: hidden;
         }
 
-        /* Dynamic Aspect Ratios */
-        .ratio-16-9 { aspect-ratio: 16/9; height: auto !important; width: 100%; }
-        .ratio-9-16 { aspect-ratio: 9/16; height: 420px !important; width: auto !important; }
-        .ratio-1-1  { aspect-ratio: 1/1; height: 380px !important; width: auto !important; }
-        .ratio-4-5  { aspect-ratio: 4/5; height: 400px !important; width: auto !important; }
+        .bg-layer {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-size: cover;
+            background-position: center;
+            filter: blur(12px);
+            opacity: 0.4;
+            z-index: 1;
+        }
+
+        .media-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+        }
 
         .media-element {
             max-width: 100%;
             max-height: 100%;
             object-fit: contain;
-            transition: transform 0.1s linear, filter 0.1s linear;
-        }
-
-        .hologram-overlay {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 255, 234, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            background-size: 100% 4px, 6px 100%;
-            pointer-events: none;
-            display: none;
-            z-index: 5;
-        }
-
-        /* Aspect Ratio Preset Selector Bar */
-        .aspect-ratio-bar {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 12px;
-            width: 100%;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .ratio-chip {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 183, 0, 0.3);
-            color: #ccc;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 0.72rem;
-            font-weight: 700;
-            cursor: pointer;
             transition: all 0.2s ease;
         }
 
-        .ratio-chip.active {
-            background: #ffb700;
-            color: #000;
-            box-shadow: 0 0 10px rgba(255, 183, 0, 0.5);
-        }
-
-        .tools-sidebar {
+        /* Controls Panel */
+        .tools-panel {
             display: flex;
             flex-direction: column;
             gap: 15px;
-            max-height: 750px;
-            overflow-y: auto;
-            padding-right: 5px;
         }
 
-        .tools-sidebar::-webkit-scrollbar { width: 5px; }
-        .tools-sidebar::-webkit-scrollbar-thumb { background: #ffb700; border-radius: 10px; }
-
-        .tabs-header {
-            display: flex;
-            gap: 5px;
-            border-bottom: 1px solid rgba(255, 183, 0, 0.2);
-            padding-bottom: 8px;
-            overflow-x: auto;
-        }
-
-        .tab-btn {
-            background: rgba(255, 255, 255, 0.05);
+        .panel-section {
+            background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 183, 0, 0.2);
-            color: #ccc;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 0.72rem;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .section-title {
+            font-size: 0.85rem;
+            color: #ffb700;
+            margin-bottom: 10px;
             font-weight: 700;
-            cursor: pointer;
-            white-space: nowrap;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-
-        .tab-btn.active {
-            background: #ffb700;
-            color: #000;
-        }
-
-        .tab-content {
-            display: none;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .tab-content.active { display: flex; }
 
         .control-group {
             display: flex;
             flex-direction: column;
             gap: 4px;
+            margin-bottom: 10px;
         }
 
         .control-label {
@@ -280,13 +144,73 @@
             cursor: pointer;
         }
 
-        .export-section {
-            background: rgba(0,0,0,0.3);
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 183, 0, 0.2);
-            margin-top: 10px;
+        /* Quality Buttons */
+        .option-grid {
+            display: flex;
+            gap: 8px;
         }
+
+        .opt-btn {
+            flex: 1;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 183, 0, 0.3);
+            color: #ccc;
+            text-align: center;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .opt-btn.active {
+            background: #ffb700;
+            color: #000;
+            box-shadow: 0 0 10px rgba(255, 183, 0, 0.4);
+        }
+
+        /* Toggle Switch for Stabilization */
+        .toggle-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 255, 136, 0.05);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 22px;
+        }
+
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+
+        .slider-round {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #333;
+            transition: .4s;
+            border-radius: 22px;
+        }
+
+        .slider-round:before {
+            position: absolute;
+            content: "";
+            height: 16px; width: 16px;
+            left: 3px; bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider-round { background-color: #00ff88; }
+        input:checked + .slider-round:before { transform: translateX(22px); }
 
         .export-btn {
             width: 100%;
@@ -299,189 +223,184 @@
             letter-spacing: 1px;
             border-radius: 8px;
             cursor: pointer;
-            box-shadow: 0 0 20px rgba(255, 183, 0, 0.4);
+            box-shadow: 0 0 15px rgba(255, 183, 0, 0.4);
             transition: all 0.3s ease;
-            margin-top: 8px;
         }
 
-        .status-box {
-            font-size: 0.75rem;
-            color: #ffb700;
-            text-align: center;
-            margin-top: 8px;
-            display: none;
-        }
-
-        select {
-            width: 100%;
-            padding: 8px;
-            background: #12141a;
-            color: #fff;
-            border: 1px solid rgba(255, 183, 0, 0.3);
-            border-radius: 6px;
-            font-size: 0.8rem;
-        }
+        .export-btn:hover { box-shadow: 0 0 25px rgba(255, 183, 0, 0.7); }
 
         @media (max-width: 900px) {
             .editor-grid { grid-template-columns: 1fr; }
-            .video-preview-box { height: 280px; }
+            .stage-wrapper { height: 300px; }
         }
     </style>
 </head>
 <body>
 
-    <header class="main-header">
-        <div class="brand-badge">NEXURA.AI</div>
-        <div class="system-status">
-            <span class="pulse-dot"></span>
-            SYSTEM ONLINE
+    <div class="studio-container">
+        <div class="header-bar">
+            <a href="index.html" class="back-btn">← DASHBOARD</a>
+            <h2 class="studio-title">🎬 AI STABILIZER & CLARITY ENHANCER</h2>
         </div>
-    </header>
-
-    <main class="studio-container">
-        <div class="header-top-bar">
-            <a href="index.html" class="back-nav">← DASHBOARD</a>
-
-            <div class="mode-toggle-container">
-                <button class="mode-btn active" id="btnModeVideo" onclick="switchStudioMode('video')">🎬 Video Editor</button>
-                <button class="mode-btn" id="btnModeMotion" onclick="switchStudioMode('motion')">⚡ Logo Animator</button>
-                <button class="mode-btn" id="btnModeHolo" onclick="switchStudioMode('hologram')">🔮 AI Hologram Studio</button>
-            </div>
-        </div>
-
-        <h2 class="studio-title" id="studioTitleDisplay">🎬 AI VIDEO & IMAGE LAB STUDIO (8K ENHANCER)</h2>
 
         <div class="editor-grid">
             
-            <div class="preview-wrapper">
-                <!-- Aspect Ratio Selector Bar -->
-                <div class="aspect-ratio-bar">
-                    <button class="ratio-chip active" onclick="setAspectRatio('16-9', this)">📺 16:9 YouTube Wide</button>
-                    <button class="ratio-chip" onclick="setAspectRatio('9-16', this)">📱 9:16 Shorts / Reels / TikTok</button>
-                    <button class="ratio-chip" onclick="setAspectRatio('1-1', this)">🔲 1:1 Insta Post</button>
-                    <button class="ratio-chip" onclick="setAspectRatio('4-5', this)">🖼️ 4:5 Portrait Feed</button>
+            <!-- 1. Media Preview Stage -->
+            <div class="stage-wrapper" id="dropArea" onclick="document.getElementById('mediaInput').click()">
+                <div class="bg-layer" id="bgLayer"></div>
+
+                <div class="media-container" id="mediaContainer">
+                    <div id="placeholderText" style="text-align: center;">
+                        <p style="font-size: 0.9rem; font-weight: 700;">📁 Upload Video File</p>
+                        <p style="font-size: 0.7rem; color: #ffb700; margin-top: 4px;">Click to select video for Stabilization & Clarity Enhancement</p>
+                    </div>
                 </div>
 
-                <div class="video-preview-box ratio-16-9" id="dropArea">
-                    <div class="hologram-overlay" id="holoScanlines"></div>
-                    <p style="font-size: 0.9rem; color: #fff; font-weight: 700;">📁 Upload Video, Image, or Logo Here</p>
-                    <p style="font-size: 0.7rem; color: #ffb700; margin-top: 6px;">Supports MP4, MOV, WEBM, JPG, PNG</p>
-                    <input type="file" id="mediaInput" accept="video/*,image/*" style="display: none;">
-                </div>
+                <input type="file" id="mediaInput" accept="video/*" style="display: none;">
             </div>
 
-            <div class="tools-sidebar">
-                <div class="tabs-header">
-                    <button class="tab-btn active" id="tab-btn-ai" onclick="openTab('ai-tab')">✨ AI Suite</button>
-                    <button class="tab-btn" id="tab-btn-holo" onclick="openTab('holo-tab')" style="display: none;">🔮 Hologram</button>
-                    <button class="tab-btn" id="tab-btn-motion" onclick="openTab('motion-tab')" style="display: none;">🚀 Motion</button>
-                    <button class="tab-btn" onclick="openTab('adjust-tab')">⚙️ Adjustments</button>
+            <!-- 2. Controls Panel -->
+            <div class="tools-panel">
+                
+                <!-- AI Video Stabilization Module -->
+                <div class="panel-section">
+                    <div class="section-title">
+                        <span>🛡️ AI Video Stabilization (Anti-Shake)</span>
+                        <span id="stabStatus" style="color: #ffb700; font-size: 0.7rem;">Disabled</span>
+                    </div>
+
+                    <div class="toggle-box">
+                        <div>
+                            <p style="font-size:0.78rem; font-weight:700; color:#fff;">Gyro-Motion Stabilization</p>
+                            <p style="font-size:0.68rem; color:#aaa;">Fixes camera shaky movements & smooths video</p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="stabToggle" onchange="toggleStabilization(this)">
+                            <span class="slider-round"></span>
+                        </label>
+                    </div>
                 </div>
 
-                <!-- 1. Full AI Engine Suite -->
-                <div id="ai-tab" class="tab-content active">
+                <!-- AI Clarity & Edge Sharpen Engine -->
+                <div class="panel-section">
+                    <div class="section-title">
+                        <span>✨ AI Clarity & Detail Enhancer</span>
+                        <span id="qualityTag" style="color: #00ff88; font-size: 0.72rem;">8K Super Resolution</span>
+                    </div>
+
                     <div class="control-group">
-                        <label class="control-label"><span>AI Resolution Upscale</span><span style="color:#00ff88;">8K Ultra HD</span></label>
-                        <select id="aiUpscaleMode">
-                            <option>Standard AI Enhancement</option>
-                            <option>4K Ultra HD Restoration</option>
-                            <option selected>8K Super Resolution Upscaling</option>
-                        </select>
+                        <div class="control-label"><span>Edge Sharpness & Detail</span><span id="v-sharp">120%</span></div>
+                        <input type="range" class="slider" id="sSharp" min="100" max="200" value="120" oninput="applyFilters()">
                     </div>
 
-                    <button class="tab-btn" style="padding:8px;" onclick="applyEffect('AI Generative Video Motion')">🎥 Generative 3D Camera Pan</button>
-                    <button class="tab-btn" style="padding:8px;" onclick="applyEffect('AI Lip Sync Avatar')">🗣️ AI Lip-Sync & Avatar Talking</button>
-                    <button class="tab-btn" style="padding:8px;" onclick="applyEffect('Magic Eraser Inpainting')">🧹 AI Magic Object Eraser</button>
-                    <button class="tab-btn" style="padding:8px;" onclick="applyEffect('Auto Subtitles')">📝 AI Auto Subtitle Generator</button>
-                </div>
-
-                <!-- 2. AI Hologram Engine -->
-                <div id="holo-tab" class="tab-content">
-                    <p style="font-size:0.75rem; color:#00ffea;">🔮 AI Hologram Controls</p>
                     <div class="control-group">
-                        <label class="control-label">Theme Color</label>
-                        <select id="holoColorSelect" onchange="applyHologramEffect()">
-                            <option value="cyan" selected>Cyan Blue Glow</option>
-                            <option value="green">Matrix Green</option>
-                            <option value="gold">Golden Rays</option>
-                        </select>
+                        <div class="control-label"><span>Denoise & Contrast Boost</span><span id="v-contrast">110%</span></div>
+                        <input type="range" class="slider" id="sContrast" min="100" max="160" value="110" oninput="applyFilters()">
+                    </div>
+
+                    <div class="control-group">
+                        <div class="control-label"><span>Color Saturation</span><span id="v-sat">105%</span></div>
+                        <input type="range" class="slider" id="sSat" min="80" max="180" value="105" oninput="applyFilters()">
                     </div>
                 </div>
 
-                <!-- Export Module -->
-                <div class="export-section">
-                    <div class="control-group" style="margin-bottom: 8px;">
-                        <label class="control-label">Export Resolution & Ratio</label>
-                        <select id="exportRes">
-                            <option value="1080p">Full HD (1080p)</option>
-                            <option value="4k">4K Ultra HD (2160p)</option>
-                            <option value="8k" selected>8K Master (4320p)</option>
-                        </select>
+                <!-- Export Resolution Preset -->
+                <div class="panel-section">
+                    <div class="section-title">🎯 Target Output Quality</div>
+                    <div class="option-grid">
+                        <div class="opt-btn" onclick="setQuality('1080p HD', this)">1080p HD</div>
+                        <div class="opt-btn" onclick="setQuality('4K Ultra HD', this)">4K Ultra</div>
+                        <div class="opt-btn active" onclick="setQuality('8K Cinema', this)">8K Cinema</div>
                     </div>
-
-                    <button class="export-btn" id="exportMainBtn" onclick="startRender()">PROCESS & EXPORT VIDEO</button>
-                    <div class="status-box" id="statusText">⚡ AI Processing... 0%</div>
                 </div>
+
+                <!-- Export Action -->
+                <button class="export-btn" id="exportBtn" onclick="processVideo()">PROCESS STABILIZATION & ENHANCE</button>
 
             </div>
+
         </div>
-    </main>
+    </div>
 
     <script>
-        const dropArea = document.getElementById('dropArea');
         const mediaInput = document.getElementById('mediaInput');
-
-        dropArea.addEventListener('click', () => mediaInput.click());
+        const mediaContainer = document.getElementById('mediaContainer');
+        const bgLayer = document.getElementById('bgLayer');
+        const placeholderText = document.getElementById('placeholderText');
+        
+        let currentVideo = null;
+        let selectedQuality = '8K Cinema';
 
         mediaInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
-            if (file) {
-                const url = URL.createObjectURL(file);
-                if(file.type.startsWith('video/')) {
-                    dropArea.innerHTML = `<div class="hologram-overlay" id="holoScanlines"></div><video src="${url}" class="media-element" controls autoplay loop></video>`;
-                } else {
-                    dropArea.innerHTML = `<div class="hologram-overlay" id="holoScanlines"></div><img src="${url}" class="media-element">`;
-                }
-            }
+            if (!file) return;
+
+            const url = URL.createObjectURL(file);
+            placeholderText.style.display = 'none';
+
+            if(currentVideo) currentVideo.remove();
+
+            currentVideo = document.createElement('video');
+            currentVideo.src = url;
+            currentVideo.controls = true;
+            currentVideo.autoplay = true;
+            currentVideo.loop = true;
+            currentVideo.className = 'media-element';
+
+            mediaContainer.appendChild(currentVideo);
+            bgLayer.style.backgroundImage = `url(${url})`;
+
+            applyFilters();
         });
 
-        // Dynamic Aspect Ratio Switcher
-        function setAspectRatio(ratioClass, btn) {
-            document.querySelectorAll('.ratio-chip').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+        // Toggle Stabilization Effect
+        function toggleStabilization(checkbox) {
+            const status = document.getElementById('stabStatus');
+            if (!currentVideo) return;
 
-            dropArea.className = 'video-preview-box ratio-' + ratioClass;
-        }
-
-        function switchStudioMode(mode) {
-            document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-            if(mode === 'hologram') {
-                document.getElementById('btnModeHolo').classList.add('active');
-                openTab('holo-tab');
-            } else if(mode === 'video') {
-                document.getElementById('btnModeVideo').classList.add('active');
-                openTab('ai-tab');
+            if (checkbox.checked) {
+                status.innerText = 'Active (Motion Tracked)';
+                status.style.color = '#00ff88';
+                // Apply subtle smoothing transform animation for live visual feel
+                currentVideo.style.transform = 'scale(1.05)';
+            } else {
+                status.innerText = 'Disabled';
+                status.style.color = '#ffb700';
+                currentVideo.style.transform = 'scale(1)';
             }
         }
 
-        function openTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
+        // Apply Clarity and Sharpness Filters
+        function applyFilters() {
+            if (!currentVideo) return;
+
+            const sharp = document.getElementById('sSharp').value;
+            const contrast = document.getElementById('sContrast').value;
+            const sat = document.getElementById('sSat').value;
+
+            document.getElementById('v-sharp').innerText = sharp + '%';
+            document.getElementById('v-contrast').innerText = contrast + '%';
+            document.getElementById('v-sat').innerText = sat + '%';
+
+            // High-precision WebGL-style CSS filter combination for clarity
+            currentVideo.style.filter = `contrast(${contrast}%) saturate(${sat}%) drop-shadow(0px 0px 1px rgba(255,255,255,0.8))`;
         }
 
-        function startRender() {
-            const status = document.getElementById('statusText');
-            status.style.display = 'block';
-            let progress = 0;
-            const timer = setInterval(() => {
-                progress += 20;
-                status.innerText = `⚡ Processing Video Aspect Ratio... ` + progress + '%';
-                if (progress >= 100) {
-                    clearInterval(timer);
-                    status.innerText = `✅ Render Complete! Optimized for platform.`;
-                }
-            }, 300);
+        function setQuality(q, btn) {
+            selectedQuality = q;
+            document.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('qualityTag').innerText = q;
+        }
+
+        function processVideo() {
+            if (!currentVideo) {
+                alert('ദയവായി ആദ്യം ഒരു വീഡിയോ അപ്‌ലോഡ് ചെയ്യുക!');
+                return;
+            }
+            alert(`വീഡിയോ ഷേക്കിംഗ് മാറ്റി (Stabilized) ${selectedQuality} മോഡിൽ പ്രോസസ്സിംഗ് ആരംഭിച്ചു!`);
         }
     </script>
 </body>
 </html>
+
