@@ -87,15 +87,15 @@ body, html {
     transition: transform 0.3s ease;
 }
 
-/* EXACT MATCH - IMAGE 2 HORIZONTAL CARD GRID */
+/* 6 CARDS DESKTOP GRID (3 Columns x 2 Rows) */
 .card-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
+    gap: 18px;
     width: 100%;
 }
 
-/* GLASSMORPHISM CARD DESIGN (Exact Image 2 Style) */
+/* GLASSMORPHISM CARD DESIGN */
 .card {
     background: rgba(18, 20, 26, 0.82);
     border: 1px solid rgba(255, 183, 0, 0.3);
@@ -106,8 +106,15 @@ body, html {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    min-height: 210px;
+    min-height: 220px;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(255, 183, 0, 0.7);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.8), 0 0 15px rgba(255, 183, 0, 0.2);
 }
 
 .card-header {
@@ -141,7 +148,7 @@ body, html {
 }
 
 .card-title {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     font-weight: 700;
     color: #ffffff;
     margin-bottom: 6px;
@@ -158,10 +165,10 @@ body, html {
     width: 100%;
 }
 
-/* GOLD BUTTON STYLING FROM IMAGE 2 */
+/* GOLD BUTTON STYLING */
 .launch-btn {
     width: 100%;
-    padding: 9px 0;
+    padding: 10px 0;
     background: transparent;
     border: 1px solid #ffb700;
     color: #ffb700;
@@ -185,7 +192,7 @@ body, html {
     cursor: not-allowed;
 }
 
-/* Mobile Screen - Horizontal Scroll Arrangement (Image 2 Fit) */
+/* Mobile Screen - Horizontal Scroll Arrangement */
 @media (max-width: 768px) {
     .dashboard-container {
         padding: 0 10px 30px 10px;
@@ -196,18 +203,19 @@ body, html {
         height: 145px;
     }
 
-    /* രണ്ടാമത്തെ ചിത്രത്തിലെ പോലെ 3 കാർഡുകളും ഒരേ ലൈനിൽ ഹൊറിസോണ്ടൽ സ്ക്രോളിൽ */
+    /* 6 കാർഡുകളും ഹൊറിസോണ്ടൽ സ്ക്രോളിൽ സുഗമമായി കാണാൻ */
     .card-grid {
         display: flex;
         overflow-x: auto;
         scroll-snap-type: x mandatory;
-        padding-bottom: 12px;
-        gap: 12px;
+        scroll-behavior: smooth;
+        padding: 10px 5px 15px 5px;
+        gap: 14px;
     }
 
     .card {
-        min-width: 250px;
-        max-width: 270px;
+        min-width: 260px;
+        max-width: 280px;
         scroll-snap-align: center;
         flex-shrink: 0;
     }
