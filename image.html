@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,51 +8,16 @@
     <style>
         .studio-box {
             width: 100%;
-            max-width: 900px;
-            margin-top: 20px;
-        }
-
-        .studio-tabs {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .tab-btn {
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(255, 183, 0, 0.3);
-            color: #ccc;
-            padding: 12px 8px;
-            border-radius: 8px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            cursor: pointer;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-        .tab-btn.active {
-            border-color: #ffb700;
-            color: #ffb700;
-            background: rgba(255, 183, 0, 0.15);
-            box-shadow: 0 0 10px rgba(255, 183, 0, 0.2);
+            max-width: 950px;
+            margin: 20px auto;
         }
 
         .tool-card {
-            display: none;
-            background: rgba(0, 0, 0, 0.45);
-            border: 1px solid rgba(255, 183, 0, 0.25);
+            background: rgba(0, 0, 0, 0.55);
+            border: 1px solid rgba(255, 183, 0, 0.3);
             border-radius: 12px;
             padding: 18px;
             margin-bottom: 20px;
-            animation: fadeIn 0.3s ease-in-out;
-        }
-        .tool-card.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         .control-title {
@@ -65,108 +30,132 @@
             justify-content: space-between;
             align-items: center;
         }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .feature-box {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .feature-label {
+            font-size: 0.75rem;
+            color: #ff007f;
+            font-weight: bold;
+            margin-bottom: 6px;
+            display: block;
+        }
+
         .slider-row {
             display: flex;
             flex-direction: column;
-            gap: 6px;
-            margin-bottom: 14px;
+            gap: 4px;
+            margin-bottom: 10px;
         }
+
         .slider-label {
             display: flex;
             justify-content: space-between;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: #ccc;
         }
+
         input[type="range"] {
             width: 100%;
             accent-color: #ffb700;
             cursor: pointer;
         }
-        select, textarea, input[type="text"] {
+
+        select, button {
             width: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.6);
             border: 1px solid rgba(255, 183, 0, 0.3);
-            border-radius: 8px;
+            border-radius: 6px;
             color: #fff;
-            padding: 10px;
-            font-size: 0.85rem;
-            outline: none;
-            margin-bottom: 12px;
-        }
-
-        .bg-mode-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        .bg-mode-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 0, 127, 0.3);
-            color: #bbb;
             padding: 8px;
-            border-radius: 6px;
-            font-size: 0.75rem;
+            font-size: 0.8rem;
+            outline: none;
             cursor: pointer;
-            text-align: center;
-        }
-        .bg-mode-btn.active {
-            border-color: #ff007f;
-            background: rgba(255, 0, 127, 0.2);
-            color: #fff;
-            font-weight: bold;
         }
 
-        .picker-box {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(0, 0, 0, 0.4);
-            padding: 8px 12px;
-            border-radius: 6px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 12px;
-        }
-
-        .upload-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 15px;
+        /* 3D Parallax Stage */
+        .parallax-stage {
+            perspective: 1000px;
+            width: 100%;
         }
 
         .image-preview-box {
             width: 100%;
-            min-height: 320px;
-            background-image: repeating-conic-gradient(#111 0% 25%, #222 0% 50%);
+            min-height: 380px;
+            background-image: repeating-conic-gradient(#111 0% 25%, #1a1a1a 0% 50%);
             background-size: 20px 20px;
             border: 1px dashed rgba(255, 183, 0, 0.4);
-            border-radius: 8px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-top: 15px;
             overflow: hidden;
             position: relative;
+            transition: transform 0.1s ease-out;
+            transform-style: preserve-3d;
         }
+
         .image-preview-box canvas {
             max-width: 100%;
-            max-height: 500px;
+            max-height: 520px;
             border-radius: 6px;
+            cursor: grab;
         }
-        .loading-spinner {
-            display: none;
-            color: #ffb700;
-            font-size: 0.9rem;
-            text-align: center;
-            padding: 10px;
+        .image-preview-box canvas:active {
+            cursor: grabbing;
+        }
+
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .toggle-container input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #ff007f;
+            cursor: pointer;
+        }
+
+        .res-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+        .res-btn {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            color: #ccc;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
             font-weight: bold;
         }
-        .bg-ai-btn {
-            background: linear-gradient(135deg, #ff007f, #7928ca);
-            border: none;
-            color: #fff;
-            font-weight: bold;
+        .res-btn.active {
+            border-color: #00ff88;
+            color: #00ff88;
+            background: rgba(0, 255, 136, 0.15);
         }
     </style>
 </head>
@@ -179,26 +168,16 @@
 
     <main class="dashboard-container">
         <div class="card studio-box">
-            <div class="card-header">
-                <span class="card-num">MODULE 02</span>
-                <div class="status-indicator">PRECISION STUDIO ONLINE</div>
-            </div>
-
-            <!-- TABS -->
-            <div class="studio-tabs">
-                <button class="tab-btn active" onclick="switchTool('bg-remover-card', this)">✂️ ADVANCED BG REMOVER</button>
-                <button class="tab-btn" onclick="switchTool('generator-card', this)">🎨 AI GENERATOR</button>
-                <button class="tab-btn" onclick="switchTool('editor-card', this)">🎛️ PHOTO EDITOR</button>
-            </div>
-
-            <!-- ADVANCED BG REMOVER CARD -->
-            <div id="bg-remover-card" class="tool-card active" style="border-color: rgba(255, 0, 127, 0.4);">
+            
+            <!-- TOOL PANEL -->
+            <div class="tool-card">
                 <div class="control-title" style="color: #ff007f;">
-                    <span>PRECISION LOGO EXTRACTOR & CLEANER</span>
-                    <span style="font-size: 0.65rem; background: #ff007f; color: #fff; padding: 2px 6px; border-radius: 4px;">ULTRA HD</span>
+                    <span>iOS ADVANCED IMAGE STUDIO & PURE PNG ENGINE</span>
+                    <span style="font-size: 0.65rem; background: #ff007f; color: #fff; padding: 2px 6px; border-radius: 4px;">iOS 18 PRO ENGINE</span>
                 </div>
 
-                <div class="upload-grid">
+                <!-- FILE UPLOAD -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
                     <label class="launch-btn" style="text-align:center; display:block; cursor:pointer; background: rgba(255,255,255,0.05); border-color:#ff007f; font-size:0.75rem;">
                         📁 1. MAIN LOGO / IMAGE
                         <input type="file" id="upload-bg-file" accept="image/*" style="display:none;">
@@ -210,104 +189,155 @@
                     </label>
                 </div>
 
-                <div class="bg-mode-grid">
-                    <button class="bg-mode-btn active" id="mode-key-btn" onclick="setBgEngineMode('color-key')">🎯 Precision Chroma Keying</button>
-                    <button class="bg-mode-btn" id="mode-ai-btn" onclick="setBgEngineMode('ai-neural')">🤖 AI Neural Segmentation</button>
+                <!-- OPTIONAL BACKDROP COLOR TOGGLE (OFF BY DEFAULT FOR PURE TRANSPARENCY) -->
+                <div class="toggle-container">
+                    <input type="checkbox" id="enable-bg-color-toggle">
+                    <label for="enable-bg-color-toggle" style="font-size:0.75rem; color:#fff; cursor:pointer;">
+                        Enable Solid Backdrop Color (ആവശ്യമെങ്കിൽ മാത്രം ഓൺ ആക്കുക - Default: Off / Pure Transparent)
+                    </label>
+                    <input type="color" id="canvas-bg-picker" value="#000000" style="width:28px; height:22px; border:none; cursor:pointer; background:none; margin-left:auto;">
                 </div>
 
-                <div id="color-key-controls">
-                    <div class="picker-box">
-                        <span style="font-size:0.75rem; color:#ccc;">മാറ്റേണ്ട കളർ:</span>
-                        <input type="color" id="target-bg-color" value="#00ff00" style="width:35px; height:25px; border:none; cursor:pointer; background:none;">
-                        <button class="ratio-btn" id="eyedropper-btn" style="margin-bottom:0; padding:4px 8px;">🖌️ Click Image to Pick</button>
+                <!-- 6 ADVANCED iOS FEATURES RACK -->
+                <div class="feature-grid">
+                    
+                    <!-- 1. Photographic Styles -->
+                    <div class="feature-box">
+                        <span class="feature-label">📸 Photographic Styles</span>
+                        <select id="photo-style-select">
+                            <option value="none">Standard / Original</option>
+                            <option value="rich-contrast">Rich Contrast (iOS)</option>
+                            <option value="vibrant-gold">Vibrant Metallic Gold</option>
+                            <option value="warm-studio">Warm Studio Light</option>
+                            <option value="dramatic-cool">Dramatic Cool Shadow</option>
+                        </select>
                     </div>
 
-                    <div class="slider-row">
-                        <div class="slider-label">
-                            <span>Background Threshold (കളർ സംവേദനക്ഷമത)</span>
-                            <span id="tolerance-val">45</span>
+                    <!-- 2. Portrait Mode & Lighting -->
+                    <div class="feature-box">
+                        <span class="feature-label">🎭 Portrait Mode & Light</span>
+                        <div class="slider-row">
+                            <div class="slider-label"><span>Background Blur</span><span id="blur-val">0px</span></div>
+                            <input type="range" id="bg-blur-range" min="0" max="30" value="0">
                         </div>
-                        <input type="range" id="tolerance-range" min="1" max="150" value="45">
+                        <select id="studio-light-select">
+                            <option value="none">No Spotlight</option>
+                            <option value="center">Studio Backlight</option>
+                            <option value="contour">Contour Glow Edge</option>
+                        </select>
                     </div>
 
-                    <!-- Inner Green Spill Remover -->
-                    <div class="slider-row">
-                        <div class="slider-label">
-                            <span style="color:#00ff88;">Inner Green Spill Purge (ഡിസൈൻ ഇടയിലെ പച്ച മായ്ക്കാൻ)</span>
-                            <span id="spill-val">70%</span>
+                    <!-- 3. Touch Drag, Scale & Rotate -->
+                    <div class="feature-box">
+                        <span class="feature-label">🖐️ Gesture Controls</span>
+                        <div class="slider-row">
+                            <div class="slider-label"><span>Scale / Zoom</span><span id="scale-val">100%</span></div>
+                            <input type="range" id="logo-scale-range" min="20" max="250" value="100">
                         </div>
-                        <input type="range" id="spill-range" min="0" max="100" value="70">
+                        <div class="slider-row">
+                            <div class="slider-label"><span>Rotation</span><span id="angle-val">0°</span></div>
+                            <input type="range" id="logo-angle-range" min="-180" max="180" value="0">
+                        </div>
                     </div>
 
-                    <!-- Gold Enhancement Slider -->
-                    <div class="slider-row">
-                        <div class="slider-label">
-                            <span style="color:#ffb700;">Gold Glow & Vibrance Boost (ഗോൾഡ് തിളക്കം കൂട്ടാൻ)</span>
-                            <span id="gold-val">130%</span>
+                    <!-- 4. Smart Eraser & Spill Removal -->
+                    <div class="feature-box">
+                        <span class="feature-label">🧹 Touch Eraser & Spill</span>
+                        <button id="eraser-toggle-btn" style="margin-bottom:8px;">🧹 Manual Eraser Tool</button>
+                        <div class="slider-row">
+                            <div class="slider-label"><span>Green Spill Purge</span><span id="spill-val">80%</span></div>
+                            <input type="range" id="spill-range" min="0" max="100" value="80">
                         </div>
-                        <input type="range" id="gold-boost-range" min="100" max="200" value="130">
                     </div>
+
+                    <!-- 5. 3D Parallax Tilt Control -->
+                    <div class="feature-box">
+                        <span class="feature-label">🧊 3D Gyro/Tilt Effect</span>
+                        <div class="toggle-container" style="padding:4px; margin:0; border:none; background:none;">
+                            <input type="checkbox" id="parallax-toggle" checked>
+                            <label for="parallax-toggle" style="font-size:0.75rem; color:#ccc;">Interactive 3D Motion</label>
+                        </div>
+                    </div>
+
+                    <!-- 6. Chroma Sensitivity & Gold Polish -->
+                    <div class="feature-box">
+                        <span class="feature-label">✨ Color Key & Gold Pop</span>
+                        <div style="display:flex; gap:6px; align-items:center; margin-bottom:6px;">
+                            <input type="color" id="target-bg-color" value="#00ff00" style="width:30px; height:20px; border:none;">
+                            <button id="eyedropper-btn" style="font-size:0.7rem; padding:4px;">🖌️ Pick Color</button>
+                        </div>
+                        <div class="slider-row">
+                            <div class="slider-label"><span>Gold Boost</span><span id="gold-val">130%</span></div>
+                            <input type="range" id="gold-boost-range" min="100" max="200" value="130">
+                        </div>
+                    </div>
+
                 </div>
 
-                <button class="launch-btn bg-ai-btn" id="execute-bg-btn">✂️ PROCESS & ENHANCE LOGO</button>
             </div>
 
-            <!-- MASTER STUDIO CANVAS -->
+            <!-- MASTER CANVAS (WITH 3D PARALLAX STAGE) -->
             <div style="background: rgba(0, 0, 0, 0.45); border: 1px solid rgba(255, 183, 0, 0.25); border-radius: 12px; padding: 18px;">
                 <div class="control-title">
-                    <span>MASTER STUDIO CANVAS</span>
-                    <div style="display:flex; gap:6px; align-items:center;">
-                        <span style="font-size:0.65rem; color:#aaa;">Canvas Backdrop:</span>
-                        <input type="color" id="canvas-bg-picker" value="#000000" style="width:20px; height:20px; border:none; cursor:pointer;">
+                    <span>MASTER STUDIO CANVAS (PURE ALPHA OUTPUT)</span>
+                </div>
+
+                <div class="parallax-stage">
+                    <div class="image-preview-box" id="preview-container">
+                        <p id="placeholder-text" style="color:#777; font-size:0.8rem;">ഇവിടെ ചിത്രം പ്രത്യക്ഷപ്പെടും.</p>
+                        <canvas id="studio-canvas" style="display:none;"></canvas>
                     </div>
                 </div>
-                
-                <div class="loading-spinner" id="loading-spinner">✨ ലോഗോ പ്രോസസ്സ് ചെയ്യുന്നു...</div>
 
-                <div class="image-preview-box" id="preview-container">
-                    <p id="placeholder-text" style="color:#777; font-size:0.8rem;">ഇവിടെ ചിത്രം പ്രത്യക്ഷപ്പെടും.</p>
-                    <canvas id="studio-canvas" style="display:none;"></canvas>
+                <!-- EXPORT RESOLUTION OPTION -->
+                <div style="margin-top:15px;">
+                    <label style="font-size:0.75rem; color:#00ff88; font-weight:bold;">ഡൗൺലോഡ് റെസല്യൂഷൻ (Auto-Upscale):</label>
+                    <div class="res-grid">
+                        <button class="res-btn" onclick="setExportResolution(1920, this)">1080p FHD</button>
+                        <button class="res-btn active" onclick="setExportResolution(3840, this)">⚡ 4K Ultra HD</button>
+                        <button class="res-btn" onclick="setExportResolution(7680, this)">💎 8K Super Resolution</button>
+                    </div>
                 </div>
 
-                <button class="launch-btn" id="download-img-btn" style="display:none; border-color:#00ff88; color:#00ff88; margin-top:15px;">
-                    📥 DOWNLOAD ULTRA-HIGH CLARITY PNG
+                <button class="launch-btn" id="download-img-btn" style="display:none; border-color:#00ff88; color:#00ff88; background: rgba(0,255,136,0.1); margin-top:10px;">
+                    📥 DOWNLOAD ULTRA-HIGH CLARITY TRANSPARENT PNG
                 </button>
             </div>
 
         </div>
     </main>
 
-    <script type="module">
-        import imglyRemoveBackground from 'https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.4.5/+esm';
-        window.imglyRemoveBackground = imglyRemoveBackground;
-    </script>
-
     <script>
-        let currentEngineMode = 'color-key';
         let rawSubjectImage = null;
         let customBackgroundImage = null;
         let processedFgCanvas = document.createElement('canvas');
 
+        // Logo Position & Gesture State
+        let logoX = 0, logoY = 0;
+        let logoScale = 1.0;
+        let logoAngle = 0;
+        let isDraggingLogo = false;
+        let dragStartX = 0, dragStartY = 0;
+
+        // Eraser State
+        let isEraserActive = false;
+        let isEraserDrawing = false;
+        let exportWidthPreset = 3840; // 4K Default
+
         const studioCanvas = document.getElementById('studio-canvas');
         const ctx = studioCanvas.getContext('2d');
+        const previewContainer = document.getElementById('preview-container');
         const placeholderText = document.getElementById('placeholder-text');
         const downloadImgBtn = document.getElementById('download-img-btn');
-        const loadingSpinner = document.getElementById('loading-spinner');
 
-        function switchTool(cardId, element) {
-            document.querySelectorAll('.tool-card').forEach(card => card.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById(cardId).classList.add('active');
+        // Resolution Switcher
+        function setExportResolution(width, element) {
+            exportWidthPreset = width;
+            document.querySelectorAll('.res-btn').forEach(btn => btn.classList.remove('active'));
             element.classList.add('active');
         }
 
-        function setBgEngineMode(mode) {
-            currentEngineMode = mode;
-            document.getElementById('mode-key-btn').classList.toggle('active', mode === 'color-key');
-            document.getElementById('mode-ai-btn').classList.toggle('active', mode === 'ai-neural');
-            document.getElementById('color-key-controls').style.display = (mode === 'color-key') ? 'block' : 'none';
-        }
-
+        // Upload Subject Image
         document.getElementById('upload-bg-file').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
@@ -316,6 +346,8 @@
                     const img = new Image();
                     img.onload = () => {
                         rawSubjectImage = img;
+                        logoX = rawSubjectImage.naturalWidth / 2;
+                        logoY = rawSubjectImage.naturalHeight / 2;
                         extractColorAndEnhance();
                     };
                     img.src = evt.target.result;
@@ -324,6 +356,7 @@
             }
         });
 
+        // Upload Optional Background
         document.getElementById('upload-new-bg-file').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
@@ -340,30 +373,65 @@
             }
         });
 
+        // Master Composite Rendering Engine
         function renderCompositeCanvas() {
             if (!rawSubjectImage) return;
 
             studioCanvas.width = rawSubjectImage.naturalWidth;
             studioCanvas.height = rawSubjectImage.naturalHeight;
 
+            // 1. Clear Canvas to Pure Alpha Transparency
             ctx.clearRect(0, 0, studioCanvas.width, studioCanvas.height);
 
-            if (customBackgroundImage) {
-                ctx.drawImage(customBackgroundImage, 0, 0, studioCanvas.width, studioCanvas.height);
+            // 2. Optional Solid Backdrop Color (Only rendered if user explicitly turned it ON)
+            const isBgColorEnabled = document.getElementById('enable-bg-color-toggle').checked;
+            if (isBgColorEnabled) {
+                ctx.fillStyle = document.getElementById('canvas-bg-picker').value;
+                ctx.fillRect(0, 0, studioCanvas.width, studioCanvas.height);
             }
 
-            if (processedFgCanvas.width > 0) {
-                ctx.drawImage(processedFgCanvas, 0, 0);
-            } else {
-                ctx.drawImage(rawSubjectImage, 0, 0);
+            // 3. Optional Custom Background Image with Portrait Blur
+            if (customBackgroundImage) {
+                ctx.save();
+                const blurVal = parseInt(document.getElementById('bg-blur-range').value);
+                if (blurVal > 0) ctx.filter = `blur(${blurVal}px)`;
+                ctx.drawImage(customBackgroundImage, 0, 0, studioCanvas.width, studioCanvas.height);
+                ctx.restore();
             }
+
+            // 4. Studio Backlight / Contour Glow Effect
+            const lightStyle = document.getElementById('studio-light-select').value;
+            if (lightStyle === 'center') {
+                ctx.save();
+                let grad = ctx.createRadialGradient(logoX, logoY, 10, logoX, logoY, studioCanvas.width * 0.4);
+                grad.addColorStop(0, 'rgba(255, 215, 0, 0.35)');
+                grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, studioCanvas.width, studioCanvas.height);
+                ctx.restore();
+            }
+
+            // 5. Apply iOS Photographic Style Filters & Render Foreground Logo
+            ctx.save();
+            ctx.translate(logoX, logoY);
+            ctx.rotate((logoAngle * Math.PI) / 180);
+            ctx.scale(logoScale, logoScale);
+
+            const photoStyle = document.getElementById('photo-style-select').value;
+            if (photoStyle === 'rich-contrast') ctx.filter = 'contrast(125%) saturate(110%)';
+            if (photoStyle === 'vibrant-gold') ctx.filter = 'saturate(160%) contrast(110%) brightness(105%)';
+            if (photoStyle === 'warm-studio') ctx.filter = 'sepia(25%) contrast(105%) brightness(102%)';
+            if (photoStyle === 'dramatic-cool') ctx.filter = 'hue-rotate(180deg) contrast(130%)';
+
+            ctx.drawImage(processedFgCanvas, -processedFgCanvas.width / 2, -processedFgCanvas.height / 2);
+            ctx.restore();
 
             placeholderText.style.display = "none";
             studioCanvas.style.display = "block";
             downloadImgBtn.style.display = "block";
         }
 
-        // Advanced Pixel Processing Engine (Chroma Purge + Spill Killer + Gold Enhancer)
+        // Chroma Removal & Spill Suppressor
         function extractColorAndEnhance() {
             if (!rawSubjectImage) return;
 
@@ -373,7 +441,6 @@
             fgCtx.drawImage(rawSubjectImage, 0, 0);
 
             const targetHex = document.getElementById('target-bg-color').value;
-            const tolerance = parseInt(document.getElementById('tolerance-range').value);
             const spillPurge = parseInt(document.getElementById('spill-range').value);
             const goldBoost = parseInt(document.getElementById('gold-boost-range').value) / 100;
 
@@ -385,38 +452,29 @@
             const data = imgData.data;
 
             for (let i = 0; i < data.length; i += 4) {
-                let r = data[i];
-                let g = data[i + 1];
-                let b = data[i + 2];
-                let a = data[i + 3];
+                let r = data[i], g = data[i + 1], b = data[i + 2], a = data[i + 3];
 
-                // Distance to Target Background Color
                 const dist = Math.sqrt((r - tr) ** 2 + (g - tg) ** 2 + (b - tb) ** 2);
 
-                // 1. Primary Background Removal
-                if (dist < tolerance) {
+                if (dist < 50) {
                     data[i + 3] = 0;
                     continue;
                 }
 
-                // 2. Inner Green Spill & Shadow Removal (Destroys green trapped inside intricate logo gaps)
-                if (spillPurge > 0 && data[i + 3] > 0) {
-                    // Check if pixel has green bias (Green dominant over Red/Blue)
+                if (spillPurge > 0 && a > 0) {
                     if (g > r * 0.82 && g > b * 0.82) {
                         const greenExcess = g - Math.max(r, b);
                         if (greenExcess > (100 - spillPurge) * 0.3) {
-                            data[i + 3] = Math.max(0, a - (greenExcess * (spillPurge / 25)));
+                            data[i + 3] = Math.max(0, a - (greenExcess * (spillPurge / 20)));
                         }
                     }
                 }
 
-                // 3. Gold Vibrance & Polish Enhancer
                 if (data[i + 3] > 30 && goldBoost > 1.0) {
-                    // Target Warm Gold / Yellow hues (Red & Green high, Blue low)
                     if (r > 80 && g > 60 && b < 180) {
-                        data[i] = Math.min(255, r * goldBoost);              // Boost Red Component
-                        data[i + 1] = Math.min(255, g * (goldBoost * 0.95));  // Boost Green for Warm Gold
-                        data[i + 2] = Math.max(0, b * (1 / goldBoost));       // Deepen Contrast by reducing Blue
+                        data[i] = Math.min(255, r * goldBoost);
+                        data[i + 1] = Math.min(255, g * (goldBoost * 0.95));
+                        data[i + 2] = Math.max(0, b * (1 / goldBoost));
                     }
                 }
             }
@@ -425,42 +483,160 @@
             renderCompositeCanvas();
         }
 
-        // Eyedropper Functionality
-        document.getElementById('eyedropper-btn').addEventListener('click', () => {
-            if ('EyeDropper' in window) {
-                const eyeDropper = new EyeDropper();
-                eyeDropper.open().then(result => {
-                    document.getElementById('target-bg-color').value = result.sRGBHex;
-                    if (currentEngineMode === 'color-key') extractColorAndEnhance();
-                });
-            }
+        /* ---------------- GESTURE & TOUCH DRAG CONTROLS ---------------- */
+        studioCanvas.addEventListener('mousedown', (e) => {
+            if (isEraserActive) { isEraserDrawing = true; eraseAtPoint(e.clientX, e.clientY); return; }
+            isDraggingLogo = true;
+            dragStartX = e.clientX;
+            dragStartY = e.clientY;
         });
 
-        // Sliders Realtime Updates
-        document.getElementById('tolerance-range').oninput = function() {
-            document.getElementById('tolerance-val').innerText = this.value;
-            if (rawSubjectImage) extractColorAndEnhance();
-        };
+        window.addEventListener('mousemove', (e) => {
+            if (isEraserDrawing) { eraseAtPoint(e.clientX, e.clientY); return; }
+            if (!isDraggingLogo) return;
 
+            const rect = studioCanvas.getBoundingClientRect();
+            const scaleX = studioCanvas.width / rect.width;
+            const scaleY = studioCanvas.height / rect.height;
+
+            logoX += (e.clientX - dragStartX) * scaleX;
+            logoY += (e.clientY - dragStartY) * scaleY;
+
+            dragStartX = e.clientX;
+            dragStartY = e.clientY;
+
+            renderCompositeCanvas();
+        });
+
+        window.addEventListener('mouseup', () => {
+            isDraggingLogo = false;
+            isEraserDrawing = false;
+        });
+
+        /* ---------------- MANUAL ERASER ENGINE ---------------- */
+        document.getElementById('eraser-toggle-btn').addEventListener('click', function() {
+            isEraserActive = !isEraserActive;
+            this.style.background = isEraserActive ? '#ff0055' : 'rgba(0,0,0,0.6)';
+            studioCanvas.style.cursor = isEraserActive ? 'crosshair' : 'grab';
+        });
+
+        function eraseAtPoint(clientX, clientY) {
+            const rect = studioCanvas.getBoundingClientRect();
+            const scaleX = studioCanvas.width / rect.width;
+            const scaleY = studioCanvas.height / rect.height;
+
+            const x = (clientX - rect.left) * scaleX;
+            const y = (clientY - rect.top) * scaleY;
+
+            const fgCtx = processedFgCanvas.getContext('2d');
+            fgCtx.save();
+            fgCtx.globalCompositeOperation = 'destination-out';
+            fgCtx.beginPath();
+            fgCtx.arc(x - (logoX - processedFgCanvas.width / 2), y - (logoY - processedFgCanvas.height / 2), 25, 0, Math.PI * 2);
+            fgCtx.fill();
+            fgCtx.restore();
+
+            renderCompositeCanvas();
+        }
+
+        /* ---------------- 3D PARALLAX TILT EFFECT ---------------- */
+        previewContainer.addEventListener('mousemove', (e) => {
+            if (!document.getElementById('parallax-toggle').checked) return;
+            const rect = previewContainer.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+
+            previewContainer.style.transform = `rotateY(${x / 20}deg) rotateX(${-y / 20}deg)`;
+        });
+
+        previewContainer.addEventListener('mouseleave', () => {
+            previewContainer.style.transform = 'rotateY(0deg) rotateX(0deg)';
+        });
+
+        /* ---------------- UI CONTROLS BINDING ---------------- */
+        document.getElementById('enable-bg-color-toggle').onchange = renderCompositeCanvas;
+        document.getElementById('canvas-bg-picker').oninput = renderCompositeCanvas;
+        document.getElementById('photo-style-select').onchange = renderCompositeCanvas;
+        document.getElementById('bg-blur-range').oninput = function() {
+            document.getElementById('blur-val').innerText = this.value + 'px';
+            renderCompositeCanvas();
+        };
+        document.getElementById('studio-light-select').onchange = renderCompositeCanvas;
+        document.getElementById('logo-scale-range').oninput = function() {
+            logoScale = parseInt(this.value) / 100;
+            document.getElementById('scale-val').innerText = this.value + '%';
+            renderCompositeCanvas();
+        };
+        document.getElementById('logo-angle-range').oninput = function() {
+            logoAngle = parseInt(this.value);
+            document.getElementById('angle-val').innerText = this.value + '°';
+            renderCompositeCanvas();
+        };
         document.getElementById('spill-range').oninput = function() {
             document.getElementById('spill-val').innerText = this.value + '%';
             if (rawSubjectImage) extractColorAndEnhance();
         };
-
         document.getElementById('gold-boost-range').oninput = function() {
             document.getElementById('gold-val').innerText = this.value + '%';
             if (rawSubjectImage) extractColorAndEnhance();
         };
 
-        document.getElementById('execute-bg-btn').addEventListener('click', extractColorAndEnhance);
+        // Eyedropper Tool
+        document.getElementById('eyedropper-btn').addEventListener('click', () => {
+            if ('EyeDropper' in window) {
+                const eyeDropper = new EyeDropper();
+                eyeDropper.open().then(result => {
+                    document.getElementById('target-bg-color').value = result.sRGBHex;
+                    extractColorAndEnhance();
+                });
+            }
+        });
 
-        // Download PNG Control
+        /* ---------------- 4K / 8K TRANSPARENT PNG EXPORT ENGINE ---------------- */
         downloadImgBtn.addEventListener('click', () => {
+            if (!studioCanvas.width) return;
+
+            const exportCanvas = document.createElement('canvas');
+            const aspectRatio = studioCanvas.height / studioCanvas.width;
+
+            exportCanvas.width = exportWidthPreset;
+            exportCanvas.height = Math.round(exportWidthPreset * aspectRatio);
+
+            const expCtx = exportCanvas.getContext('2d');
+            expCtx.imageSmoothingEnabled = true;
+            expCtx.imageSmoothingQuality = 'high';
+
+            const scaleRatio = exportCanvas.width / studioCanvas.width;
+
+            // Render Offscreen with high scale
+            expCtx.save();
+            expCtx.scale(scaleRatio, scaleRatio);
+
+            const isBgColorEnabled = document.getElementById('enable-bg-color-toggle').checked;
+            if (isBgColorEnabled) {
+                expCtx.fillStyle = document.getElementById('canvas-bg-picker').value;
+                expCtx.fillRect(0, 0, studioCanvas.width, studioCanvas.height);
+            }
+
+            if (customBackgroundImage) {
+                const blurVal = parseInt(document.getElementById('bg-blur-range').value);
+                if (blurVal > 0) expCtx.filter = `blur(${blurVal}px)`;
+                expCtx.drawImage(customBackgroundImage, 0, 0, studioCanvas.width, studioCanvas.height);
+            }
+
+            expCtx.translate(logoX, logoY);
+            expCtx.rotate((logoAngle * Math.PI) / 180);
+            expCtx.scale(logoScale, logoScale);
+
+            expCtx.drawImage(processedFgCanvas, -processedFgCanvas.width / 2, -processedFgCanvas.height / 2);
+            expCtx.restore();
+
             const link = document.createElement('a');
-            link.download = `Nexura_Ultra_Gold_Logo_${Date.now()}.png`;
-            link.href = studioCanvas.toDataURL('image/png');
+            link.download = `Nexura_Transparent_Logo_${exportWidthPreset}p_${Date.now()}.png`;
+            link.href = exportCanvas.toDataURL('image/png', 1.0);
             link.click();
         });
     </script>
 </body>
 </html>
+
