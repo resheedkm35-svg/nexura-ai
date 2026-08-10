@@ -65,6 +65,27 @@ body, html {
     align-items: center;
 }
 
+/* Section Title Styling */
+.section-title {
+    width: 100%;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #ffb700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin: 25px 0 15px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(255, 183, 0, 0.4), transparent);
+}
+
 /* Separate Center Banner Logo Wrapper */
 .logo-wrapper {
     width: 100%;
@@ -87,11 +108,11 @@ body, html {
     transition: transform 0.3s ease;
 }
 
-/* 6 CARDS DESKTOP GRID (3 Columns x 2 Rows) */
+/* EXACT MATCH - HORIZONTAL CARD GRID */
 .card-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 18px;
+    gap: 15px;
     width: 100%;
 }
 
@@ -106,15 +127,14 @@ body, html {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    min-height: 220px;
+    min-height: 210px;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
-    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.25s ease, border-color 0.25s ease;
 }
 
 .card:hover {
-    transform: translateY(-5px);
-    border-color: rgba(255, 183, 0, 0.7);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.8), 0 0 15px rgba(255, 183, 0, 0.2);
+    transform: translateY(-4px);
+    border-color: rgba(255, 183, 0, 0.6);
 }
 
 .card-header {
@@ -148,7 +168,7 @@ body, html {
 }
 
 .card-title {
-    font-size: 1.05rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: #ffffff;
     margin-bottom: 6px;
@@ -168,7 +188,7 @@ body, html {
 /* GOLD BUTTON STYLING */
 .launch-btn {
     width: 100%;
-    padding: 10px 0;
+    padding: 9px 0;
     background: transparent;
     border: 1px solid #ffb700;
     color: #ffb700;
@@ -203,19 +223,18 @@ body, html {
         height: 145px;
     }
 
-    /* 6 കാർഡുകളും ഹൊറിസോണ്ടൽ സ്ക്രോളിൽ സുഗമമായി കാണാൻ */
+    /* കാർഡുകൾ ഒരേ ലൈനിൽ ഹൊറിസോണ്ടൽ സ്ക്രോളിൽ കാണാൻ */
     .card-grid {
         display: flex;
         overflow-x: auto;
         scroll-snap-type: x mandatory;
-        scroll-behavior: smooth;
-        padding: 10px 5px 15px 5px;
-        gap: 14px;
+        padding-bottom: 12px;
+        gap: 12px;
     }
 
     .card {
-        min-width: 260px;
-        max-width: 280px;
+        min-width: 250px;
+        max-width: 270px;
         scroll-snap-align: center;
         flex-shrink: 0;
     }
@@ -228,4 +247,3 @@ body, html {
         scrollbar-width: none;
     }
 }
-
