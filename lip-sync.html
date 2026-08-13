@@ -1,95 +1,41 @@
+<!-- Single Unified AI Studio Dashboard -->
 <!DOCTYPE html>
 <html lang="ml">
 <head>
-    <meta charset="UTF-8">
-    <title>AI Lip-Sync & Avatar Studio</title>
     <style>
-        body { background-color: #05070a; color: white; font-family: sans-serif; padding: 20px; }
-        .studio-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .panel { background: #111; padding: 20px; border-radius: 15px; border: 1px solid #333; }
-        #avatar-preview { width: 100%; height: 300px; background: #000; display: flex; align-items: center; justify-content: center; border: 2px dashed #00ffcc; border-radius: 10px; overflow: hidden; }
-        img { max-width: 100%; max-height: 100%; filter: contrast(1.2) saturate(1.5); transition: 0.5s; }
-        .auto-animating { animation: mouth-move 0.5s infinite alternate; }
-        @keyframes mouth-move { from { transform: scale(1); } to { transform: scale(1.05); } }
-        .timer-select { margin: 10px 0; }
-        button { background: #00ffcc; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .studio-dashboard { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
+        .control-panel { background: #1a1a1a; padding: 20px; border-radius: 10px; }
+        .preview-area { background: #000; height: 500px; display: flex; align-items: center; justify-content: center; }
     </style>
 </head>
 <body>
 
-    <h2>🤖 AI Lip-Sync & Audio Studio</h2>
-
-    <div class="studio-grid">
-        <!-- സെക്ഷൻ 1: AI Avatar & Animation -->
-        <div class="panel">
-            <h3>🎨 AI Avatar Animator</h3>
-            <div id="avatar-preview">
-                <p id="placeholder-text">ചിത്രം അപ്‌ലോഡ് ചെയ്യുക (അത് ഓട്ടോമാറ്റിക് ആനിമേഷൻ ആകും)</p>
-            </div>
-            
-            <input type="file" id="imageInput" accept="image/*" style="margin-top:15px;">
-            
-            <div class="timer-select">
-                <label>ആനിമേഷൻ ദൈർഘ്യം:</label>
-                <select id="timerSelect">
-                    <option value="60">1 മിനിറ്റ്</option>
-                    <option value="120">2 മിനിറ്റ്</option>
-                    <option value="300">5 മിനിറ്റ്</option>
-                </select>
-            </div>
-            <button onclick="startAutoAnimation()">ആനിമേഷൻ സ്റ്റാർട്ട് ചെയ്യുക</button>
-        </div>
-
-        <!-- സെക്ഷൻ 2: Audio Noise Cleaner -->
-        <div class="panel">
-            <h3>🎙️ Audio Noise Cleaner</h3>
-            <input type="file" id="audioInput" accept="audio/*">
-            <div style="margin-top:20px;">
-                <p>നോയിസ് ക്ലീനിംഗ് ലെവൽ:</p>
-                <input type="range" min="1" max="100" value="50">
-            </div>
-            <button style="background: #ff0055; color:white; margin-top:20px;">ക്ലീൻ ഓഡിയോ ഡൗൺലോഡ്</button>
-        </div>
+<div class="studio-dashboard">
+    <!-- കൺട്രോൾ പാനൽ (ഒരൊറ്റ സ്ഥലത്ത്) -->
+    <div class="control-panel">
+        <h3>AI Unified Studio</h3>
+        <input type="file" id="imageUpload"> <!-- ചിത്രം ഇടാൻ -->
+        <textarea placeholder="കാർട്ടൂൺ സംസാരിക്കേണ്ട കാര്യങ്ങൾ ഇവിടെ ടൈപ്പ് ചെയ്യുക"></textarea>
+        <button onclick="processAll()">Generate AI Animation</button>
+        <div id="status"></div> <!-- സ്റ്റാറ്റസ് കാണിക്കാൻ -->
     </div>
 
+    <!-- ഔട്ട്‌പുട്ട് കാണാൻ -->
+    <div class="preview-area" id="finalResult">
+        <p>ഇവിടെ നിങ്ങളുടെ ആനിമേഷൻ ലോഡ് ആകും</p>
+    </div>
+</div>
+
 <script>
-    const imageInput = document.getElementById('imageInput');
-    const avatarPreview = document.getElementById('avatar-preview');
-    const timerSelect = document.getElementById('timerSelect');
-
-    // ചിത്രം അപ്‌ലോഡ് ചെയ്താൽ ഓട്ടോമാറ്റിക്കായി പ്രോസസ്സ് ചെയ്യുന്നു
-    imageInput.addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                avatarPreview.innerHTML = `<img id="mainAvatar" src="${event.target.result}" style="filter: contrast(1.2) brightness(1.1) saturate(1.4);">`;
-                console.log("ചിത്രം കളർ ഗ്രേഡിംഗ് ചെയ്ത് റെഡിയാക്കി!");
-                // ചിത്രം വന്ന ഉടൻ ഓട്ടോമാറ്റിക് ആനിമേഷൻ തുടങ്ങുന്നു
-                startAutoAnimation();
-            }
-            reader.readAsDataURL(file);
-        }
-    });
-
-    function startAutoAnimation() {
-        const avatar = document.getElementById('mainAvatar');
-        const duration = parseInt(timerSelect.value);
+    async function processAll() {
+        document.getElementById('status').innerText = "AI വർക്കിംഗ് ആണ്...";
         
-        if (!avatar) {
-            alert("ആദ്യം ഒരു ചിത്രം അപ്‌ലോഡ് ചെയ്യുക!");
-            return;
-        }
-
-        avatar.classList.add('auto-animating');
+        // 1. Cartoonize Image API Call
+        // 2. Text-to-Speech & Lip-Sync API Call
+        // 3. Display result in finalResult div
         
-        // സെറ്റ് ചെയ്ത ടൈമർ അനുസരിച്ച് ആനിമേഷൻ നിർത്തുന്നു
-        setTimeout(() => {
-            avatar.classList.remove('auto-animating');
-            alert("ആനിമേഷൻ പൂർത്തിയായി!");
-        }, duration * 1000);
+        console.log("സിസ്റ്റം എല്ലാം ഓട്ടോമാറ്റിക് ആയി ചെയ്യുന്നു...");
     }
 </script>
-
 </body>
 </html>
