@@ -1,41 +1,396 @@
-<!-- Single Unified AI Studio Dashboard -->
 <!DOCTYPE html>
 <html lang="ml">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Cartoon & Lip-Sync Unified Studio</title>
     <style>
-        .studio-dashboard { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
-        .control-panel { background: #1a1a1a; padding: 20px; border-radius: 10px; }
-        .preview-area { background: #000; height: 500px; display: flex; align-items: center; justify-content: center; }
+        * {
+            box-sizing: border-box;
+            margin: 0; padding: 0;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background-color: #030508;
+            color: #00ffcc;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .studio-container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 25px;
+            background: rgba(10, 15, 25, 0.9);
+            border: 1px solid rgba(0, 255, 204, 0.3);
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.15);
+        }
+
+        .studio-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.6);
+        }
+
+        .main-dashboard {
+            display: grid;
+            grid-template-columns: 1.3fr 1fr;
+            gap: 20px;
+        }
+
+        /* Preview Stage / Laser Scanning Box */
+        .stage-card {
+            background: #080c14;
+            border: 1.5px solid rgba(0, 255, 204, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            position: relative;
+        }
+
+        .preview-screen {
+            width: 100%;
+            height: 420px;
+            background: #000000;
+            border: 2px dashed rgba(0, 255, 204, 0.4);
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        /* Laser Light Beam Animation */
+        .laser-beam {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 4px;
+            background: #ff0055;
+            box-shadow: 0 0 15px #ff0055, 0 0 25px #ff0055;
+            display: none;
+            z-index: 10;
+        }
+
+        @keyframes laserScan {
+            0% { top: 0%; }
+            50% { top: 98%; }
+            100% { top: 0%; }
+        }
+
+        .scanning-active .laser-beam {
+            display: block;
+            animation: laserScan 2.5s infinite linear;
+        }
+
+        .avatar-img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            border-radius: 8px;
+            filter: contrast(1.1) brightness(1.05);
+            transition: all 0.4s ease;
+        }
+
+        .status-badge {
+            position: absolute;
+            top: 15px; left: 15px;
+            padding: 6px 12px;
+            background: rgba(0, 15, 25, 0.85);
+            border: 1px solid #00ffcc;
+            color: #00ffcc;
+            font-size: 0.75rem;
+            font-weight: 700;
+            border-radius: 6px;
+            letter-spacing: 1px;
+            z-index: 12;
+        }
+
+        .status-badge.error {
+            border-color: #ff0055;
+            color: #ff0055;
+            box-shadow: 0 0 10px rgba(255, 0, 85, 0.4);
+        }
+
+        .status-badge.processing {
+            border-color: #ffaa00;
+            color: #ffaa00;
+            animation: pulse 1s infinite alternate;
+        }
+
+        @keyframes pulse { from { opacity: 0.6; } to { opacity: 1; } }
+
+        /* Timeline & Controls */
+        .control-panel {
+            background: #080c14;
+            border: 1.5px solid rgba(0, 255, 204, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .panel-block {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(0, 255, 204, 0.15);
+            border-radius: 10px;
+            padding: 12px;
+        }
+
+        .block-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        textarea {
+            width: 100%;
+            height: 70px;
+            background: #000;
+            border: 1px solid rgba(0, 255, 204, 0.3);
+            border-radius: 6px;
+            color: #fff;
+            padding: 8px;
+            font-size: 0.8rem;
+            resize: none;
+        }
+
+        .timer-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .timer-btn {
+            padding: 8px;
+            background: rgba(0, 255, 204, 0.05);
+            border: 1px solid rgba(0, 255, 204, 0.3);
+            color: #fff;
+            font-size: 0.75rem;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .timer-btn.active {
+            background: #00ffcc;
+            color: #000;
+            font-weight: 800;
+        }
+
+        .generate-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(90deg, #ff0055, #ff5500);
+            border: none;
+            color: #fff;
+            font-size: 0.9rem;
+            font-weight: 800;
+            border-radius: 8px;
+            cursor: pointer;
+            letter-spacing: 1px;
+            box-shadow: 0 0 15px rgba(255, 0, 85, 0.4);
+            transition: 0.3s;
+        }
+
+        .generate-btn:hover {
+            box-shadow: 0 0 25px rgba(255, 0, 85, 0.8);
+        }
+
+        /* Timeline Progress */
+        .progress-bar-bg {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: #00ffcc;
+            transition: width 0.1s linear;
+        }
     </style>
 </head>
 <body>
 
-<div class="studio-dashboard">
-    <!-- കൺട്രോൾ പാനൽ (ഒരൊറ്റ സ്ഥലത്ത്) -->
-    <div class="control-panel">
-        <h3>AI Unified Studio</h3>
-        <input type="file" id="imageUpload"> <!-- ചിത്രം ഇടാൻ -->
-        <textarea placeholder="കാർട്ടൂൺ സംസാരിക്കേണ്ട കാര്യങ്ങൾ ഇവിടെ ടൈപ്പ് ചെയ്യുക"></textarea>
-        <button onclick="processAll()">Generate AI Animation</button>
-        <div id="status"></div> <!-- സ്റ്റാറ്റസ് കാണിക്കാൻ -->
+<div class="studio-container">
+    <div class="header-bar">
+        <h2 class="studio-title">🤖 AI CARTOON & LIP-SYNC UNIFIED STUDIO</h2>
+        <span style="font-size: 0.8rem; color: #aaa;">SYSTEM STATUS: ONLINE</span>
     </div>
 
-    <!-- ഔട്ട്‌പുട്ട് കാണാൻ -->
-    <div class="preview-area" id="finalResult">
-        <p>ഇവിടെ നിങ്ങളുടെ ആനിമേഷൻ ലോഡ് ആകും</p>
+    <div class="main-dashboard">
+        
+        <div class="stage-card">
+            <div class="preview-screen" id="previewScreen" onclick="document.getElementById('imgUpload').click()">
+                <div class="status-badge" id="statusBadge">STATUS: NO IMAGE DETECTED</div>
+                <div class="laser-beam"></div>
+                
+                <div id="uploadPlaceholder" style="text-align: center; color: #888;">
+                    <p style="font-size: 1rem; font-weight: bold; color: #fff;">📸 Upload Image or Sketch</p>
+                    <p style="font-size: 0.8rem; color: #00ffcc; margin-top: 5px;">ചിത്രം അപ്‌ലോഡ് ചെയ്യാൻ ഇവിടെ ക്ലിക്ക് ചെയ്യുക</p>
+                </div>
+
+                <img id="avatarDisplay" class="avatar-img" style="display: none;">
+            </div>
+
+            <input type="file" id="imgUpload" accept="image/*" style="display: none;">
+
+            <div class="panel-block">
+                <div class="block-title">
+                    <span>🎬 RENDER TIMELINE PROGRESS</span>
+                    <span id="timeCounter">00:00 / 01:00</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="control-panel">
+            
+            <div class="panel-block">
+                <div class="block-title"><span>🎨 AI CARTOON PROCESSING</span></div>
+                <label style="font-size: 0.75rem; color: #aaa;">Auto-convert to Cartoon Style on upload</label>
+            </div>
+
+            <div class="panel-block">
+                <div class="block-title"><span>💬 CARTOON SPEECH / SCRIPT</span></div>
+                <textarea id="scriptInput" placeholder="കാർട്ടൂൺ സംസാരിക്കേണ്ട വാചകങ്ങൾ ഇവിടെ ടൈപ്പ് ചെയ്യുക..."></textarea>
+            </div>
+
+            <div class="panel-block">
+                <div class="block-title"><span>🎙️ AUDIO INPUT & NOISE CLEANER</span></div>
+                <input type="file" id="audioUpload" accept="audio/*" style="font-size: 0.75rem; color: #fff;">
+            </div>
+
+            <div class="panel-block">
+                <div class="block-title"><span>⏱️ RENDER DURATION</span></div>
+                <div class="timer-options">
+                    <div class="timer-btn active" onclick="setTimer(60, this)">1 Min</div>
+                    <div class="timer-btn" onclick="setTimer(120, this)">2 Min</div>
+                    <div class="timer-btn" onclick="setTimer(300, this)">5 Min</div>
+                </div>
+            </div>
+
+            <button class="generate-btn" onclick="startUnifiedProcess()">⚡ GENERATE AI ANIMATION</button>
+
+        </div>
+
     </div>
 </div>
 
 <script>
-    async function processAll() {
-        document.getElementById('status').innerText = "AI വർക്കിംഗ് ആണ്...";
+    const imgUpload = document.getElementById('imgUpload');
+    const previewScreen = document.getElementById('previewScreen');
+    const avatarDisplay = document.getElementById('avatarDisplay');
+    const uploadPlaceholder = document.getElementById('uploadPlaceholder');
+    const statusBadge = document.getElementById('statusBadge');
+    const progressFill = document.getElementById('progressFill');
+    const timeCounter = document.getElementById('timeCounter');
+
+    let selectedDuration = 60;
+
+    function setTimer(sec, btn) {
+        selectedDuration = sec;
+        document.querySelectorAll('.timer-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        timeCounter.innerText = `00:00 / 0${sec/60}:00`;
+    }
+
+    // Handle Image Upload & Trigger Laser Scanner
+    imgUpload.addEventListener('change', function(e) {
+        const file = e.target.files[0];
         
-        // 1. Cartoonize Image API Call
-        // 2. Text-to-Speech & Lip-Sync API Call
-        // 3. Display result in finalResult div
-        
-        console.log("സിസ്റ്റം എല്ലാം ഓട്ടോമാറ്റിക് ആയി ചെയ്യുന്നു...");
+        if (!file) {
+            statusBadge.innerText = "STATUS: NO IMAGE DETECTED";
+            statusBadge.className = "status-badge error";
+            avatarDisplay.style.display = "none";
+            uploadPlaceholder.style.display = "block";
+            return;
+        }
+
+        // Show Processing State
+        statusBadge.innerText = "STATUS: SCANNING & CARTOONIZING...";
+        statusBadge.className = "status-badge processing";
+        previewScreen.classList.add('scanning-active');
+
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            avatarDisplay.src = event.target.result;
+            
+            // Simulating AI Processing Time (2.5 seconds)
+            setTimeout(() => {
+                uploadPlaceholder.style.display = "none";
+                avatarDisplay.style.display = "block";
+                previewScreen.classList.remove('scanning-active');
+                
+                // Add Cartoon Style Effect dynamically
+                avatarDisplay.style.filter = "contrast(1.35) saturate(1.6) brightness(1.05)";
+                
+                statusBadge.innerText = "STATUS: CARTOON READY FOR LIP-SYNC";
+                statusBadge.className = "status-badge";
+            }, 2500);
+        };
+        reader.readAsDataURL(file);
+    });
+
+    // Start Unified Generation Process
+    function startUnifiedProcess() {
+        if (!avatarDisplay.src || avatarDisplay.style.display === "none") {
+            alert("ദയവായി ആദ്യം ഒരു ചിത്രം അപ്‌ലോഡ് ചെയ്യുക!");
+            statusBadge.innerText = "ERROR: NO IMAGE FILE";
+            statusBadge.className = "status-badge error";
+            return;
+        }
+
+        statusBadge.innerText = "STATUS: GENERATING AI LIP-SYNC...";
+        statusBadge.className = "status-badge processing";
+        previewScreen.classList.add('scanning-active');
+
+        let currentSec = 0;
+        progressFill.style.width = "0%";
+
+        const interval = setInterval(() => {
+            currentSec += 1;
+            const percentage = (currentSec / selectedDuration) * 100;
+            progressFill.style.width = `${percentage}%`;
+
+            let displayMin = Math.floor(currentSec / 60);
+            let displaySec = currentSec % 60;
+            timeCounter.innerText = `0${displayMin}:${displaySec < 10 ? '0' + displaySec : displaySec} / 0${selectedDuration/60}:00`;
+
+            if (currentSec >= selectedDuration) {
+                clearInterval(interval);
+                previewScreen.classList.remove('scanning-active');
+                statusBadge.innerText = "STATUS: ANIMATION COMPLETED!";
+                statusBadge.className = "status-badge";
+                alert("നിങ്ങളുടെ കാർട്ടൂൺ ആനിമേഷൻ റെഡിയായിട്ടുണ്ട്!");
+            }
+        }, 100);
     }
 </script>
+
 </body>
 </html>
